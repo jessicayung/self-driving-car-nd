@@ -9,5 +9,10 @@ See also: My notes for [Udacity's Machine Learning Nanodegree](https://github.co
 
 ## Program Outline:
 ### Term 1: Deep Learning and Computer Vision
-### Term 2: ?
-### Term 3: ?
+### Term 2: Sensor Fusion, Localisation and Control
+- Sensor Fusion: Integrating different types of sensors.
+- Localisation: 'Where relative to the world is a car?' Alignment of car, sensors to the map. 
+- Control: Computer program that steers cars, wheels so as to meet an objective.
+### Term 3: Path Planning, Controlling a Self-Driving Car
+- Path Planning: Finding a sequence of steps in a maze (navigating cities, parking lots)
+- Put your code in a self-driving car
