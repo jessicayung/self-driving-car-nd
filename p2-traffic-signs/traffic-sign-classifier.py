@@ -43,13 +43,16 @@ print("Number of classes =", n_classes)
 
 ### MODEL ###
 # Model parameters
-learning_rate = 0.2
+learning_rate = 0.01
 initial_learning_rate = learning_rate
-training_epochs = 5
-batch_size = 100
+training_epochs = 100
+batch_size = 50
 display_step = 1
 dropout = 0.75
+anneal_mod_frequency = 15
+annealing_rate = 0.9
 
+print_accuracy_mod_frequency = 20
 
 # Additional parameters for multilayer perceptron
 # n_hidden_1 = 256 # 1st layer number of features
@@ -183,18 +186,23 @@ with tf.Session() as sess:
             print("Time since start: ", epoch_time - init_time)
             print("Time since last epoch: ", epoch_time - last_epoch_time)
         # Anneal learning rate
-        if epoch % 5 == 0:
-            learning_rate = learning_rate * 0.5
+        print("Anneal learning rate every ", anneal_mod_frequency, " epochs by ", 1 - annealing_rate)
+        if (epoch + 1) % anneal_mod_frequency == 0:
+            learning_rate = learning_rate * annealing_rate
             print("New learning rate: ", learning_rate)
+        if (epoch + 1) % print_accuracy_mod_frequency == 0:
+            accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+            print("Accuracy (test):", accuracy.eval({x_unflattened: X_test, y_rawlabels: y_test}))
+            
     print("Optimization Finished!")
 
     # Test model
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     # Calculate accuracy
-    accuracy_train = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    print("Accuracy (train):", accuracy_train.eval({x_unflattened: X_train, y_rawlabels: y_train}))
+    # accuracy_train = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    # print("Accuracy (train):", accuracy_train.eval({x_unflattened: X_train, y_rawlabels: y_train}))
     train_predict_time = time.time()
-    print("Time to calculate accuracy on training set: ", train_predict_time - epoch_time)
+    #print("Time to calculate accuracy on training set: ", train_predict_time - epoch_time)
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print("Accuracy (test):", accuracy.eval({x_unflattened: X_test, y_rawlabels: y_test}))
     test_predict_time = time.time()
@@ -203,7 +211,9 @@ with tf.Session() as sess:
     # Print parameters for reference
     print("Parameters:")
     print("Learning rate (initial): ", initial_learning_rate)
+    print("Anneal learning rate every ", anneal_mod_frequency, " epochs by ", 1 - annealing_rate)
     print("Learning rate (final): ", learning_rate)
     print("Training epochs: ", training_epochs)
     print("Batch size: ", batch_size)
     print("Dropout: ", dropout)
+    
