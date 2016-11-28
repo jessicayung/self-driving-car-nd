@@ -1,4 +1,6 @@
-p2-traffic-signs/traffic-sign-data/
+p2-traffic-signs/traffic-sign-data/train.p
+
+p2-traffic-signs/traffic-sign-data/test.p
 
 *.zip
 

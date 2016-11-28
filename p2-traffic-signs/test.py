@@ -1,7 +1,7 @@
 
 
 # Import packages
-import numpy as np
+import numpy as np`
 import tensorflow as tf
 import time
 import pickle
@@ -15,7 +15,7 @@ from sklearn.utils import shuffle
 Reference: https://www.tensorflow.org/versions/r0.11/tutorials/mnist/pros/index.html#deep-mnist-for-experts
 """
 
-f = open('workfile', 'w')
+f = open('trafficsign', 'w')
 
 # Import and read training and test data
 training_file = "traffic-sign-data/train.p"
