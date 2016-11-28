@@ -45,14 +45,14 @@ print("Number of classes =", n_classes)
 # Model parameters
 learning_rate = 0.01
 initial_learning_rate = learning_rate
-training_epochs = 100
+training_epochs = 15
 batch_size = 50
 display_step = 1
 dropout = 0.75
 anneal_mod_frequency = 15
 annealing_rate = 0.9
 
-print_accuracy_mod_frequency = 20
+print_accuracy_mod_frequency = 5
 
 # Additional parameters for multilayer perceptron
 # n_hidden_1 = 256 # 1st layer number of features
@@ -190,7 +190,9 @@ with tf.Session() as sess:
         if (epoch + 1) % anneal_mod_frequency == 0:
             learning_rate = learning_rate * annealing_rate
             print("New learning rate: ", learning_rate)
+           
         if (epoch + 1) % print_accuracy_mod_frequency == 0:
+            correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
             accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
             print("Accuracy (test):", accuracy.eval({x_unflattened: X_test, y_rawlabels: y_test}))
             
