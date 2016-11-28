@@ -186,7 +186,6 @@ with tf.Session() as sess:
             print("Time since start: ", epoch_time - init_time)
             print("Time since last epoch: ", epoch_time - last_epoch_time)
         # Anneal learning rate
-        print("Anneal learning rate every ", anneal_mod_frequency, " epochs by ", 1 - annealing_rate)
         if (epoch + 1) % anneal_mod_frequency == 0:
             learning_rate = learning_rate * annealing_rate
             print("New learning rate: ", learning_rate)
