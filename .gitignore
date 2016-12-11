@@ -5,3 +5,5 @@ p2-traffic-signs/traffic-sign-data/test.p
 *.zip
 
 p1-lane-lines/annotated-videos/
+
+*.h5
