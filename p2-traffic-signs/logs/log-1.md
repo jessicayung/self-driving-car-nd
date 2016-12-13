@@ -1,4 +1,4 @@
-
+```
 Epoch: 0001 cost= 29.250815934
 Time since start:  9.967313289642334
 Time since last epoch:  9.967313289642334
@@ -561,4 +561,68 @@ Epoch: 0132 cost= 3.487840573
 Time since start:  1267.1704378128052
 Time since last epoch:  9.265973567962646
 Anneal learning rate every  15  epochs by  0.09999999999999998
+```
+
+## Tues 13 Dec 2016
+Okay I normalised the data. Why are my results still shite?
+```
+Epoch: 0001 cost= 4.316094816
+Time since start:  8.719993829727173
+Time since last epoch:  8.719993829727173
+Epoch: 0002 cost= 3.496909843
+Time since start:  16.05109429359436
+Time since last epoch:  7.3311004638671875
+Epoch: 0003 cost= 3.494292022
+Time since start:  23.372997045516968
+Time since last epoch:  7.321902751922607
+Epoch: 0004 cost= 3.492756017
+Time since start:  30.703863382339478
+Time since last epoch:  7.33086633682251
+Epoch: 0005 cost= 3.491428322
+Time since start:  38.02842092514038
+Time since last epoch:  7.324557542800903
+Accuracy (test): 0.0589865
+Epoch: 0006 cost= 3.490451730
+Time since start:  47.32746696472168
+Time since last epoch:  7.333714008331299
+Epoch: 0007 cost= 3.489449307
+Time since start:  54.645750284194946
+Time since last epoch:  7.318283319473267
+Epoch: 0008 cost= 3.488430704
+Time since start:  61.97279667854309
+Time since last epoch:  7.3270463943481445
+Epoch: 0009 cost= 3.487866361
+Time since start:  69.297678232193
+Time since last epoch:  7.324881553649902
+Epoch: 0010 cost= 3.487547867
+Time since start:  76.62840747833252
+Time since last epoch:  7.330729246139526
+Accuracy (test): 0.0593824
+Epoch: 0011 cost= 3.487372710
+Time since start:  85.89553785324097
+Time since last epoch:  7.331223726272583
+Epoch: 0012 cost= 3.487361663
+Time since start:  93.21979403495789
+Time since last epoch:  7.324256181716919
+Epoch: 0013 cost= 3.487362931
+Time since start:  100.54587721824646
+Time since last epoch:  7.326083183288574
+Epoch: 0014 cost= 3.487364015
+Time since start:  107.8658664226532
+Time since last epoch:  7.319989204406738
+Epoch: 0015 cost= 3.487364754
+Time since start:  115.18564581871033
+Time since last epoch:  7.319779396057129
+New learning rate:  0.009000000000000001
+Accuracy (test): 0.0593824
+Optimization Finished!
+Accuracy (test): 0.0593824
+Parameters:
+Learning rate (initial):  0.01
+Anneal learning rate every  15  epochs by  0.09999999999999998
+Learning rate (final):  0.009000000000000001
+Training epochs:  15
+Batch size:  100
+Dropout:  0.75
+```
 
