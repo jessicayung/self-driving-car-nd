@@ -7,3 +7,11 @@ p2-traffic-signs/traffic-sign-data/test.p
 p1-lane-lines/annotated-videos/
 
 *.h5
+
+*.gz
+
+*.pyc
+
+*.npy
+
+*.p
