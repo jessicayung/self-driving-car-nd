@@ -43,10 +43,10 @@ print("Number of classes =", n_classes)
 
 ### MODEL ###
 # Model parameters
-learning_rate = 0.01
+learning_rate = 0.001
 initial_learning_rate = learning_rate
 training_epochs = 15
-batch_size = 50
+batch_size = 100
 display_step = 1
 dropout = 0.75
 anneal_mod_frequency = 15

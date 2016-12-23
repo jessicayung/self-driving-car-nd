@@ -1,5 +1,5 @@
 """
-Convolutional network to classify traffic signs
+Two-layer feedforward network to classify traffic signs
 
 Author: Jessica Yung
 December 2016
@@ -25,9 +25,10 @@ with open(training_file, mode='rb') as f:
     train = pickle.load(f)
 with open(testing_file, mode='rb') as f:
     test = pickle.load(f)
-
+    
 X_train, y_train = train['features'], train['labels']
 X_test, y_test = test['features'], test['labels']
+
 
 # Shuffle training examples
 X_train, y_train = shuffle(X_train, y_train)
@@ -53,13 +54,9 @@ print("Number of classes =", n_classes)
 ### MODEL ###
 
 # Network parameters
-n_input = 32 * 32 * 3
-nb_filters = 32
-kernel_size = (3, 3)
-input_shape = (32, 32, 3)
 n_fc1 = 512
 n_fc2 = 128
-in_channels = 3
+n_input = 32*32*3
 
 # Model parameters
 learning_rate = 0.001
@@ -75,39 +72,16 @@ print_accuracy_mod_frequency = 1
 
 # tf Graph input
 x_unflattened = tf.placeholder("float", [None, 32, 32, 3])
-x = x_unflattened
+x = tf.reshape(x_unflattened, [-1, n_input])
 
 y_rawlabels = tf.placeholder("int32", [None])
 y = tf.one_hot(y_rawlabels, depth=43, on_value=1., off_value=0., axis=-1)
 
-
 ## Create model
 
-def conv2d(x, W, b, strides=3):
-    # Conv2D wrapper, with bias and relu activation
-    # strides = [batch, in_height, in_width, channels]
-    # TODO: Explain these parameters
-    x = tf.nn.conv2d(x, W, strides=[1, strides, strides, 1], padding='SAME')
-    x = tf.nn.bias_add(x, b)
-    return tf.nn.relu(x)
-
-
-def maxpool2d(x, k=2):
-    # MaxPool2D wrapper
-    return tf.nn.max_pool(x, ksize=[1, k, k, 1], strides=[1, k, k, 1],
-                          padding='SAME')
-
-
-def conv_net(model_x, model_weights, model_biases, model_dropout):
-    # Convolution Layer 1
-    conv1 = conv2d(model_x, model_weights['conv1'], model_biases['conv1'])
-    # Max Pooling (down-sampling)
-    conv1 = maxpool2d(conv1, k=2)
-
+def two_feedforward_network(model_x, model_weights, model_biases, model_dropout):
     # Fully connected layer 1
-    # Reshape conv1 output to fit fully connected layer input
-    fc1 = tf.reshape(conv1, [-1, model_weights['fc1'].get_shape().as_list()[0]])
-    fc1 = tf.add(tf.matmul(fc1, model_weights['fc1']), model_biases['fc1'])
+    fc1 = tf.add(tf.matmul(model_x, model_weights['fc1']), model_biases['fc1'])
     fc1 = tf.nn.relu(fc1)
     fc1 = tf.nn.dropout(fc1, model_dropout)
     # Fully connected layer 2
@@ -129,32 +103,30 @@ def weight_variable(shape):
     # alt: tf.random_normal(shape)
     return tf.Variable(initial)
 
-
 def bias_variable(shape):
     initial = tf.constant(0.1, shape=shape)
     return tf.Variable(initial)
 
-
 weights = {
-    'conv1': weight_variable([kernel_size[0], kernel_size[1], in_channels, nb_filters]),
-    'fc1': weight_variable([nb_filters, n_fc1]),
+    'fc1': weight_variable([n_input, n_fc1]),
     'fc2': weight_variable([n_fc1, n_fc2]),
     'out': weight_variable([n_fc2, n_classes])
 }
 
 biases = {
-    'conv1': bias_variable([nb_filters]),
     'fc1': bias_variable([n_fc1]),
     'fc2': bias_variable([n_fc2]),
     'out': bias_variable([n_classes])
 }
 
 # Construct model
-pred = conv_net(x, weights, biases, dropout)
+pred = two_feedforward_network(x, weights, biases, dropout)
+
 
 # Define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+
 
 # Function to initialise the variables
 init = tf.initialize_all_variables()
@@ -163,7 +135,7 @@ init = tf.initialize_all_variables()
 # Launch the graph
 with tf.Session() as sess:
     sess.run(init)
-
+    
     # Initialise time logs
     init_time = time.time()
     epoch_time = init_time
@@ -171,14 +143,12 @@ with tf.Session() as sess:
     # Training cycle
     for epoch in range(training_epochs):
         avg_cost = 0.
-
-        total_batch = int(n_train / batch_size)
+        
+        total_batch = int(n_train/batch_size)
         # Loop over all batches
         for i in range(total_batch):
-            batch_x, batch_y = np.array(X_train[i * batch_size:(i + 1) * batch_size]), \
-                               np.array(y_train[i * batch_size:(i + 1) * batch_size])
-            print("Length of batch X: ", len(batch_x))
-            print("Length of batch y: ", len(batch_y))
+            batch_x, batch_y = np.array(X_train[i*batch_size:(i+1)*batch_size]), \
+                               np.array(y_train[i*batch_size:(i+1)*batch_size])
             # tf.train.batch([X_train, y_train], batch_size=100, enqueue_many=True)
             # Run optimization op (backprop) and cost op (to get loss value)
             _, c = sess.run([optimizer, cost], feed_dict={x_unflattened: batch_x, y_rawlabels: batch_y})
@@ -187,7 +157,7 @@ with tf.Session() as sess:
             # print(avg_cost)
         # Display logs per epoch step
         if epoch % display_step == 0:
-            print("Epoch:", '%04d' % (epoch + 1), "cost=",
+            print("Epoch:", '%04d' % (epoch+1), "cost=",
                   "{:.9f}".format(avg_cost))
             last_epoch_time = epoch_time
             epoch_time = time.time()
@@ -197,12 +167,12 @@ with tf.Session() as sess:
         if (epoch + 1) % anneal_mod_frequency == 0:
             learning_rate *= annealing_rate
             print("New learning rate: ", learning_rate)
-
+           
         if (epoch + 1) % print_accuracy_mod_frequency == 0:
             correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
             accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
             print("Accuracy (test):", accuracy.eval({x_unflattened: X_test, y_rawlabels: y_test}))
-
+            
     print("Optimization Finished!")
 
     # Test model
@@ -216,7 +186,7 @@ with tf.Session() as sess:
     print("Accuracy (test):", accuracy.eval({x_unflattened: X_test, y_rawlabels: y_test}))
     test_predict_time = time.time()
     print("Time to calculate accuracy on test set: ", test_predict_time - train_predict_time)
-
+    
     # Print parameters for reference
     print("Parameters:")
     print("Learning rate (initial): ", initial_learning_rate)
