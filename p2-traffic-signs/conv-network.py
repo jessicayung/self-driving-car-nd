@@ -106,8 +106,13 @@ def conv_net(model_x, model_weights, model_biases, model_dropout):
 
     # Fully connected layer 1
     # Reshape conv1 output to fit fully connected layer input
-    fc1 = tf.reshape(conv1, [-1, model_weights['fc1'].get_shape().as_list()[0]])
-    fc1 = tf.add(tf.matmul(fc1, model_weights['fc1']), model_biases['fc1'])
+    
+    conv1_shape = conv1.get_shape().as_list()
+    print("Conv1 Shape: ", conv1_shape)
+    fc1 = tf.reshape(conv1, [-1, conv1_shape[1]*conv1_shape[2]*conv1_shape[3]])
+    print("fc1 shape: ", tf.shape(fc1))
+    fc1_xw = tf.matmul(fc1, model_weights['fc1'])
+    fc1 = tf.add(fc1_xw, model_biases['fc1'])
     fc1 = tf.nn.relu(fc1)
     fc1 = tf.nn.dropout(fc1, model_dropout)
     # Fully connected layer 2
@@ -137,7 +142,8 @@ def bias_variable(shape):
 
 weights = {
     'conv1': weight_variable([kernel_size[0], kernel_size[1], in_channels, nb_filters]),
-    'fc1': weight_variable([nb_filters, n_fc1]),
+    # TODO: Convert line below to not-hardcoded. Prev was nb_filters
+    'fc1': weight_variable([1152, n_fc1]),
     'fc2': weight_variable([n_fc1, n_fc2]),
     'out': weight_variable([n_fc2, n_classes])
 }
@@ -177,8 +183,6 @@ with tf.Session() as sess:
         for i in range(total_batch):
             batch_x, batch_y = np.array(X_train[i * batch_size:(i + 1) * batch_size]), \
                                np.array(y_train[i * batch_size:(i + 1) * batch_size])
-            print("Length of batch X: ", len(batch_x))
-            print("Length of batch y: ", len(batch_y))
             # tf.train.batch([X_train, y_train], batch_size=100, enqueue_many=True)
             # Run optimization op (backprop) and cost op (to get loss value)
             _, c = sess.run([optimizer, cost], feed_dict={x_unflattened: batch_x, y_rawlabels: batch_y})
