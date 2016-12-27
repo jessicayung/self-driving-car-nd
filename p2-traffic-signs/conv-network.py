@@ -113,7 +113,6 @@ def conv_net(model_x, model_weights, model_biases, model_dropout):
     print("fc1 shape: ", tf.shape(fc1))
     fc1_xw = tf.matmul(fc1, model_weights['fc1'])
     fc1 = tf.add(fc1_xw, model_biases['fc1'])
-    fc1 = tf.nn.relu(fc1)
     fc1 = tf.nn.dropout(fc1, model_dropout)
     # Fully connected layer 2
     fc2 = tf.add(tf.matmul(fc1, model_weights['fc2']), model_biases['fc2'])
