@@ -1,4 +1,4 @@
-## Trial 1
+## Trial 1a
 Conv1 Shape:  [None, 5, 5, 32]
 Epoch: 0001 cost= 3.619075378
 Time since start:  3.1834616661071777
@@ -2467,4 +2467,573 @@ Batch size:  100
 Dropout (conv):  0.5
 Dropout (fc):  0.2
 
-## 
+## Trial 1b
+
+Conv1 Shape:  [None, 6, 6, 32]
+Epoch: 0001 cost= 3.633297085
+Time since start:  1.977123737335205
+Time since last epoch:  1.977123737335205
+Accuracy (validation): 0.0992094
+Epoch: 0002 cost= 3.180818480
+Time since start:  4.2330169677734375
+Time since last epoch:  2.2558932304382324
+Accuracy (validation): 0.200459
+Epoch: 0003 cost= 2.661614267
+Time since start:  6.35676383972168
+Time since last epoch:  2.123746871948242
+Accuracy (validation): 0.267151
+Epoch: 0004 cost= 2.347705019
+Time since start:  8.409562826156616
+Time since last epoch:  2.0527989864349365
+Accuracy (validation): 0.304514
+Epoch: 0005 cost= 2.180301807
+Time since start:  10.414836645126343
+Time since last epoch:  2.0052738189697266
+Accuracy (validation): 0.320964
+Epoch: 0006 cost= 2.094434197
+Time since start:  12.395683765411377
+Time since last epoch:  1.9808471202850342
+Accuracy (validation): 0.336776
+Epoch: 0007 cost= 2.033652549
+Time since start:  14.324381828308105
+Time since last epoch:  1.9286980628967285
+Accuracy (validation): 0.348891
+Epoch: 0008 cost= 1.980192420
+Time since start:  16.273165225982666
+Time since last epoch:  1.9487833976745605
+Accuracy (validation): 0.357562
+Epoch: 0009 cost= 1.932033501
+Time since start:  18.256263494491577
+Time since last epoch:  1.9830982685089111
+Accuracy (validation): 0.371589
+Epoch: 0010 cost= 1.900400284
+Time since start:  20.174304962158203
+Time since last epoch:  1.918041467666626
+Accuracy (validation): 0.377582
+Epoch: 0011 cost= 1.857264635
+Time since start:  22.064847707748413
+Time since last epoch:  1.89054274559021
+Accuracy (validation): 0.398113
+Epoch: 0012 cost= 1.831035000
+Time since start:  23.98874831199646
+Time since last epoch:  1.9239006042480469
+Accuracy (validation): 0.399771
+Epoch: 0013 cost= 1.806175655
+Time since start:  25.90964698791504
+Time since last epoch:  1.920898675918579
+Accuracy (validation): 0.400918
+Epoch: 0014 cost= 1.775088912
+Time since start:  27.831145524978638
+Time since last epoch:  1.9214985370635986
+Accuracy (validation): 0.411885
+Epoch: 0015 cost= 1.765688127
+Time since start:  29.75166392326355
+Time since last epoch:  1.920518398284912
+New learning rate:  0.001
+Accuracy (validation): 0.415073
+Epoch: 0016 cost= 1.742840990
+Time since start:  31.67642879486084
+Time since last epoch:  1.92476487159729
+Accuracy (validation): 0.42706
+Epoch: 0017 cost= 1.716615019
+Time since start:  33.60172390937805
+Time since last epoch:  1.925295114517212
+Accuracy (validation): 0.429227
+Epoch: 0018 cost= 1.701825214
+Time since start:  35.505122661590576
+Time since last epoch:  1.9033987522125244
+Accuracy (validation): 0.439429
+Epoch: 0019 cost= 1.694593858
+Time since start:  37.40982246398926
+Time since last epoch:  1.9046998023986816
+Accuracy (validation): 0.440066
+Epoch: 0020 cost= 1.670769815
+Time since start:  39.305965423583984
+Time since last epoch:  1.8961429595947266
+Accuracy (validation): 0.445422
+Epoch: 0021 cost= 1.649879466
+Time since start:  41.210755348205566
+Time since last epoch:  1.904789924621582
+Accuracy (validation): 0.451416
+Epoch: 0022 cost= 1.639931070
+Time since start:  43.108253479003906
+Time since last epoch:  1.8974981307983398
+Accuracy (validation): 0.447335
+Epoch: 0023 cost= 1.618047637
+Time since start:  45.00885462760925
+Time since last epoch:  1.9006011486053467
+Accuracy (validation): 0.458812
+Epoch: 0024 cost= 1.620946378
+Time since start:  46.910622119903564
+Time since last epoch:  1.9017674922943115
+Accuracy (validation): 0.458812
+Epoch: 0025 cost= 1.602095832
+Time since start:  48.814472675323486
+Time since last epoch:  1.9038505554199219
+Accuracy (validation): 0.466845
+Epoch: 0026 cost= 1.592362382
+Time since start:  50.71667981147766
+Time since last epoch:  1.9022071361541748
+Accuracy (validation): 0.466973
+Epoch: 0027 cost= 1.582595067
+Time since start:  52.618000507354736
+Time since last epoch:  1.9013206958770752
+Accuracy (validation): 0.476664
+Epoch: 0028 cost= 1.574456926
+Time since start:  54.5224404335022
+Time since last epoch:  1.904439926147461
+Accuracy (validation): 0.476919
+Epoch: 0029 cost= 1.551221131
+Time since start:  56.428300619125366
+Time since last epoch:  1.905860185623169
+Accuracy (validation): 0.48406
+Epoch: 0030 cost= 1.543825473
+Time since start:  58.33428883552551
+Time since last epoch:  1.9059882164001465
+New learning rate:  0.001
+Accuracy (validation): 0.485846
+Epoch: 0031 cost= 1.536649226
+Time since start:  60.235151529312134
+Time since last epoch:  1.900862693786621
+Accuracy (validation): 0.489926
+Epoch: 0032 cost= 1.510460814
+Time since start:  62.15926384925842
+Time since last epoch:  1.924112319946289
+Accuracy (validation): 0.491201
+Epoch: 0033 cost= 1.521905697
+Time since start:  64.11949300765991
+Time since last epoch:  1.9602291584014893
+Accuracy (validation): 0.490181
+Epoch: 0034 cost= 1.515950710
+Time since start:  66.08553957939148
+Time since last epoch:  1.9660465717315674
+Accuracy (validation): 0.494134
+Epoch: 0035 cost= 1.501628680
+Time since start:  68.04827570915222
+Time since last epoch:  1.9627361297607422
+Accuracy (validation): 0.499235
+Epoch: 0036 cost= 1.498677961
+Time since start:  69.95777320861816
+Time since last epoch:  1.9094974994659424
+Accuracy (validation): 0.512624
+Epoch: 0037 cost= 1.490379661
+Time since start:  71.86277461051941
+Time since last epoch:  1.9050014019012451
+Accuracy (validation): 0.503188
+Epoch: 0038 cost= 1.476500908
+Time since start:  73.77006030082703
+Time since last epoch:  1.9072856903076172
+Accuracy (validation): 0.511094
+Epoch: 0039 cost= 1.467851379
+Time since start:  75.67275547981262
+Time since last epoch:  1.9026951789855957
+Accuracy (validation): 0.510584
+Epoch: 0040 cost= 1.468095237
+Time since start:  77.57753038406372
+Time since last epoch:  1.9047749042510986
+Accuracy (validation): 0.515557
+Epoch: 0041 cost= 1.458985334
+Time since start:  79.48922944068909
+Time since last epoch:  1.9116990566253662
+Accuracy (validation): 0.513772
+Epoch: 0042 cost= 1.443220471
+Time since start:  81.39242768287659
+Time since last epoch:  1.9031982421875
+Accuracy (validation): 0.514537
+Epoch: 0043 cost= 1.451315958
+Time since start:  83.29106879234314
+Time since last epoch:  1.8986411094665527
+Accuracy (validation): 0.523719
+Epoch: 0044 cost= 1.431158745
+Time since start:  85.18641972541809
+Time since last epoch:  1.8953509330749512
+Accuracy (validation): 0.524994
+Epoch: 0045 cost= 1.441302475
+Time since start:  87.08796167373657
+Time since last epoch:  1.9015419483184814
+New learning rate:  0.001
+Accuracy (validation): 0.528819
+Epoch: 0046 cost= 1.434145903
+Time since start:  88.98614478111267
+Time since last epoch:  1.8981831073760986
+Accuracy (validation): 0.522698
+Epoch: 0047 cost= 1.420105538
+Time since start:  90.88854503631592
+Time since last epoch:  1.902400255203247
+Accuracy (validation): 0.524101
+Epoch: 0048 cost= 1.416424279
+Time since start:  92.79286289215088
+Time since last epoch:  1.904317855834961
+Accuracy (validation): 0.524739
+Epoch: 0049 cost= 1.408850615
+Time since start:  94.69562673568726
+Time since last epoch:  1.902763843536377
+Accuracy (validation): 0.530732
+Epoch: 0050 cost= 1.408061212
+Time since start:  96.60259008407593
+Time since last epoch:  1.9069633483886719
+Accuracy (validation): 0.537873
+Epoch: 0051 cost= 1.390488447
+Time since start:  98.5027174949646
+Time since last epoch:  1.9001274108886719
+Accuracy (validation): 0.534048
+Epoch: 0052 cost= 1.390143980
+Time since start:  100.39801692962646
+Time since last epoch:  1.8952994346618652
+Accuracy (validation): 0.539276
+Epoch: 0053 cost= 1.399073982
+Time since start:  102.29960823059082
+Time since last epoch:  1.9015913009643555
+Accuracy (validation): 0.540551
+Epoch: 0054 cost= 1.387375991
+Time since start:  104.1973340511322
+Time since last epoch:  1.8977258205413818
+Accuracy (validation): 0.543484
+Epoch: 0055 cost= 1.385538448
+Time since start:  106.09769868850708
+Time since last epoch:  1.900364637374878
+Accuracy (validation): 0.537108
+Epoch: 0056 cost= 1.377713980
+Time since start:  107.99304056167603
+Time since last epoch:  1.8953418731689453
+Accuracy (validation): 0.538893
+Epoch: 0057 cost= 1.385387712
+Time since start:  109.89855074882507
+Time since last epoch:  1.9055101871490479
+Accuracy (validation): 0.555981
+Epoch: 0058 cost= 1.372004402
+Time since start:  111.80418109893799
+Time since last epoch:  1.905630350112915
+Accuracy (validation): 0.551008
+Epoch: 0059 cost= 1.363210869
+Time since start:  113.70677280426025
+Time since last epoch:  1.9025917053222656
+Accuracy (validation): 0.554961
+Epoch: 0060 cost= 1.354024030
+Time since start:  115.61097383499146
+Time since last epoch:  1.9042010307312012
+New learning rate:  0.001
+Accuracy (validation): 0.542464
+Epoch: 0061 cost= 1.351149094
+Time since start:  117.52147126197815
+Time since last epoch:  1.9104974269866943
+Accuracy (validation): 0.558149
+Epoch: 0062 cost= 1.347558097
+Time since start:  119.42420864105225
+Time since last epoch:  1.9027373790740967
+Accuracy (validation): 0.551008
+Epoch: 0063 cost= 1.329243866
+Time since start:  121.32353186607361
+Time since last epoch:  1.8993232250213623
+Accuracy (validation): 0.551008
+Epoch: 0064 cost= 1.333145383
+Time since start:  123.22272944450378
+Time since last epoch:  1.8991975784301758
+Accuracy (validation): 0.561974
+Epoch: 0065 cost= 1.354195752
+Time since start:  125.12177014350891
+Time since last epoch:  1.899040699005127
+Accuracy (validation): 0.557766
+Epoch: 0066 cost= 1.336421788
+Time since start:  127.02177238464355
+Time since last epoch:  1.9000022411346436
+Accuracy (validation): 0.552793
+Epoch: 0067 cost= 1.339897281
+Time since start:  128.91987943649292
+Time since last epoch:  1.8981070518493652
+Accuracy (validation): 0.558276
+Epoch: 0068 cost= 1.332942107
+Time since start:  130.82237815856934
+Time since last epoch:  1.902498722076416
+Accuracy (validation): 0.566182
+Epoch: 0069 cost= 1.323181989
+Time since start:  132.72568559646606
+Time since last epoch:  1.9033074378967285
+Accuracy (validation): 0.564524
+Epoch: 0070 cost= 1.319274486
+Time since start:  134.62452721595764
+Time since last epoch:  1.8988416194915771
+Accuracy (validation): 0.566182
+Epoch: 0071 cost= 1.323384353
+Time since start:  136.5229938030243
+Time since last epoch:  1.8984665870666504
+Accuracy (validation): 0.567202
+Epoch: 0072 cost= 1.308543846
+Time since start:  138.42406940460205
+Time since last epoch:  1.9010756015777588
+Accuracy (validation): 0.574981
+Epoch: 0073 cost= 1.302356853
+Time since start:  140.3177034854889
+Time since last epoch:  1.8936340808868408
+Accuracy (validation): 0.56835
+Epoch: 0074 cost= 1.301502046
+Time since start:  142.19055700302124
+Time since last epoch:  1.8728535175323486
+Accuracy (validation): 0.567712
+Epoch: 0075 cost= 1.294734636
+Time since start:  144.0967881679535
+Time since last epoch:  1.906231164932251
+New learning rate:  0.001
+Accuracy (validation): 0.562994
+Epoch: 0076 cost= 1.303420306
+Time since start:  145.9950029850006
+Time since last epoch:  1.8982148170471191
+Accuracy (validation): 0.574981
+Epoch: 0077 cost= 1.302371705
+Time since start:  147.8957884311676
+Time since last epoch:  1.9007854461669922
+Accuracy (validation): 0.575874
+Epoch: 0078 cost= 1.299238499
+Time since start:  149.79635405540466
+Time since last epoch:  1.9005656242370605
+Accuracy (validation): 0.578679
+Epoch: 0079 cost= 1.296766729
+Time since start:  151.69887948036194
+Time since last epoch:  1.9025254249572754
+Accuracy (validation): 0.571028
+Epoch: 0080 cost= 1.288962286
+Time since start:  153.63034057617188
+Time since last epoch:  1.9314610958099365
+Accuracy (validation): 0.587988
+Epoch: 0081 cost= 1.285336960
+Time since start:  155.56414413452148
+Time since last epoch:  1.9338035583496094
+Accuracy (validation): 0.588753
+Epoch: 0082 cost= 1.282727628
+Time since start:  157.49952936172485
+Time since last epoch:  1.9353852272033691
+Accuracy (validation): 0.586203
+Epoch: 0083 cost= 1.279503832
+Time since start:  159.44018840789795
+Time since last epoch:  1.9406590461730957
+Accuracy (validation): 0.580847
+Epoch: 0084 cost= 1.279760893
+Time since start:  161.36772441864014
+Time since last epoch:  1.9275360107421875
+Accuracy (validation): 0.586203
+Epoch: 0085 cost= 1.276934276
+Time since start:  163.28317427635193
+Time since last epoch:  1.915449857711792
+Accuracy (validation): 0.593344
+Epoch: 0086 cost= 1.277409396
+Time since start:  165.19580459594727
+Time since last epoch:  1.912630319595337
+Accuracy (validation): 0.590666
+Epoch: 0087 cost= 1.264712261
+Time since start:  167.11177778244019
+Time since last epoch:  1.91597318649292
+Accuracy (validation): 0.589518
+Epoch: 0088 cost= 1.266505602
+Time since start:  169.02499985694885
+Time since last epoch:  1.913222074508667
+Accuracy (validation): 0.582377
+Epoch: 0089 cost= 1.258097337
+Time since start:  170.9415397644043
+Time since last epoch:  1.9165399074554443
+Accuracy (validation): 0.591813
+Epoch: 0090 cost= 1.269598866
+Time since start:  172.85895323753357
+Time since last epoch:  1.9174134731292725
+New learning rate:  0.001
+Accuracy (validation): 0.588243
+Epoch: 0091 cost= 1.264618436
+Time since start:  174.77589225769043
+Time since last epoch:  1.9169390201568604
+Accuracy (validation): 0.591941
+Epoch: 0092 cost= 1.257850563
+Time since start:  176.69586157798767
+Time since last epoch:  1.9199693202972412
+Accuracy (validation): 0.591813
+Epoch: 0093 cost= 1.251456585
+Time since start:  178.6231973171234
+Time since last epoch:  1.9273357391357422
+Accuracy (validation): 0.587605
+Epoch: 0094 cost= 1.261743409
+Time since start:  180.54083895683289
+Time since last epoch:  1.9176416397094727
+Accuracy (validation): 0.587733
+Epoch: 0095 cost= 1.258669402
+Time since start:  182.463214635849
+Time since last epoch:  1.9223756790161133
+Accuracy (validation): 0.590411
+Epoch: 0096 cost= 1.240560065
+Time since start:  184.38375043869019
+Time since last epoch:  1.9205358028411865
+Accuracy (validation): 0.605203
+Epoch: 0097 cost= 1.251280304
+Time since start:  186.30287790298462
+Time since last epoch:  1.9191274642944336
+Accuracy (validation): 0.584035
+Epoch: 0098 cost= 1.237651993
+Time since start:  188.2223699092865
+Time since last epoch:  1.9194920063018799
+Accuracy (validation): 0.600867
+Epoch: 0099 cost= 1.240183681
+Time since start:  190.13660597801208
+Time since last epoch:  1.914236068725586
+Accuracy (validation): 0.591941
+Epoch: 0100 cost= 1.246627786
+Time since start:  192.05211901664734
+Time since last epoch:  1.915513038635254
+Accuracy (validation): 0.596022
+Optimization Finished!
+Accuracy (test): 0.525495
+Time to calculate accuracy on test set:  0.39592766761779785
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.5
+Dropout (fc):  0.2
+Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 3
+Conv1 Shape:  [None, 6, 6, 32]
+Epoch: 0001 cost= 3.614263570
+Time since start:  4.965389966964722
+Time since last epoch:  4.965389966964722
+Accuracy (validation): 0.106605
+Epoch: 0002 cost= 3.114849630
+Time since start:  10.46470594406128
+Time since last epoch:  5.499315977096558
+Accuracy (validation): 0.206707
+Epoch: 0003 cost= 2.604028290
+Time since start:  15.922945976257324
+Time since last epoch:  5.458240032196045
+Accuracy (validation): 0.27442
+Epoch: 0004 cost= 2.312887716
+Time since start:  21.47503900527954
+Time since last epoch:  5.552093029022217
+Accuracy (validation): 0.304259
+Epoch: 0005 cost= 2.168761833
+Time since start:  27.115318059921265
+Time since last epoch:  5.640279054641724
+Accuracy (validation): 0.317138
+Epoch: 0006 cost= 2.086453389
+Time since start:  32.621989011764526
+Time since last epoch:  5.506670951843262
+Accuracy (validation): 0.336649
+Epoch: 0007 cost= 2.027522210
+Time since start:  38.15190601348877
+Time since last epoch:  5.529917001724243
+Accuracy (validation): 0.345448
+Epoch: 0008 cost= 1.969841720
+Time since start:  43.622446060180664
+Time since last epoch:  5.4705400466918945
+Accuracy (validation): 0.363045
+Epoch: 0009 cost= 1.925629587
+Time since start:  49.15958905220032
+Time since last epoch:  5.537142992019653
+Accuracy (validation): 0.366361
+Epoch: 0010 cost= 1.891099549
+Time since start:  54.901052951812744
+Time since last epoch:  5.741463899612427
+Accuracy (validation): 0.379368
+Epoch: 0011 cost= 1.867139630
+Time since start:  60.403692960739136
+Time since last epoch:  5.502640008926392
+Accuracy (validation): 0.378602
+Epoch: 0012 cost= 1.826547676
+Time since start:  65.89082384109497
+Time since last epoch:  5.487130880355835
+Accuracy (validation): 0.394287
+Epoch: 0013 cost= 1.798831395
+Time since start:  72.08148789405823
+Time since last epoch:  6.190664052963257
+Accuracy (validation): 0.401428
+Epoch: 0014 cost= 1.770387164
+Time since start:  77.51901388168335
+Time since last epoch:  5.437525987625122
+Accuracy (validation): 0.417623
+Epoch: 0015 cost= 1.750723326
+Time since start:  82.89554786682129
+Time since last epoch:  5.3765339851379395
+New learning rate:  0.001
+Accuracy (validation): 0.423744
+Optimization Finished!
+Accuracy (test): 0.382898
+Time to calculate accuracy on test set:  1.335460901260376
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  15
+Batch size:  100
+Dropout (conv):  0.5
+Dropout (fc):  0.2
+Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 4: Increased dropout (fc) to 0.5
+Conv1 Shape:  [None, 6, 6, 32]
+Epoch: 0001 cost= 3.036186519
+Time since last epoch:  4.5998687744140625
+Accuracy (validation): 0.310508
+Epoch: 0002 cost= 2.067828702
+Time since last epoch:  5.221659183502197
+Accuracy (validation): 0.420173
+Epoch: 0003 cost= 1.711628710
+Time since last epoch:  5.234351873397827
+Accuracy (validation): 0.487503
+Epoch: 0004 cost= 1.498893786
+Time since last epoch:  5.207338094711304
+Accuracy (validation): 0.542974
+Epoch: 0005 cost= 1.362839454
+Time since last epoch:  5.22510290145874
+Accuracy (validation): 0.577276
+Epoch: 0006 cost= 1.261465623
+Time since last epoch:  5.2810821533203125
+Accuracy (validation): 0.602652
+Epoch: 0007 cost= 1.189207101
+Time since last epoch:  5.458119869232178
+Accuracy (validation): 0.622035
+Epoch: 0008 cost= 1.117006843
+Time since last epoch:  5.475721120834351
+Accuracy (validation): 0.651364
+Epoch: 0009 cost= 1.058204246
+Time since last epoch:  5.379892826080322
+Accuracy (validation): 0.663861
+Epoch: 0010 cost= 1.009941135
+Time since last epoch:  5.624250173568726
+Accuracy (validation): 0.670365
+Epoch: 0011 cost= 0.961830265
+Time since last epoch:  5.55267596244812
+Accuracy (validation): 0.682989
+Epoch: 0012 cost= 0.932264943
+Time since last epoch:  5.54630184173584
+Accuracy (validation): 0.695358
+Epoch: 0013 cost= 0.895068129
+Time since last epoch:  6.202136993408203
+Accuracy (validation): 0.711298
+Epoch: 0014 cost= 0.856667501
+Time since last epoch:  6.266235113143921
+Accuracy (validation): 0.723795
+Epoch: 0015 cost= 0.839341484
+Time since last epoch:  5.947840929031372
+New learning rate:  0.001
+Accuracy (validation): 0.717292
+Optimization Finished!
+Accuracy (test): 0.601742
+Time to calculate accuracy on test set:  1.6819019317626953
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  15
+Batch size:  100
+Dropout (conv):  0.5
+Dropout (fc):  0.5
+Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
