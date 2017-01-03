@@ -1,3 +1,5 @@
+# Got dropout reversed
+
 ## Trial 1a
 Conv1 Shape:  [None, 5, 5, 32]
 Epoch: 0001 cost= 3.619075378
@@ -3034,6 +3036,2195 @@ Batch size:  100
 Dropout (conv):  0.5
 Dropout (fc):  0.5
 Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+# Now I know what dropout is (not reversed)
+
+## Trial 5
+Conv1 Shape:  [None, 6, 6, 32]
+Epoch: 0001 cost= 2.504294497
+Time since last epoch:  3.3045706748962402
+Accuracy (validation): 0.457919
+Epoch: 0002 cost= 1.520747944
+Time since last epoch:  2.1886203289031982
+Accuracy (validation): 0.57039
+Epoch: 0003 cost= 1.215982694
+Time since last epoch:  2.19071102142334
+Accuracy (validation): 0.638995
+Epoch: 0004 cost= 1.043343480
+Time since last epoch:  2.118586778640747
+Accuracy (validation): 0.677378
+Epoch: 0005 cost= 0.942950729
+Time since last epoch:  2.1033804416656494
+Accuracy (validation): 0.696506
+Epoch: 0006 cost= 0.855043638
+Time since last epoch:  2.004570484161377
+Accuracy (validation): 0.721882
+Epoch: 0007 cost= 0.791878704
+Time since last epoch:  1.8835194110870361
+Accuracy (validation): 0.74356
+Epoch: 0008 cost= 0.727796887
+Time since last epoch:  1.8725695610046387
+Accuracy (validation): 0.757205
+Epoch: 0009 cost= 0.682168279
+Time since last epoch:  1.8707568645477295
+Accuracy (validation): 0.770849
+Epoch: 0010 cost= 0.641077488
+Time since last epoch:  1.8723719120025635
+Accuracy (validation): 0.784239
+Epoch: 0011 cost= 0.601311737
+Time since last epoch:  1.8689806461334229
+Accuracy (validation): 0.798904
+Epoch: 0012 cost= 0.561886040
+Time since last epoch:  1.8044824600219727
+Accuracy (validation): 0.79495
+Epoch: 0013 cost= 0.534508969
+Time since last epoch:  1.799713134765625
+Accuracy (validation): 0.799414
+Epoch: 0014 cost= 0.514311506
+Time since last epoch:  1.8244600296020508
+Accuracy (validation): 0.807065
+Epoch: 0015 cost= 0.484857618
+Time since last epoch:  1.8624649047851562
+New learning rate:  0.001
+Accuracy (validation): 0.822367
+Optimization Finished!
+Accuracy (test): 0.624387
+Time to calculate accuracy on test set:  0.24706292152404785
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  15
+Batch size:  100
+Dropout (conv):  0.5
+Dropout (fc):  0.8
+Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 6
+Conv1 Shape:  [None, 6, 6, 32]
+Epoch: 0001 cost= 2.503748326
+Time since last epoch:  2.0299572944641113
+Accuracy (validation): 0.454348
+Epoch: 0002 cost= 1.521514473
+Time since last epoch:  2.183577537536621
+Accuracy (validation): 0.585055
+Epoch: 0003 cost= 1.199651749
+Time since last epoch:  2.1638734340667725
+Accuracy (validation): 0.640398
+Epoch: 0004 cost= 1.036146103
+Time since last epoch:  2.152285575866699
+Accuracy (validation): 0.675338
+Epoch: 0005 cost= 0.924118579
+Time since last epoch:  2.1238086223602295
+Accuracy (validation): 0.70862
+Epoch: 0006 cost= 0.843304135
+Time since last epoch:  2.0131123065948486
+Accuracy (validation): 0.738715
+Epoch: 0007 cost= 0.769683844
+Time since last epoch:  1.9347162246704102
+Accuracy (validation): 0.74152
+Epoch: 0008 cost= 0.712300595
+Time since last epoch:  1.9277713298797607
+Accuracy (validation): 0.763963
+Epoch: 0009 cost= 0.668603032
+Time since last epoch:  1.884429931640625
+Accuracy (validation): 0.774165
+Epoch: 0010 cost= 0.632860165
+Time since last epoch:  1.8819267749786377
+Accuracy (validation): 0.787427
+Epoch: 0011 cost= 0.584661133
+Time since last epoch:  1.9463999271392822
+Accuracy (validation): 0.794695
+Epoch: 0012 cost= 0.554627575
+Time since last epoch:  1.9436266422271729
+Accuracy (validation): 0.800051
+Epoch: 0013 cost= 0.521317048
+Time since last epoch:  1.8714616298675537
+Accuracy (validation): 0.809615
+Epoch: 0014 cost= 0.497108046
+Time since last epoch:  1.83992600440979
+Accuracy (validation): 0.80987
+Epoch: 0015 cost= 0.479824166
+Time since last epoch:  1.8409662246704102
+New learning rate:  0.001
+Accuracy (validation): 0.815991
+Epoch: 0016 cost= 0.449898166
+Time since last epoch:  1.838088035583496
+Accuracy (validation): 0.832058
+Epoch: 0017 cost= 0.435715491
+Time since last epoch:  1.8408629894256592
+Accuracy (validation): 0.835246
+Epoch: 0018 cost= 0.412233048
+Time since last epoch:  1.840177059173584
+Accuracy (validation): 0.838562
+Epoch: 0019 cost= 0.398962450
+Time since last epoch:  1.8358402252197266
+Accuracy (validation): 0.845703
+Epoch: 0020 cost= 0.384500934
+Time since last epoch:  1.8430273532867432
+Accuracy (validation): 0.849528
+Epoch: 0021 cost= 0.372369435
+Time since last epoch:  1.8413324356079102
+Accuracy (validation): 0.84583
+Epoch: 0022 cost= 0.361806161
+Time since last epoch:  1.841092586517334
+Accuracy (validation): 0.849528
+Epoch: 0023 cost= 0.346126613
+Time since last epoch:  1.8432350158691406
+Accuracy (validation): 0.858965
+Epoch: 0024 cost= 0.330516133
+Time since last epoch:  1.8381798267364502
+Accuracy (validation): 0.863938
+Epoch: 0025 cost= 0.324922698
+Time since last epoch:  1.8318653106689453
+Accuracy (validation): 0.869039
+Epoch: 0026 cost= 0.316739728
+Time since last epoch:  1.8389232158660889
+Accuracy (validation): 0.860623
+Epoch: 0027 cost= 0.314226347
+Time since last epoch:  1.8452084064483643
+Accuracy (validation): 0.871462
+Epoch: 0028 cost= 0.304093751
+Time since last epoch:  1.845580816268921
+Accuracy (validation): 0.869421
+Epoch: 0029 cost= 0.290715130
+Time since last epoch:  1.8445525169372559
+Accuracy (validation): 0.875287
+Epoch: 0030 cost= 0.284438958
+Time since last epoch:  1.8428356647491455
+New learning rate:  0.001
+Accuracy (validation): 0.87516
+Epoch: 0031 cost= 0.276686926
+Time since last epoch:  1.8497962951660156
+Accuracy (validation): 0.879113
+Epoch: 0032 cost= 0.272343622
+Time since last epoch:  1.8498647212982178
+Accuracy (validation): 0.879623
+Epoch: 0033 cost= 0.262187580
+Time since last epoch:  1.9031383991241455
+Accuracy (validation): 0.876435
+Epoch: 0034 cost= 0.261176884
+Time since last epoch:  1.845655918121338
+Accuracy (validation): 0.883321
+Epoch: 0035 cost= 0.254813767
+Time since last epoch:  1.8106682300567627
+Accuracy (validation): 0.885361
+Epoch: 0036 cost= 0.259591873
+Time since last epoch:  1.8328797817230225
+Accuracy (validation): 0.88128
+Epoch: 0037 cost= 0.235204547
+Time since last epoch:  1.8689701557159424
+Accuracy (validation): 0.887911
+Epoch: 0038 cost= 0.244447870
+Time since last epoch:  1.8832573890686035
+Accuracy (validation): 0.882173
+Epoch: 0039 cost= 0.232085565
+Time since last epoch:  1.8766529560089111
+Accuracy (validation): 0.887529
+Epoch: 0040 cost= 0.225635096
+Time since last epoch:  1.8735501766204834
+Accuracy (validation): 0.890079
+Epoch: 0041 cost= 0.219955827
+Time since last epoch:  1.8755550384521484
+Accuracy (validation): 0.891992
+Epoch: 0042 cost= 0.218235726
+Time since last epoch:  1.8704843521118164
+Accuracy (validation): 0.891099
+Epoch: 0043 cost= 0.223189322
+Time since last epoch:  1.8243508338928223
+Accuracy (validation): 0.892375
+Epoch: 0044 cost= 0.211072719
+Time since last epoch:  1.7906222343444824
+Accuracy (validation): 0.892375
+Epoch: 0045 cost= 0.208827178
+Time since last epoch:  1.7825825214385986
+New learning rate:  0.001
+Accuracy (validation): 0.902576
+Epoch: 0046 cost= 0.210855032
+Time since last epoch:  1.7861833572387695
+Accuracy (validation): 0.893267
+Epoch: 0047 cost= 0.202699066
+Time since last epoch:  1.7818381786346436
+Accuracy (validation): 0.89773
+Epoch: 0048 cost= 0.194330853
+Time since last epoch:  1.791534185409546
+Accuracy (validation): 0.896328
+Epoch: 0049 cost= 0.197958085
+Time since last epoch:  1.7923705577850342
+Accuracy (validation): 0.906657
+Epoch: 0050 cost= 0.202504679
+Time since last epoch:  1.7857718467712402
+Accuracy (validation): 0.892757
+Epoch: 0051 cost= 0.190978387
+Time since last epoch:  1.7924046516418457
+Accuracy (validation): 0.898368
+Epoch: 0052 cost= 0.193616268
+Time since last epoch:  1.7921645641326904
+Accuracy (validation): 0.898623
+Epoch: 0053 cost= 0.188133378
+Time since last epoch:  1.7906498908996582
+Accuracy (validation): 0.901046
+Epoch: 0054 cost= 0.186186710
+Time since last epoch:  1.7904026508331299
+Accuracy (validation): 0.903979
+Epoch: 0055 cost= 0.176882320
+Time since last epoch:  1.7888834476470947
+Accuracy (validation): 0.906657
+Epoch: 0056 cost= 0.183006294
+Time since last epoch:  1.7895448207855225
+Accuracy (validation): 0.900026
+Epoch: 0057 cost= 0.177345661
+Time since last epoch:  1.7894952297210693
+Accuracy (validation): 0.907039
+Epoch: 0058 cost= 0.179909923
+Time since last epoch:  1.795217752456665
+Accuracy (validation): 0.907167
+Epoch: 0059 cost= 0.180145952
+Time since last epoch:  1.7883203029632568
+Accuracy (validation): 0.903724
+Epoch: 0060 cost= 0.175677479
+Time since last epoch:  1.7906665802001953
+New learning rate:  0.001
+Accuracy (validation): 0.904234
+Epoch: 0061 cost= 0.173341705
+Time since last epoch:  1.7832634449005127
+Accuracy (validation): 0.909462
+Epoch: 0062 cost= 0.161693475
+Time since last epoch:  1.790348768234253
+Accuracy (validation): 0.901939
+Epoch: 0063 cost= 0.164949813
+Time since last epoch:  1.7958364486694336
+Accuracy (validation): 0.907549
+Epoch: 0064 cost= 0.165543740
+Time since last epoch:  1.78761887550354
+Accuracy (validation): 0.905382
+Epoch: 0065 cost= 0.169703206
+Time since last epoch:  1.7886719703674316
+Accuracy (validation): 0.908315
+Epoch: 0066 cost= 0.157252023
+Time since last epoch:  1.8121321201324463
+Accuracy (validation): 0.909972
+Epoch: 0067 cost= 0.161512769
+Time since last epoch:  1.8589017391204834
+Accuracy (validation): 0.902321
+Epoch: 0068 cost= 0.154608296
+Time since last epoch:  1.9065113067626953
+Accuracy (validation): 0.906784
+Epoch: 0069 cost= 0.153832913
+Time since last epoch:  1.8869991302490234
+Accuracy (validation): 0.916858
+Epoch: 0070 cost= 0.161833975
+Time since last epoch:  1.8771336078643799
+Accuracy (validation): 0.910482
+Epoch: 0071 cost= 0.152252641
+Time since last epoch:  1.8787789344787598
+Accuracy (validation): 0.907677
+Epoch: 0072 cost= 0.153676882
+Time since last epoch:  1.886033058166504
+Accuracy (validation): 0.908697
+Epoch: 0073 cost= 0.149230426
+Time since last epoch:  1.8537929058074951
+Accuracy (validation): 0.912905
+Epoch: 0074 cost= 0.157603499
+Time since last epoch:  1.794417142868042
+Accuracy (validation): 0.906019
+Epoch: 0075 cost= 0.152907035
+Time since last epoch:  1.7990305423736572
+New learning rate:  0.001
+Accuracy (validation): 0.91316
+Epoch: 0076 cost= 0.139276417
+Time since last epoch:  1.79341721534729
+Accuracy (validation): 0.911502
+Epoch: 0077 cost= 0.151987728
+Time since last epoch:  1.7906317710876465
+Accuracy (validation): 0.909845
+Epoch: 0078 cost= 0.146669319
+Time since last epoch:  1.7945420742034912
+Accuracy (validation): 0.91469
+Epoch: 0079 cost= 0.137724779
+Time since last epoch:  1.7896628379821777
+Accuracy (validation): 0.912268
+Epoch: 0080 cost= 0.138944280
+Time since last epoch:  1.791930913925171
+Accuracy (validation): 0.915838
+Epoch: 0081 cost= 0.140850533
+Time since last epoch:  1.788426399230957
+Accuracy (validation): 0.913925
+Epoch: 0082 cost= 0.142368294
+Time since last epoch:  1.793494462966919
+Accuracy (validation): 0.909717
+Epoch: 0083 cost= 0.144255946
+Time since last epoch:  1.7891085147857666
+Accuracy (validation): 0.916221
+Epoch: 0084 cost= 0.135465500
+Time since last epoch:  1.7937710285186768
+Accuracy (validation): 0.911758
+Epoch: 0085 cost= 0.148121410
+Time since last epoch:  1.7967431545257568
+Accuracy (validation): 0.916603
+Epoch: 0086 cost= 0.144209305
+Time since last epoch:  1.792165994644165
+Accuracy (validation): 0.921194
+Epoch: 0087 cost= 0.137184536
+Time since last epoch:  1.7938971519470215
+Accuracy (validation): 0.9152
+Epoch: 0088 cost= 0.135689302
+Time since last epoch:  1.7956736087799072
+Accuracy (validation): 0.914945
+Epoch: 0089 cost= 0.134165387
+Time since last epoch:  1.7957570552825928
+Accuracy (validation): 0.918006
+Epoch: 0090 cost= 0.136161314
+Time since last epoch:  1.7941045761108398
+New learning rate:  0.001
+Accuracy (validation): 0.911502
+Epoch: 0091 cost= 0.129683213
+Time since last epoch:  1.798330545425415
+Accuracy (validation): 0.922979
+Epoch: 0092 cost= 0.137106717
+Time since last epoch:  1.7976677417755127
+Accuracy (validation): 0.914818
+Epoch: 0093 cost= 0.133886525
+Time since last epoch:  1.7950224876403809
+Accuracy (validation): 0.916603
+Epoch: 0094 cost= 0.129401244
+Time since last epoch:  1.8220341205596924
+Accuracy (validation): 0.919281
+Epoch: 0095 cost= 0.129606193
+Time since last epoch:  1.8696949481964111
+Accuracy (validation): 0.920301
+Epoch: 0096 cost= 0.130492013
+Time since last epoch:  1.9064795970916748
+Accuracy (validation): 0.916221
+Epoch: 0097 cost= 0.124536339
+Time since last epoch:  1.9081025123596191
+Accuracy (validation): 0.921321
+Epoch: 0098 cost= 0.130846437
+Time since last epoch:  1.912980318069458
+Accuracy (validation): 0.921321
+Epoch: 0099 cost= 0.132458956
+Time since last epoch:  1.864497423171997
+Accuracy (validation): 0.919026
+Epoch: 0100 cost= 0.122603141
+Time since last epoch:  1.855513572692871
+Accuracy (validation): 0.923107
+Optimization Finished!
+Accuracy (test): 0.668963
+Time to calculate accuracy on test set:  0.2640554904937744
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.5
+Dropout (fc):  0.8
+Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 7
+
+Conv1 Shape:  [None, 5, 5, 32]
+Epoch: 0001 cost= 2.950154345
+Accuracy (validation): 0.31038
+Epoch: 0002 cost= 2.105089564
+Accuracy (validation): 0.399643
+Epoch: 0003 cost= 1.851778436
+Accuracy (validation): 0.441469
+Epoch: 0004 cost= 1.705268903
+Accuracy (validation): 0.479087
+Epoch: 0005 cost= 1.614620932
+Accuracy (validation): 0.495537
+Epoch: 0006 cost= 1.543118254
+Accuracy (validation): 0.513772
+Epoch: 0007 cost= 1.479235318
+Accuracy (validation): 0.531752
+Epoch: 0008 cost= 1.433558594
+Accuracy (validation): 0.534175
+Epoch: 0009 cost= 1.397964183
+Accuracy (validation): 0.55241
+Epoch: 0010 cost= 1.370652999
+Accuracy (validation): 0.553685
+Epoch: 0011 cost= 1.331676044
+Accuracy (validation): 0.56733
+Epoch: 0012 cost= 1.299661747
+Accuracy (validation): 0.578934
+Epoch: 0013 cost= 1.275021324
+Accuracy (validation): 0.593726
+Epoch: 0014 cost= 1.237280746
+Accuracy (validation): 0.589008
+Epoch: 0015 cost= 1.234317843
+New learning rate:  0.001
+Accuracy (validation): 0.599975
+Epoch: 0016 cost= 1.208605494
+Accuracy (validation): 0.606606
+Epoch: 0017 cost= 1.180205601
+Accuracy (validation): 0.604565
+Epoch: 0018 cost= 1.177928809
+Accuracy (validation): 0.614894
+Epoch: 0019 cost= 1.147374162
+Accuracy (validation): 0.614002
+Epoch: 0020 cost= 1.126037278
+Accuracy (validation): 0.61974
+Epoch: 0021 cost= 1.113463271
+Accuracy (validation): 0.629049
+Epoch: 0022 cost= 1.092020330
+Accuracy (validation): 0.625606
+Epoch: 0023 cost= 1.084871853
+Accuracy (validation): 0.635935
+Epoch: 0024 cost= 1.061047159
+Accuracy (validation): 0.641163
+Epoch: 0025 cost= 1.049525701
+Accuracy (validation): 0.647794
+Epoch: 0026 cost= 1.039606800
+Accuracy (validation): 0.642821
+Epoch: 0027 cost= 1.036176705
+Accuracy (validation): 0.648942
+Epoch: 0028 cost= 1.013272982
+Accuracy (validation): 0.657613
+Epoch: 0029 cost= 0.999043744
+Accuracy (validation): 0.654298
+Epoch: 0030 cost= 1.002874925
+New learning rate:  0.001
+Accuracy (validation): 0.662204
+Epoch: 0031 cost= 0.987018580
+Accuracy (validation): 0.660418
+Epoch: 0032 cost= 0.973991177
+Accuracy (validation): 0.660291
+Epoch: 0033 cost= 0.966938775
+Accuracy (validation): 0.66807
+Epoch: 0034 cost= 0.954817262
+Accuracy (validation): 0.676741
+Epoch: 0035 cost= 0.950159289
+Accuracy (validation): 0.675083
+Epoch: 0036 cost= 0.954347169
+Accuracy (validation): 0.675721
+Epoch: 0037 cost= 0.933940529
+Accuracy (validation): 0.677251
+Epoch: 0038 cost= 0.916522579
+Accuracy (validation): 0.677506
+Epoch: 0039 cost= 0.916421618
+Accuracy (validation): 0.680821
+Epoch: 0040 cost= 0.914957317
+Accuracy (validation): 0.680184
+Epoch: 0041 cost= 0.915640992
+Accuracy (validation): 0.690768
+Epoch: 0042 cost= 0.902038484
+Accuracy (validation): 0.689875
+Epoch: 0043 cost= 0.890217295
+Accuracy (validation): 0.684774
+Epoch: 0044 cost= 0.885593257
+Accuracy (validation): 0.692681
+Epoch: 0045 cost= 0.886466854
+New learning rate:  0.001
+Accuracy (validation): 0.692808
+Epoch: 0046 cost= 0.877225915
+Accuracy (validation): 0.697016
+Epoch: 0047 cost= 0.869027098
+Accuracy (validation): 0.695741
+Epoch: 0048 cost= 0.865045018
+Accuracy (validation): 0.699057
+Epoch: 0049 cost= 0.848906949
+Accuracy (validation): 0.695359
+Epoch: 0050 cost= 0.851418178
+Accuracy (validation): 0.706325
+Epoch: 0051 cost= 0.844909500
+Accuracy (validation): 0.699694
+Epoch: 0052 cost= 0.838804865
+Accuracy (validation): 0.701862
+Epoch: 0053 cost= 0.835600555
+Accuracy (validation): 0.70607
+Epoch: 0054 cost= 0.833683572
+Accuracy (validation): 0.705177
+Epoch: 0055 cost= 0.828441119
+Accuracy (validation): 0.706325
+Epoch: 0056 cost= 0.832156026
+Accuracy (validation): 0.697016
+Epoch: 0057 cost= 0.817507897
+Accuracy (validation): 0.714869
+Epoch: 0058 cost= 0.807402715
+Accuracy (validation): 0.706963
+Epoch: 0059 cost= 0.805849725
+Accuracy (validation): 0.706708
+Epoch: 0060 cost= 0.807206719
+New learning rate:  0.001
+Accuracy (validation): 0.718439
+Epoch: 0061 cost= 0.805916589
+Accuracy (validation): 0.72201
+Epoch: 0062 cost= 0.793297485
+Accuracy (validation): 0.718184
+Epoch: 0063 cost= 0.796861154
+Accuracy (validation): 0.715379
+Epoch: 0064 cost= 0.795550434
+Accuracy (validation): 0.715761
+Epoch: 0065 cost= 0.783134688
+Accuracy (validation): 0.722648
+Epoch: 0066 cost= 0.787911925
+Accuracy (validation): 0.733359
+Epoch: 0067 cost= 0.785059031
+Accuracy (validation): 0.718694
+Epoch: 0068 cost= 0.771687555
+Accuracy (validation): 0.726218
+Epoch: 0069 cost= 0.779240059
+Accuracy (validation): 0.728641
+Epoch: 0070 cost= 0.773432774
+Accuracy (validation): 0.7215
+Epoch: 0071 cost= 0.774663962
+Accuracy (validation): 0.725963
+Epoch: 0072 cost= 0.757693632
+Accuracy (validation): 0.715379
+Epoch: 0073 cost= 0.762218543
+Accuracy (validation): 0.72609
+Epoch: 0074 cost= 0.753143308
+Accuracy (validation): 0.733359
+Epoch: 0075 cost= 0.751842437
+New learning rate:  0.001
+Accuracy (validation): 0.725708
+Epoch: 0076 cost= 0.752830254
+Accuracy (validation): 0.728131
+Epoch: 0077 cost= 0.750431900
+Accuracy (validation): 0.737567
+Epoch: 0078 cost= 0.745712085
+Accuracy (validation): 0.722137
+Epoch: 0079 cost= 0.744494454
+Accuracy (validation): 0.727366
+Epoch: 0080 cost= 0.740901109
+Accuracy (validation): 0.730426
+Epoch: 0081 cost= 0.729940617
+Accuracy (validation): 0.730809
+Epoch: 0082 cost= 0.739439983
+Accuracy (validation): 0.73795
+Epoch: 0083 cost= 0.727391159
+Accuracy (validation): 0.730681
+Epoch: 0084 cost= 0.734476883
+Accuracy (validation): 0.73999
+Epoch: 0085 cost= 0.729199558
+Accuracy (validation): 0.732849
+Epoch: 0086 cost= 0.722290048
+Accuracy (validation): 0.743178
+Epoch: 0087 cost= 0.731071138
+Accuracy (validation): 0.730299
+Epoch: 0088 cost= 0.725873988
+Accuracy (validation): 0.731191
+Epoch: 0089 cost= 0.720756444
+Accuracy (validation): 0.730554
+Epoch: 0090 cost= 0.712952831
+New learning rate:  0.001
+Accuracy (validation): 0.746238
+Epoch: 0091 cost= 0.718738511
+Accuracy (validation): 0.744326
+Epoch: 0092 cost= 0.710993417
+Accuracy (validation): 0.741775
+Epoch: 0093 cost= 0.709820268
+Accuracy (validation): 0.737567
+Epoch: 0094 cost= 0.719180482
+Accuracy (validation): 0.74203
+Epoch: 0095 cost= 0.708945274
+Accuracy (validation): 0.745601
+Epoch: 0096 cost= 0.712191670
+Accuracy (validation): 0.744581
+Epoch: 0097 cost= 0.705304883
+Accuracy (validation): 0.738842
+Epoch: 0098 cost= 0.704308106
+Accuracy (validation): 0.74203
+Epoch: 0099 cost= 0.688871280
+Accuracy (validation): 0.744581
+Epoch: 0100 cost= 0.692856219
+Accuracy (validation): 0.742795
+Optimization Finished!
+Accuracy (test): 0.550752
+Time to calculate accuracy on test set:  0.28839993476867676
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.2
+Dropout (fc):  0.8
+Padding:  VALID
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 8
+Conv1 Shape:  [None, 5, 5, 32]
+Epoch: 0001 cost= 2.212058391
+Accuracy (validation): 0.55241
+Epoch: 0002 cost= 1.193584524
+Accuracy (validation): 0.675083
+Epoch: 0003 cost= 0.889924441
+Accuracy (validation): 0.741265
+Epoch: 0004 cost= 0.723221304
+Accuracy (validation): 0.767151
+Epoch: 0005 cost= 0.609508549
+Accuracy (validation): 0.796481
+Epoch: 0006 cost= 0.535419103
+Accuracy (validation): 0.829253
+Epoch: 0007 cost= 0.471080163
+Accuracy (validation): 0.837414
+Epoch: 0008 cost= 0.417911927
+Accuracy (validation): 0.839582
+Epoch: 0009 cost= 0.371996068
+Accuracy (validation): 0.855139
+Epoch: 0010 cost= 0.337106773
+Accuracy (validation): 0.869804
+Epoch: 0011 cost= 0.308646074
+Accuracy (validation): 0.873629
+Epoch: 0012 cost= 0.281862703
+Accuracy (validation): 0.890207
+Epoch: 0013 cost= 0.260087948
+Accuracy (validation): 0.888804
+Epoch: 0014 cost= 0.240514247
+Accuracy (validation): 0.899643
+Epoch: 0015 cost= 0.229763230
+New learning rate:  0.001
+Accuracy (validation): 0.903341
+Epoch: 0016 cost= 0.211796676
+Accuracy (validation): 0.904106
+Epoch: 0017 cost= 0.196080673
+Accuracy (validation): 0.903341
+Epoch: 0018 cost= 0.185885381
+Accuracy (validation): 0.90959
+Epoch: 0019 cost= 0.175502783
+Accuracy (validation): 0.91469
+Epoch: 0020 cost= 0.162044853
+Accuracy (validation): 0.91112
+Epoch: 0021 cost= 0.163299025
+Accuracy (validation): 0.922342
+Epoch: 0022 cost= 0.151688902
+Accuracy (validation): 0.916348
+Epoch: 0023 cost= 0.142422407
+Accuracy (validation): 0.918899
+Epoch: 0024 cost= 0.134173905
+Accuracy (validation): 0.925657
+Epoch: 0025 cost= 0.125998380
+Accuracy (validation): 0.918388
+Epoch: 0026 cost= 0.120247876
+Accuracy (validation): 0.928207
+Epoch: 0027 cost= 0.125373458
+Accuracy (validation): 0.928335
+Epoch: 0028 cost= 0.121939874
+Accuracy (validation): 0.932798
+Epoch: 0029 cost= 0.110261008
+Accuracy (validation): 0.93063
+Epoch: 0030 cost= 0.109809186
+New learning rate:  0.001
+Accuracy (validation): 0.929228
+Epoch: 0031 cost= 0.104217137
+Accuracy (validation): 0.930758
+Epoch: 0032 cost= 0.104098144
+Accuracy (validation): 0.934711
+Epoch: 0033 cost= 0.093164548
+Accuracy (validation): 0.935859
+Epoch: 0034 cost= 0.100203496
+Accuracy (validation): 0.931013
+Epoch: 0035 cost= 0.098328570
+Accuracy (validation): 0.941597
+Epoch: 0036 cost= 0.095216977
+Accuracy (validation): 0.936496
+Epoch: 0037 cost= 0.088544129
+Accuracy (validation): 0.939429
+Epoch: 0038 cost= 0.089066895
+Accuracy (validation): 0.937771
+Epoch: 0039 cost= 0.082742842
+Accuracy (validation): 0.940067
+Epoch: 0040 cost= 0.081917833
+Accuracy (validation): 0.934583
+Epoch: 0041 cost= 0.077085165
+Accuracy (validation): 0.934711
+Epoch: 0042 cost= 0.075959610
+Accuracy (validation): 0.941469
+Epoch: 0043 cost= 0.080916562
+Accuracy (validation): 0.939684
+Epoch: 0044 cost= 0.079465586
+Accuracy (validation): 0.939174
+Epoch: 0045 cost= 0.074017784
+New learning rate:  0.001
+Accuracy (validation): 0.942872
+Epoch: 0046 cost= 0.069513621
+Accuracy (validation): 0.937516
+Epoch: 0047 cost= 0.068586155
+Accuracy (validation): 0.943
+Epoch: 0048 cost= 0.070502710
+Accuracy (validation): 0.942107
+Epoch: 0049 cost= 0.072704837
+Accuracy (validation): 0.941214
+Epoch: 0050 cost= 0.069346677
+Accuracy (validation): 0.943637
+Epoch: 0051 cost= 0.069103429
+Accuracy (validation): 0.946825
+Epoch: 0052 cost= 0.066964843
+Accuracy (validation): 0.94402
+Epoch: 0053 cost= 0.064509136
+Accuracy (validation): 0.943
+Epoch: 0054 cost= 0.063361147
+Accuracy (validation): 0.943255
+Epoch: 0055 cost= 0.062900489
+Accuracy (validation): 0.94249
+Epoch: 0056 cost= 0.062274105
+Accuracy (validation): 0.941852
+Epoch: 0057 cost= 0.062780638
+Accuracy (validation): 0.942107
+Epoch: 0058 cost= 0.056901346
+Accuracy (validation): 0.939684
+Epoch: 0059 cost= 0.061150542
+Accuracy (validation): 0.942745
+Epoch: 0060 cost= 0.062969376
+New learning rate:  0.001
+Accuracy (validation): 0.945167
+Epoch: 0061 cost= 0.059952618
+Accuracy (validation): 0.94912
+Epoch: 0062 cost= 0.056694359
+Accuracy (validation): 0.948355
+Epoch: 0063 cost= 0.053883228
+Accuracy (validation): 0.948483
+Epoch: 0064 cost= 0.059977173
+Accuracy (validation): 0.947845
+Epoch: 0065 cost= 0.056952986
+Accuracy (validation): 0.94453
+Epoch: 0066 cost= 0.060117216
+Accuracy (validation): 0.945167
+Epoch: 0067 cost= 0.054471432
+Accuracy (validation): 0.944275
+Epoch: 0068 cost= 0.054038627
+Accuracy (validation): 0.94453
+Epoch: 0069 cost= 0.054466285
+Accuracy (validation): 0.942872
+Epoch: 0070 cost= 0.057024420
+Accuracy (validation): 0.948355
+Epoch: 0071 cost= 0.052134518
+Accuracy (validation): 0.948228
+Epoch: 0072 cost= 0.054000750
+Accuracy (validation): 0.950651
+Epoch: 0073 cost= 0.053974694
+Accuracy (validation): 0.952819
+Epoch: 0074 cost= 0.047847623
+Accuracy (validation): 0.949503
+Epoch: 0075 cost= 0.047533247
+New learning rate:  0.001
+Accuracy (validation): 0.949758
+Epoch: 0076 cost= 0.052442688
+Accuracy (validation): 0.9481
+Epoch: 0077 cost= 0.045895408
+Accuracy (validation): 0.94861
+Epoch: 0078 cost= 0.051227206
+Accuracy (validation): 0.94351
+Epoch: 0079 cost= 0.054454186
+Accuracy (validation): 0.952053
+Epoch: 0080 cost= 0.046732690
+Accuracy (validation): 0.946315
+Epoch: 0081 cost= 0.048497563
+Accuracy (validation): 0.951671
+Epoch: 0082 cost= 0.046012351
+Accuracy (validation): 0.94606
+Epoch: 0083 cost= 0.045155529
+Accuracy (validation): 0.94606
+Epoch: 0084 cost= 0.051384496
+Accuracy (validation): 0.94759
+Epoch: 0085 cost= 0.047993271
+Accuracy (validation): 0.946315
+Epoch: 0086 cost= 0.049240775
+Accuracy (validation): 0.954986
+Epoch: 0087 cost= 0.045328645
+Accuracy (validation): 0.953329
+Epoch: 0088 cost= 0.047376906
+Accuracy (validation): 0.950523
+Epoch: 0089 cost= 0.044677873
+Accuracy (validation): 0.958557
+Epoch: 0090 cost= 0.043662923
+New learning rate:  0.001
+Accuracy (validation): 0.954859
+Epoch: 0091 cost= 0.045992714
+Accuracy (validation): 0.953711
+Epoch: 0092 cost= 0.043358649
+Accuracy (validation): 0.952181
+Epoch: 0093 cost= 0.044139325
+Accuracy (validation): 0.94249
+Epoch: 0094 cost= 0.042095126
+Accuracy (validation): 0.954859
+Epoch: 0095 cost= 0.039928183
+Accuracy (validation): 0.953456
+Epoch: 0096 cost= 0.044638922
+Accuracy (validation): 0.952819
+Epoch: 0097 cost= 0.045464576
+Accuracy (validation): 0.950778
+Epoch: 0098 cost= 0.045139573
+Accuracy (validation): 0.948865
+Epoch: 0099 cost= 0.042735672
+Accuracy (validation): 0.951926
+Epoch: 0100 cost= 0.044609470
+Accuracy (validation): 0.953584
+Optimization Finished!
+Accuracy (test): 0.760729
+Time to calculate accuracy on test set:  0.31751370429992676
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.8
+Dropout (fc):  0.8
+Padding:  VALID
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 9
+Conv1 Shape:  [None, 5, 5, 32]
+Epoch: 0001 cost= 2.298765846
+Accuracy (validation): 0.527162
+Epoch: 0002 cost= 1.290009345
+Accuracy (validation): 0.641928
+Epoch: 0003 cost= 0.992730133
+Accuracy (validation): 0.703265
+Epoch: 0004 cost= 0.836990670
+Accuracy (validation): 0.738077
+Epoch: 0005 cost= 0.728627344
+Accuracy (validation): 0.759118
+Epoch: 0006 cost= 0.646646685
+Accuracy (validation): 0.782709
+Epoch: 0007 cost= 0.575012727
+Accuracy (validation): 0.805917
+Epoch: 0008 cost= 0.518703024
+Accuracy (validation): 0.816501
+Epoch: 0009 cost= 0.482139723
+Accuracy (validation): 0.821857
+Epoch: 0010 cost= 0.450677297
+Accuracy (validation): 0.835501
+Epoch: 0011 cost= 0.407929362
+Accuracy (validation): 0.844683
+Epoch: 0012 cost= 0.388386972
+Accuracy (validation): 0.854884
+Epoch: 0013 cost= 0.351197189
+Accuracy (validation): 0.86075
+Epoch: 0014 cost= 0.331587695
+Accuracy (validation): 0.867381
+Epoch: 0015 cost= 0.317714837
+New learning rate:  0.001
+Accuracy (validation): 0.871462
+Epoch: 0016 cost= 0.297125313
+Accuracy (validation): 0.877327
+Epoch: 0017 cost= 0.286997638
+Accuracy (validation): 0.87465
+Epoch: 0018 cost= 0.273043004
+Accuracy (validation): 0.873502
+Epoch: 0019 cost= 0.250789947
+Accuracy (validation): 0.890972
+Epoch: 0020 cost= 0.241944033
+Accuracy (validation): 0.887657
+Epoch: 0021 cost= 0.234356196
+Accuracy (validation): 0.900153
+Epoch: 0022 cost= 0.221344314
+Accuracy (validation): 0.89212
+Epoch: 0023 cost= 0.210563317
+Accuracy (validation): 0.898878
+Epoch: 0024 cost= 0.209720500
+Accuracy (validation): 0.901939
+Epoch: 0025 cost= 0.193716193
+Accuracy (validation): 0.901811
+Epoch: 0026 cost= 0.189537205
+Accuracy (validation): 0.898113
+Epoch: 0027 cost= 0.183259921
+Accuracy (validation): 0.905509
+Epoch: 0028 cost= 0.173215720
+Accuracy (validation): 0.907422
+Epoch: 0029 cost= 0.171348018
+Accuracy (validation): 0.915456
+Epoch: 0030 cost= 0.170083414
+New learning rate:  0.001
+Accuracy (validation): 0.915711
+Epoch: 0031 cost= 0.159736914
+Accuracy (validation): 0.910227
+Epoch: 0032 cost= 0.154889059
+Accuracy (validation): 0.912905
+Epoch: 0033 cost= 0.148455612
+Accuracy (validation): 0.910992
+Epoch: 0034 cost= 0.144944909
+Accuracy (validation): 0.917241
+Epoch: 0035 cost= 0.144900625
+Accuracy (validation): 0.913925
+Epoch: 0036 cost= 0.132998369
+Accuracy (validation): 0.914053
+Epoch: 0037 cost= 0.146437460
+Accuracy (validation): 0.918771
+Epoch: 0038 cost= 0.130117211
+Accuracy (validation): 0.923234
+Epoch: 0039 cost= 0.129679369
+Accuracy (validation): 0.918133
+Epoch: 0040 cost= 0.129307298
+Accuracy (validation): 0.923234
+Epoch: 0041 cost= 0.123313254
+Accuracy (validation): 0.923489
+Epoch: 0042 cost= 0.124990705
+Accuracy (validation): 0.927825
+Epoch: 0043 cost= 0.121341595
+Accuracy (validation): 0.93165
+Epoch: 0044 cost= 0.117551903
+Accuracy (validation): 0.927187
+Epoch: 0045 cost= 0.115749543
+New learning rate:  0.001
+Accuracy (validation): 0.92859
+Epoch: 0046 cost= 0.113289006
+Accuracy (validation): 0.929355
+Epoch: 0047 cost= 0.109036220
+Accuracy (validation): 0.932543
+Epoch: 0048 cost= 0.108128200
+Accuracy (validation): 0.928845
+Epoch: 0049 cost= 0.109494379
+Accuracy (validation): 0.930503
+Epoch: 0050 cost= 0.099583006
+Accuracy (validation): 0.929865
+Epoch: 0051 cost= 0.105667075
+Accuracy (validation): 0.930885
+Epoch: 0052 cost= 0.101216582
+Accuracy (validation): 0.931905
+Epoch: 0053 cost= 0.100791331
+Accuracy (validation): 0.931395
+Epoch: 0054 cost= 0.106350096
+Accuracy (validation): 0.930758
+Epoch: 0055 cost= 0.096976313
+Accuracy (validation): 0.93114
+Epoch: 0056 cost= 0.094637544
+Accuracy (validation): 0.935476
+Epoch: 0057 cost= 0.098519022
+Accuracy (validation): 0.930503
+Epoch: 0058 cost= 0.098245337
+Accuracy (validation): 0.938154
+Epoch: 0059 cost= 0.095469145
+Accuracy (validation): 0.936241
+Epoch: 0060 cost= 0.089556222
+New learning rate:  0.001
+Accuracy (validation): 0.931523
+Epoch: 0061 cost= 0.092197313
+Accuracy (validation): 0.935731
+Epoch: 0062 cost= 0.090584374
+Accuracy (validation): 0.931523
+Epoch: 0063 cost= 0.089266975
+Accuracy (validation): 0.939684
+Epoch: 0064 cost= 0.088787082
+Accuracy (validation): 0.934966
+Epoch: 0065 cost= 0.086438626
+Accuracy (validation): 0.935731
+Epoch: 0066 cost= 0.089037346
+Accuracy (validation): 0.9291
+Epoch: 0067 cost= 0.085876432
+Accuracy (validation): 0.937261
+Epoch: 0068 cost= 0.085885527
+Accuracy (validation): 0.938409
+Epoch: 0069 cost= 0.088302872
+Accuracy (validation): 0.939429
+Epoch: 0070 cost= 0.082005789
+Accuracy (validation): 0.938792
+Epoch: 0071 cost= 0.083730682
+Accuracy (validation): 0.939047
+Epoch: 0072 cost= 0.082907163
+Accuracy (validation): 0.938919
+Epoch: 0073 cost= 0.081868803
+Accuracy (validation): 0.938664
+Epoch: 0074 cost= 0.075004045
+Accuracy (validation): 0.937644
+Epoch: 0075 cost= 0.078208081
+New learning rate:  0.001
+Accuracy (validation): 0.938154
+Epoch: 0076 cost= 0.080465794
+Accuracy (validation): 0.936751
+Epoch: 0077 cost= 0.075499275
+Accuracy (validation): 0.942107
+Epoch: 0078 cost= 0.078378313
+Accuracy (validation): 0.936496
+Epoch: 0079 cost= 0.073228094
+Accuracy (validation): 0.938026
+Epoch: 0080 cost= 0.079590745
+Accuracy (validation): 0.937644
+Epoch: 0081 cost= 0.075711610
+Accuracy (validation): 0.94657
+Epoch: 0082 cost= 0.075106588
+Accuracy (validation): 0.939557
+Epoch: 0083 cost= 0.075344983
+Accuracy (validation): 0.940577
+Epoch: 0084 cost= 0.071289359
+Accuracy (validation): 0.938664
+Epoch: 0085 cost= 0.074111353
+Accuracy (validation): 0.939812
+Epoch: 0086 cost= 0.073294347
+Accuracy (validation): 0.942107
+Epoch: 0087 cost= 0.073582019
+Accuracy (validation): 0.945422
+Epoch: 0088 cost= 0.066510346
+Accuracy (validation): 0.940449
+Epoch: 0089 cost= 0.075755959
+Accuracy (validation): 0.946953
+Epoch: 0090 cost= 0.075688718
+New learning rate:  0.001
+Accuracy (validation): 0.938664
+Epoch: 0091 cost= 0.069167573
+Accuracy (validation): 0.941724
+Epoch: 0092 cost= 0.068181834
+Accuracy (validation): 0.938919
+Epoch: 0093 cost= 0.073176576
+Accuracy (validation): 0.939939
+Epoch: 0094 cost= 0.070390241
+Accuracy (validation): 0.945295
+Epoch: 0095 cost= 0.070351098
+Accuracy (validation): 0.938536
+Epoch: 0096 cost= 0.068834800
+Accuracy (validation): 0.937261
+Epoch: 0097 cost= 0.066587802
+Accuracy (validation): 0.936879
+Epoch: 0098 cost= 0.069091447
+Accuracy (validation): 0.939046
+Epoch: 0099 cost= 0.063318301
+Accuracy (validation): 0.941724
+Epoch: 0100 cost= 0.066249224
+Accuracy (validation): 0.941087
+Optimization Finished!
+Accuracy (test): 0.736026
+Time to calculate accuracy on test set:  0.33690500259399414
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.7
+Dropout (fc):  0.8
+Padding:  VALID
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 10
+Conv1 Shape:  [None, 5, 5, 32]
+Epoch: 0001 cost= 2.181280923
+Accuracy (validation): 0.591941
+Epoch: 0002 cost= 1.112307940
+Accuracy (validation): 0.70811
+Epoch: 0003 cost= 0.815409384
+Accuracy (validation): 0.762433
+Epoch: 0004 cost= 0.646698879
+Accuracy (validation): 0.804387
+Epoch: 0005 cost= 0.535648916
+Accuracy (validation): 0.8253
+Epoch: 0006 cost= 0.465994947
+Accuracy (validation): 0.84124
+Epoch: 0007 cost= 0.416932569
+Accuracy (validation): 0.861388
+Epoch: 0008 cost= 0.361502665
+Accuracy (validation): 0.863556
+Epoch: 0009 cost= 0.329899524
+Accuracy (validation): 0.87771
+Epoch: 0010 cost= 0.291635945
+Accuracy (validation): 0.883703
+Epoch: 0011 cost= 0.270194682
+Accuracy (validation): 0.891227
+Epoch: 0012 cost= 0.241603178
+Accuracy (validation): 0.899516
+Epoch: 0013 cost= 0.224418610
+Accuracy (validation): 0.911247
+Epoch: 0014 cost= 0.204643970
+Accuracy (validation): 0.911502
+Epoch: 0015 cost= 0.190425407
+New learning rate:  0.001
+Accuracy (validation): 0.919536
+Epoch: 0016 cost= 0.181851527
+Accuracy (validation): 0.919536
+Epoch: 0017 cost= 0.168218314
+Accuracy (validation): 0.916476
+Epoch: 0018 cost= 0.160567814
+Accuracy (validation): 0.926295
+Epoch: 0019 cost= 0.145853442
+Accuracy (validation): 0.917113
+Epoch: 0020 cost= 0.141082690
+Accuracy (validation): 0.929993
+Epoch: 0021 cost= 0.133653785
+Accuracy (validation): 0.928462
+Epoch: 0022 cost= 0.123333002
+Accuracy (validation): 0.929483
+Epoch: 0023 cost= 0.116403539
+Accuracy (validation): 0.930758
+Epoch: 0024 cost= 0.112199524
+Accuracy (validation): 0.93114
+Epoch: 0025 cost= 0.107717005
+Accuracy (validation): 0.932033
+Epoch: 0026 cost= 0.108357411
+Accuracy (validation): 0.933053
+Epoch: 0027 cost= 0.099605229
+Accuracy (validation): 0.940832
+Epoch: 0028 cost= 0.099851435
+Accuracy (validation): 0.941087
+Epoch: 0029 cost= 0.098564972
+Accuracy (validation): 0.939557
+Epoch: 0030 cost= 0.090365626
+New learning rate:  0.001
+Accuracy (validation): 0.941469
+Epoch: 0031 cost= 0.086476590
+Accuracy (validation): 0.940194
+Epoch: 0032 cost= 0.086410034
+Accuracy (validation): 0.939812
+Epoch: 0033 cost= 0.078469710
+Accuracy (validation): 0.939174
+Epoch: 0034 cost= 0.078488385
+Accuracy (validation): 0.936369
+Epoch: 0035 cost= 0.079775078
+Accuracy (validation): 0.935221
+Epoch: 0036 cost= 0.068712231
+Accuracy (validation): 0.939047
+Epoch: 0037 cost= 0.078277421
+Accuracy (validation): 0.939557
+Epoch: 0038 cost= 0.074466381
+Accuracy (validation): 0.941852
+Epoch: 0039 cost= 0.069669144
+Accuracy (validation): 0.945933
+Epoch: 0040 cost= 0.068701989
+Accuracy (validation): 0.940577
+Epoch: 0041 cost= 0.066083267
+Accuracy (validation): 0.945167
+Epoch: 0042 cost= 0.065328109
+Accuracy (validation): 0.942744
+Epoch: 0043 cost= 0.066696981
+Accuracy (validation): 0.948483
+Epoch: 0044 cost= 0.065080102
+Accuracy (validation): 0.938281
+Epoch: 0045 cost= 0.064829764
+New learning rate:  0.001
+Accuracy (validation): 0.945933
+Epoch: 0046 cost= 0.059879478
+Accuracy (validation): 0.947973
+Epoch: 0047 cost= 0.059240333
+Accuracy (validation): 0.946443
+Epoch: 0048 cost= 0.060646477
+Accuracy (validation): 0.945295
+Epoch: 0049 cost= 0.058234473
+Accuracy (validation): 0.9481
+Epoch: 0050 cost= 0.055959568
+Accuracy (validation): 0.950778
+Epoch: 0051 cost= 0.055970743
+Accuracy (validation): 0.944402
+Epoch: 0052 cost= 0.053591169
+Accuracy (validation): 0.94759
+Epoch: 0053 cost= 0.052059002
+Accuracy (validation): 0.947463
+Epoch: 0054 cost= 0.056192972
+Accuracy (validation): 0.942107
+Epoch: 0055 cost= 0.053519854
+Accuracy (validation): 0.949503
+Epoch: 0056 cost= 0.050914318
+Accuracy (validation): 0.939301
+Epoch: 0057 cost= 0.051682443
+Accuracy (validation): 0.950396
+Epoch: 0058 cost= 0.052996093
+Accuracy (validation): 0.950268
+Epoch: 0059 cost= 0.045133227
+Accuracy (validation): 0.949885
+Epoch: 0060 cost= 0.045735102
+New learning rate:  0.001
+Accuracy (validation): 0.951926
+Epoch: 0061 cost= 0.047273328
+Accuracy (validation): 0.950141
+Epoch: 0062 cost= 0.053420998
+Accuracy (validation): 0.950778
+Epoch: 0063 cost= 0.045293866
+Accuracy (validation): 0.948993
+Epoch: 0064 cost= 0.043279616
+Accuracy (validation): 0.950396
+Epoch: 0065 cost= 0.046799175
+Accuracy (validation): 0.950268
+Epoch: 0066 cost= 0.045188337
+Accuracy (validation): 0.952563
+Epoch: 0067 cost= 0.046305566
+Accuracy (validation): 0.950013
+Epoch: 0068 cost= 0.043582725
+Accuracy (validation): 0.951671
+Epoch: 0069 cost= 0.043797524
+Accuracy (validation): 0.953074
+Epoch: 0070 cost= 0.044204695
+Accuracy (validation): 0.956772
+Epoch: 0071 cost= 0.043746190
+Accuracy (validation): 0.952436
+Epoch: 0072 cost= 0.039584941
+Accuracy (validation): 0.952819
+Epoch: 0073 cost= 0.042627672
+Accuracy (validation): 0.949503
+Epoch: 0074 cost= 0.039080582
+Accuracy (validation): 0.950778
+Epoch: 0075 cost= 0.045710270
+New learning rate:  0.001
+Accuracy (validation): 0.952819
+Epoch: 0076 cost= 0.041181733
+Accuracy (validation): 0.952691
+Epoch: 0077 cost= 0.038343435
+Accuracy (validation): 0.952819
+Epoch: 0078 cost= 0.049320383
+Accuracy (validation): 0.949375
+Epoch: 0079 cost= 0.035752722
+Accuracy (validation): 0.956389
+Epoch: 0080 cost= 0.038450792
+Accuracy (validation): 0.953584
+Epoch: 0081 cost= 0.042003353
+Accuracy (validation): 0.954349
+Epoch: 0082 cost= 0.041854952
+Accuracy (validation): 0.952691
+Epoch: 0083 cost= 0.041678875
+Accuracy (validation): 0.956006
+Epoch: 0084 cost= 0.036524091
+Accuracy (validation): 0.954476
+Epoch: 0085 cost= 0.037879485
+Accuracy (validation): 0.955496
+Epoch: 0086 cost= 0.042161668
+Accuracy (validation): 0.955496
+Epoch: 0087 cost= 0.033511478
+Accuracy (validation): 0.958429
+Epoch: 0088 cost= 0.036506387
+Accuracy (validation): 0.954094
+Epoch: 0089 cost= 0.036612949
+Accuracy (validation): 0.958047
+Epoch: 0090 cost= 0.036414041
+New learning rate:  0.001
+Accuracy (validation): 0.953201
+Epoch: 0091 cost= 0.039717281
+Accuracy (validation): 0.954604
+Epoch: 0092 cost= 0.036749178
+Accuracy (validation): 0.957537
+Epoch: 0093 cost= 0.036858642
+Accuracy (validation): 0.955369
+Epoch: 0094 cost= 0.035862976
+Accuracy (validation): 0.955624
+Epoch: 0095 cost= 0.036126448
+Accuracy (validation): 0.958174
+Epoch: 0096 cost= 0.038688858
+Accuracy (validation): 0.955496
+Epoch: 0097 cost= 0.036399957
+Accuracy (validation): 0.957792
+Epoch: 0098 cost= 0.035729818
+Accuracy (validation): 0.953966
+Epoch: 0099 cost= 0.035010397
+Accuracy (validation): 0.957027
+Epoch: 0100 cost= 0.036594008
+Accuracy (validation): 0.958047
+Optimization Finished!
+Accuracy (test): 0.773397
+Time to calculate accuracy on test set:  0.3631002902984619
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.85
+Dropout (fc):  0.8
+Padding:  VALID
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 11
+Epoch: 0001 cost= 2.175793135
+Accuracy (validation): 0.567712
+Epoch: 0002 cost= 1.088294212
+Accuracy (validation): 0.710788
+Epoch: 0003 cost= 0.782698886
+Accuracy (validation): 0.760903
+Epoch: 0004 cost= 0.627720674
+Accuracy (validation): 0.801454
+Epoch: 0005 cost= 0.522505611
+Accuracy (validation): 0.832824
+Epoch: 0006 cost= 0.444425594
+Accuracy (validation): 0.84583
+Epoch: 0007 cost= 0.381004185
+Accuracy (validation): 0.852971
+Epoch: 0008 cost= 0.340259597
+Accuracy (validation): 0.871334
+Epoch: 0009 cost= 0.302091377
+Accuracy (validation): 0.884596
+Epoch: 0010 cost= 0.273177624
+Accuracy (validation): 0.891482
+Epoch: 0011 cost= 0.242750441
+Accuracy (validation): 0.890844
+Epoch: 0012 cost= 0.230561252
+Accuracy (validation): 0.904744
+Epoch: 0013 cost= 0.201036774
+Accuracy (validation): 0.907422
+Epoch: 0014 cost= 0.184697336
+Accuracy (validation): 0.912013
+Epoch: 0015 cost= 0.180172436
+New learning rate:  0.001
+Accuracy (validation): 0.91418
+Epoch: 0016 cost= 0.162711379
+Accuracy (validation): 0.912523
+Epoch: 0017 cost= 0.149558609
+Accuracy (validation): 0.915073
+Epoch: 0018 cost= 0.143535849
+Accuracy (validation): 0.919026
+Epoch: 0019 cost= 0.135524545
+Accuracy (validation): 0.915328
+Epoch: 0020 cost= 0.135091908
+Accuracy (validation): 0.927952
+Epoch: 0021 cost= 0.119138643
+Accuracy (validation): 0.929355
+Epoch: 0022 cost= 0.118333448
+Accuracy (validation): 0.933563
+Epoch: 0023 cost= 0.117149426
+Accuracy (validation): 0.927442
+Epoch: 0024 cost= 0.108179385
+Accuracy (validation): 0.93114
+Epoch: 0025 cost= 0.091273507
+Accuracy (validation): 0.936496
+Epoch: 0026 cost= 0.094923073
+Accuracy (validation): 0.935859
+Epoch: 0027 cost= 0.092189107
+Accuracy (validation): 0.936751
+Epoch: 0028 cost= 0.088554054
+Accuracy (validation): 0.939174
+Epoch: 0029 cost= 0.082838000
+Accuracy (validation): 0.938154
+Epoch: 0030 cost= 0.079811964
+New learning rate:  0.001
+Accuracy (validation): 0.937771
+Epoch: 0031 cost= 0.081461752
+Accuracy (validation): 0.939302
+Epoch: 0032 cost= 0.078753268
+Accuracy (validation): 0.941469
+Epoch: 0033 cost= 0.070292184
+Accuracy (validation): 0.937771
+Epoch: 0034 cost= 0.077593342
+Accuracy (validation): 0.945932
+Epoch: 0035 cost= 0.069940697
+Accuracy (validation): 0.941469
+Epoch: 0036 cost= 0.067417731
+Accuracy (validation): 0.949248
+Epoch: 0037 cost= 0.069720191
+Accuracy (validation): 0.937771
+Epoch: 0038 cost= 0.067535334
+Accuracy (validation): 0.942745
+Epoch: 0039 cost= 0.062516151
+Accuracy (validation): 0.94453
+Epoch: 0040 cost= 0.061553582
+Accuracy (validation): 0.945805
+Epoch: 0041 cost= 0.062459079
+Accuracy (validation): 0.946443
+Epoch: 0042 cost= 0.063230247
+Accuracy (validation): 0.94657
+Epoch: 0043 cost= 0.054761872
+Accuracy (validation): 0.950268
+Epoch: 0044 cost= 0.064221163
+Accuracy (validation): 0.94759
+Epoch: 0045 cost= 0.055740618
+New learning rate:  0.001
+Accuracy (validation): 0.944785
+Epoch: 0046 cost= 0.054656446
+Accuracy (validation): 0.94963
+Epoch: 0047 cost= 0.053145180
+Accuracy (validation): 0.956389
+Epoch: 0048 cost= 0.052098782
+Accuracy (validation): 0.949885
+Epoch: 0049 cost= 0.051216766
+Accuracy (validation): 0.955496
+Epoch: 0050 cost= 0.052764795
+Accuracy (validation): 0.94606
+Epoch: 0051 cost= 0.049396438
+Accuracy (validation): 0.946698
+Epoch: 0052 cost= 0.052866939
+Accuracy (validation): 0.953456
+Epoch: 0053 cost= 0.053233234
+Accuracy (validation): 0.953201
+Epoch: 0054 cost= 0.049267887
+Accuracy (validation): 0.954859
+Epoch: 0055 cost= 0.049997772
+Accuracy (validation): 0.949248
+Epoch: 0056 cost= 0.049717725
+Accuracy (validation): 0.950013
+Epoch: 0057 cost= 0.046668434
+Accuracy (validation): 0.955496
+Epoch: 0058 cost= 0.046351931
+Accuracy (validation): 0.949376
+Epoch: 0059 cost= 0.043744756
+Accuracy (validation): 0.953201
+Epoch: 0060 cost= 0.043845373
+New learning rate:  0.001
+Accuracy (validation): 0.953839
+Epoch: 0061 cost= 0.045765158
+Accuracy (validation): 0.947335
+Epoch: 0062 cost= 0.046580966
+Accuracy (validation): 0.951926
+Epoch: 0063 cost= 0.048868816
+Accuracy (validation): 0.954349
+Epoch: 0064 cost= 0.038162513
+Accuracy (validation): 0.954859
+Epoch: 0065 cost= 0.038971887
+Accuracy (validation): 0.953711
+Epoch: 0066 cost= 0.045753177
+Accuracy (validation): 0.953074
+Epoch: 0067 cost= 0.042168920
+Accuracy (validation): 0.954221
+Epoch: 0068 cost= 0.038850573
+Accuracy (validation): 0.959067
+Epoch: 0069 cost= 0.040176914
+Accuracy (validation): 0.957154
+Epoch: 0070 cost= 0.039440094
+Accuracy (validation): 0.955624
+Epoch: 0071 cost= 0.039405890
+Accuracy (validation): 0.958557
+Epoch: 0072 cost= 0.038617785
+Accuracy (validation): 0.956006
+Epoch: 0073 cost= 0.038914611
+Accuracy (validation): 0.953329
+Epoch: 0074 cost= 0.037807738
+Accuracy (validation): 0.955241
+Epoch: 0075 cost= 0.042705561
+New learning rate:  0.001
+Accuracy (validation): 0.954094
+Epoch: 0076 cost= 0.037924687
+Accuracy (validation): 0.952946
+Epoch: 0077 cost= 0.035418649
+Accuracy (validation): 0.953074
+Epoch: 0078 cost= 0.039187135
+Accuracy (validation): 0.950523
+Epoch: 0079 cost= 0.038765744
+Accuracy (validation): 0.955496
+Epoch: 0080 cost= 0.032540747
+Accuracy (validation): 0.954094
+Epoch: 0081 cost= 0.037298999
+Accuracy (validation): 0.957154
+Epoch: 0082 cost= 0.029934875
+Accuracy (validation): 0.959194
+Epoch: 0083 cost= 0.038465399
+Accuracy (validation): 0.950141
+Epoch: 0084 cost= 0.038552036
+Accuracy (validation): 0.955114
+Epoch: 0085 cost= 0.034056608
+Accuracy (validation): 0.956262
+Epoch: 0086 cost= 0.037626835
+Accuracy (validation): 0.957792
+Epoch: 0087 cost= 0.040395017
+Accuracy (validation): 0.956262
+Epoch: 0088 cost= 0.033136134
+Accuracy (validation): 0.955751
+Epoch: 0089 cost= 0.036601060
+Accuracy (validation): 0.955496
+Epoch: 0090 cost= 0.036730352
+New learning rate:  0.001
+Accuracy (validation): 0.952563
+Epoch: 0091 cost= 0.034606311
+Accuracy (validation): 0.957154
+Epoch: 0092 cost= 0.032591843
+Accuracy (validation): 0.960087
+Epoch: 0093 cost= 0.033172788
+Accuracy (validation): 0.958302
+Epoch: 0094 cost= 0.034224284
+Accuracy (validation): 0.958429
+Epoch: 0095 cost= 0.029481584
+Accuracy (validation): 0.958302
+Epoch: 0096 cost= 0.033245200
+Accuracy (validation): 0.955624
+Epoch: 0097 cost= 0.032294445
+Accuracy (validation): 0.959322
+Epoch: 0098 cost= 0.032464875
+Accuracy (validation): 0.960215
+Epoch: 0099 cost= 0.030538298
+Accuracy (validation): 0.953074
+Epoch: 0100 cost= 0.035022745
+Accuracy (validation): 0.956772
+Optimization Finished!
+Accuracy (test): 0.73943
+Time to calculate accuracy on test set:  0.3869516849517822
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.85
+Dropout (fc):  0.8
+Padding:  SAME
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 12
+Epoch: 0001 cost= 2.180808832
+Accuracy (validation): 0.564652
+Epoch: 0002 cost= 1.096214724
+Accuracy (validation): 0.711171
+Epoch: 0003 cost= 0.774982207
+Accuracy (validation): 0.771742
+Epoch: 0004 cost= 0.610281454
+Accuracy (validation): 0.819944
+Epoch: 0005 cost= 0.502679935
+Accuracy (validation): 0.839455
+Epoch: 0006 cost= 0.423692116
+Accuracy (validation): 0.853099
+Epoch: 0007 cost= 0.369695329
+Accuracy (validation): 0.870952
+Epoch: 0008 cost= 0.318091787
+Accuracy (validation): 0.87924
+Epoch: 0009 cost= 0.283026139
+Accuracy (validation): 0.886891
+Epoch: 0010 cost= 0.252672991
+Accuracy (validation): 0.887146
+Epoch: 0011 cost= 0.235745229
+Accuracy (validation): 0.900153
+Epoch: 0012 cost= 0.210423500
+Accuracy (validation): 0.908187
+Epoch: 0013 cost= 0.188173904
+Accuracy (validation): 0.91265
+Epoch: 0014 cost= 0.175175054
+Accuracy (validation): 0.915328
+Epoch: 0015 cost= 0.163108138
+New learning rate:  0.001
+Accuracy (validation): 0.920556
+Epoch: 0016 cost= 0.151405409
+Accuracy (validation): 0.920429
+Epoch: 0017 cost= 0.138927602
+Accuracy (validation): 0.927442
+Epoch: 0018 cost= 0.133695186
+Accuracy (validation): 0.92706
+Epoch: 0019 cost= 0.118157574
+Accuracy (validation): 0.926677
+Epoch: 0020 cost= 0.112793179
+Accuracy (validation): 0.929993
+Epoch: 0021 cost= 0.108998061
+Accuracy (validation): 0.938664
+Epoch: 0022 cost= 0.099489991
+Accuracy (validation): 0.938281
+Epoch: 0023 cost= 0.099979476
+Accuracy (validation): 0.925275
+Epoch: 0024 cost= 0.094525336
+Accuracy (validation): 0.939812
+Epoch: 0025 cost= 0.087933772
+Accuracy (validation): 0.936369
+Epoch: 0026 cost= 0.087609950
+Accuracy (validation): 0.932415
+Epoch: 0027 cost= 0.085759721
+Accuracy (validation): 0.946698
+Epoch: 0028 cost= 0.079357660
+Accuracy (validation): 0.943382
+Epoch: 0029 cost= 0.076758215
+Accuracy (validation): 0.939174
+Epoch: 0030 cost= 0.076563014
+New learning rate:  0.001
+Accuracy (validation): 0.947208
+Epoch: 0031 cost= 0.069968877
+Accuracy (validation): 0.945933
+Epoch: 0032 cost= 0.071818438
+Accuracy (validation): 0.942617
+Epoch: 0033 cost= 0.063843627
+Accuracy (validation): 0.939174
+Epoch: 0034 cost= 0.063650988
+Accuracy (validation): 0.940959
+Epoch: 0035 cost= 0.059409122
+Accuracy (validation): 0.944275
+Epoch: 0036 cost= 0.061762720
+Accuracy (validation): 0.94555
+Epoch: 0037 cost= 0.059381516
+Accuracy (validation): 0.94351
+Epoch: 0038 cost= 0.056581958
+Accuracy (validation): 0.952053
+Epoch: 0039 cost= 0.054511934
+Accuracy (validation): 0.945805
+Epoch: 0040 cost= 0.053261990
+Accuracy (validation): 0.939812
+Epoch: 0041 cost= 0.057709479
+Accuracy (validation): 0.946315
+Epoch: 0042 cost= 0.054842276
+Accuracy (validation): 0.951671
+Epoch: 0043 cost= 0.051842264
+Accuracy (validation): 0.948993
+Epoch: 0044 cost= 0.058662788
+Accuracy (validation): 0.94759
+Epoch: 0045 cost= 0.047506396
+New learning rate:  0.001
+Accuracy (validation): 0.952946
+Epoch: 0046 cost= 0.048583660
+Accuracy (validation): 0.94912
+Epoch: 0047 cost= 0.048435073
+Accuracy (validation): 0.947973
+Epoch: 0048 cost= 0.042102166
+Accuracy (validation): 0.952818
+Epoch: 0049 cost= 0.045223553
+Accuracy (validation): 0.957919
+Epoch: 0050 cost= 0.045807685
+Accuracy (validation): 0.952563
+Epoch: 0051 cost= 0.045724038
+Accuracy (validation): 0.952053
+Epoch: 0052 cost= 0.047482449
+Accuracy (validation): 0.951543
+Epoch: 0053 cost= 0.048288580
+Accuracy (validation): 0.953074
+Epoch: 0054 cost= 0.041271770
+Accuracy (validation): 0.956006
+Epoch: 0055 cost= 0.041667163
+Accuracy (validation): 0.956899
+Epoch: 0056 cost= 0.040173325
+Accuracy (validation): 0.955751
+Epoch: 0057 cost= 0.038985076
+Accuracy (validation): 0.947845
+Epoch: 0058 cost= 0.042961517
+Accuracy (validation): 0.951033
+Epoch: 0059 cost= 0.043521162
+Accuracy (validation): 0.951671
+Epoch: 0060 cost= 0.036641081
+New learning rate:  0.001
+Accuracy (validation): 0.955624
+Epoch: 0061 cost= 0.039615181
+Accuracy (validation): 0.955751
+Epoch: 0062 cost= 0.041095511
+Accuracy (validation): 0.956006
+Epoch: 0063 cost= 0.037646091
+Accuracy (validation): 0.952819
+Epoch: 0064 cost= 0.037758353
+Accuracy (validation): 0.952181
+Epoch: 0065 cost= 0.036325641
+Accuracy (validation): 0.961617
+Epoch: 0066 cost= 0.038221972
+Accuracy (validation): 0.957792
+Epoch: 0067 cost= 0.036239337
+Accuracy (validation): 0.958302
+Epoch: 0068 cost= 0.036721304
+Accuracy (validation): 0.953584
+Epoch: 0069 cost= 0.034637701
+Accuracy (validation): 0.955496
+Epoch: 0070 cost= 0.034619070
+Accuracy (validation): 0.955879
+Epoch: 0071 cost= 0.036399959
+Accuracy (validation): 0.951798
+Epoch: 0072 cost= 0.035716097
+Accuracy (validation): 0.957409
+Epoch: 0073 cost= 0.033007461
+Accuracy (validation): 0.956644
+Epoch: 0074 cost= 0.029790706
+Accuracy (validation): 0.956644
+Epoch: 0075 cost= 0.031021510
+New learning rate:  0.001
+Accuracy (validation): 0.952946
+Epoch: 0076 cost= 0.031668649
+Accuracy (validation): 0.954986
+Epoch: 0077 cost= 0.034805402
+Accuracy (validation): 0.955114
+Epoch: 0078 cost= 0.035373061
+Accuracy (validation): 0.957027
+Epoch: 0079 cost= 0.035362817
+Accuracy (validation): 0.957919
+Epoch: 0080 cost= 0.029998658
+Accuracy (validation): 0.958557
+Epoch: 0081 cost= 0.029410208
+Accuracy (validation): 0.959194
+Epoch: 0082 cost= 0.029950227
+Accuracy (validation): 0.957409
+Epoch: 0083 cost= 0.032936910
+Accuracy (validation): 0.96149
+Epoch: 0084 cost= 0.030596221
+Accuracy (validation): 0.959449
+Epoch: 0085 cost= 0.032541370
+Accuracy (validation): 0.96098
+Epoch: 0086 cost= 0.027974697
+Accuracy (validation): 0.958174
+Epoch: 0087 cost= 0.035541009
+Accuracy (validation): 0.957664
+Epoch: 0088 cost= 0.030099471
+Accuracy (validation): 0.955114
+Epoch: 0089 cost= 0.030848074
+Accuracy (validation): 0.954476
+Epoch: 0090 cost= 0.033715691
+New learning rate:  0.001
+Accuracy (validation): 0.94963
+Epoch: 0091 cost= 0.029982815
+Accuracy (validation): 0.955114
+Epoch: 0092 cost= 0.027158002
+Accuracy (validation): 0.957154
+Epoch: 0093 cost= 0.028187309
+Accuracy (validation): 0.95945
+Epoch: 0094 cost= 0.028817314
+Accuracy (validation): 0.957282
+Epoch: 0095 cost= 0.025488986
+Accuracy (validation): 0.957664
+Epoch: 0096 cost= 0.028344354
+Accuracy (validation): 0.958684
+Epoch: 0097 cost= 0.026891673
+Accuracy (validation): 0.959194
+Epoch: 0098 cost= 0.032021059
+Accuracy (validation): 0.959705
+Epoch: 0099 cost= 0.029152672
+Accuracy (validation): 0.957792
+Epoch: 0100 cost= 0.028152338
+Accuracy (validation): 0.957409
+Optimization Finished!
+Accuracy (test): 0.793112
+Time to calculate accuracy on test set:  0.4109625816345215
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.9
+Dropout (fc):  0.8
+Padding:  VALID
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 13
+Epoch: 0001 cost= 2.244690807
+Accuracy (validation): 0.541061
+Epoch: 0002 cost= 1.179625217
+Accuracy (validation): 0.672788
+Epoch: 0003 cost= 0.880545513
+Accuracy (validation): 0.743688
+Epoch: 0004 cost= 0.711865343
+Accuracy (validation): 0.782454
+Epoch: 0005 cost= 0.596376831
+Accuracy (validation): 0.807192
+Epoch: 0006 cost= 0.511783619
+Accuracy (validation): 0.830273
+Epoch: 0007 cost= 0.441687602
+Accuracy (validation): 0.843025
+Epoch: 0008 cost= 0.391908608
+Accuracy (validation): 0.862918
+Epoch: 0009 cost= 0.355378612
+Accuracy (validation): 0.868784
+Epoch: 0010 cost= 0.318066308
+Accuracy (validation): 0.87873
+Epoch: 0011 cost= 0.291501784
+Accuracy (validation): 0.881791
+Epoch: 0012 cost= 0.265785482
+Accuracy (validation): 0.89314
+Epoch: 0013 cost= 0.244623268
+Accuracy (validation): 0.901556
+Epoch: 0014 cost= 0.227848766
+Accuracy (validation): 0.905764
+Epoch: 0015 cost= 0.213600172
+New learning rate:  0.001
+Accuracy (validation): 0.899133
+Epoch: 0016 cost= 0.198015205
+Accuracy (validation): 0.911502
+Epoch: 0017 cost= 0.185345093
+Accuracy (validation): 0.912013
+Epoch: 0018 cost= 0.171959744
+Accuracy (validation): 0.915711
+Epoch: 0019 cost= 0.163499580
+Accuracy (validation): 0.9101
+Epoch: 0020 cost= 0.155934539
+Accuracy (validation): 0.919154
+Epoch: 0021 cost= 0.150710384
+Accuracy (validation): 0.916476
+Epoch: 0022 cost= 0.140413054
+Accuracy (validation): 0.919536
+Epoch: 0023 cost= 0.135148000
+Accuracy (validation): 0.928462
+Epoch: 0024 cost= 0.129905904
+Accuracy (validation): 0.924892
+Epoch: 0025 cost= 0.125159974
+Accuracy (validation): 0.934966
+Epoch: 0026 cost= 0.119371641
+Accuracy (validation): 0.923999
+Epoch: 0027 cost= 0.112411583
+Accuracy (validation): 0.93012
+Epoch: 0028 cost= 0.111622576
+Accuracy (validation): 0.934073
+Epoch: 0029 cost= 0.105073803
+Accuracy (validation): 0.935731
+Epoch: 0030 cost= 0.108467549
+New learning rate:  0.001
+Accuracy (validation): 0.925912
+Epoch: 0031 cost= 0.101527030
+Accuracy (validation): 0.935221
+Epoch: 0032 cost= 0.097238352
+Accuracy (validation): 0.931013
+Epoch: 0033 cost= 0.090564889
+Accuracy (validation): 0.936496
+Epoch: 0034 cost= 0.089772368
+Accuracy (validation): 0.932288
+Epoch: 0035 cost= 0.085384485
+Accuracy (validation): 0.935093
+Epoch: 0036 cost= 0.084695167
+Accuracy (validation): 0.937644
+Epoch: 0037 cost= 0.082075407
+Accuracy (validation): 0.942617
+Epoch: 0038 cost= 0.085493667
+Accuracy (validation): 0.940322
+Epoch: 0039 cost= 0.082571433
+Accuracy (validation): 0.939302
+Epoch: 0040 cost= 0.074831057
+Accuracy (validation): 0.943637
+Epoch: 0041 cost= 0.073583496
+Accuracy (validation): 0.944147
+Epoch: 0042 cost= 0.074746107
+Accuracy (validation): 0.940194
+Epoch: 0043 cost= 0.071392927
+Accuracy (validation): 0.94351
+Epoch: 0044 cost= 0.067078602
+Accuracy (validation): 0.936624
+Epoch: 0045 cost= 0.073644376
+New learning rate:  0.001
+Accuracy (validation): 0.943255
+Epoch: 0046 cost= 0.068370231
+Accuracy (validation): 0.941724
+Epoch: 0047 cost= 0.074017774
+Accuracy (validation): 0.942745
+Epoch: 0048 cost= 0.068182839
+Accuracy (validation): 0.947973
+Epoch: 0049 cost= 0.070922264
+Accuracy (validation): 0.941342
+Epoch: 0050 cost= 0.067086421
+Accuracy (validation): 0.94657
+Epoch: 0051 cost= 0.060162064
+Accuracy (validation): 0.94351
+Epoch: 0052 cost= 0.063194826
+Accuracy (validation): 0.940322
+Epoch: 0053 cost= 0.061592371
+Accuracy (validation): 0.94504
+Epoch: 0054 cost= 0.059441054
+Accuracy (validation): 0.945805
+Epoch: 0055 cost= 0.059324408
+Accuracy (validation): 0.953201
+Epoch: 0056 cost= 0.060262634
+Accuracy (validation): 0.945933
+Epoch: 0057 cost= 0.062137690
+Accuracy (validation): 0.952563
+Epoch: 0058 cost= 0.054418275
+Accuracy (validation): 0.950778
+Epoch: 0059 cost= 0.058473716
+Accuracy (validation): 0.950906
+Epoch: 0060 cost= 0.060924662
+New learning rate:  0.001
+Accuracy (validation): 0.94861
+Epoch: 0061 cost= 0.055703600
+Accuracy (validation): 0.944275
+Epoch: 0062 cost= 0.058193582
+Accuracy (validation): 0.950523
+Epoch: 0063 cost= 0.056133893
+Accuracy (validation): 0.950013
+Epoch: 0064 cost= 0.055120316
+Accuracy (validation): 0.94606
+Epoch: 0065 cost= 0.052257553
+Accuracy (validation): 0.951926
+Epoch: 0066 cost= 0.055455174
+Accuracy (validation): 0.949248
+Epoch: 0067 cost= 0.054481696
+Accuracy (validation): 0.951543
+Epoch: 0068 cost= 0.052919711
+Accuracy (validation): 0.952308
+Epoch: 0069 cost= 0.052493075
+Accuracy (validation): 0.950778
+Epoch: 0070 cost= 0.048504086
+Accuracy (validation): 0.956644
+Epoch: 0071 cost= 0.051053271
+Accuracy (validation): 0.949886
+Epoch: 0072 cost= 0.055599740
+Accuracy (validation): 0.950268
+Epoch: 0073 cost= 0.049583039
+Accuracy (validation): 0.952691
+Epoch: 0074 cost= 0.048918068
+Accuracy (validation): 0.955241
+Epoch: 0075 cost= 0.045672406
+New learning rate:  0.001
+Accuracy (validation): 0.948993
+Epoch: 0076 cost= 0.047632031
+Accuracy (validation): 0.948993
+Epoch: 0077 cost= 0.043851107
+Accuracy (validation): 0.954221
+Epoch: 0078 cost= 0.049771064
+Accuracy (validation): 0.956389
+Epoch: 0079 cost= 0.045126488
+Accuracy (validation): 0.950906
+Epoch: 0080 cost= 0.051602135
+Accuracy (validation): 0.949503
+Epoch: 0081 cost= 0.045555750
+Accuracy (validation): 0.94912
+Epoch: 0082 cost= 0.044426184
+Accuracy (validation): 0.948738
+Epoch: 0083 cost= 0.040565867
+Accuracy (validation): 0.949758
+Epoch: 0084 cost= 0.051328946
+Accuracy (validation): 0.952053
+Epoch: 0085 cost= 0.048553576
+Accuracy (validation): 0.952819
+Epoch: 0086 cost= 0.041897283
+Accuracy (validation): 0.953584
+Epoch: 0087 cost= 0.045598625
+Accuracy (validation): 0.952819
+Epoch: 0088 cost= 0.040015507
+Accuracy (validation): 0.954986
+Epoch: 0089 cost= 0.042164654
+Accuracy (validation): 0.954476
+Epoch: 0090 cost= 0.044583221
+New learning rate:  0.001
+Accuracy (validation): 0.957154
+Epoch: 0091 cost= 0.044809307
+Accuracy (validation): 0.955114
+Epoch: 0092 cost= 0.042430834
+Accuracy (validation): 0.950396
+Epoch: 0093 cost= 0.045360772
+Accuracy (validation): 0.953711
+Epoch: 0094 cost= 0.043757094
+Accuracy (validation): 0.950141
+Epoch: 0095 cost= 0.041687435
+Accuracy (validation): 0.954859
+Epoch: 0096 cost= 0.041706493
+Accuracy (validation): 0.953201
+Epoch: 0097 cost= 0.041239522
+Accuracy (validation): 0.949503
+Epoch: 0098 cost= 0.047502425
+Accuracy (validation): 0.949248
+Epoch: 0099 cost= 0.042477994
+Accuracy (validation): 0.949886
+Epoch: 0100 cost= 0.037097471
+Accuracy (validation): 0.955241
+Optimization Finished!
+Accuracy (test): 0.786778
+Time to calculate accuracy on test set:  0.4421210289001465
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.9
+Dropout (fc):  0.7
+Padding:  VALID
+weights_mean:  0.0
+weights_stddev:  0.1
+biases_mean:  0.0
+
+## Trial 14
+Epoch: 0001 cost= 2.033621150
+Accuracy (validation): 0.626371
+Epoch: 0002 cost= 0.965445368
+Accuracy (validation): 0.742285
+Epoch: 0003 cost= 0.677308536
+Accuracy (validation): 0.788575
+Epoch: 0004 cost= 0.523132763
+Accuracy (validation): 0.830146
+Epoch: 0005 cost= 0.423531943
+Accuracy (validation): 0.862918
+Epoch: 0006 cost= 0.353230422
+Accuracy (validation): 0.856159
+Epoch: 0007 cost= 0.299647305
+Accuracy (validation): 0.876945
+Epoch: 0008 cost= 0.256873310
+Accuracy (validation): 0.887912
+Epoch: 0009 cost= 0.226062320
+Accuracy (validation): 0.89212
+Epoch: 0010 cost= 0.201785189
+Accuracy (validation): 0.909207
+Epoch: 0011 cost= 0.181645642
+Accuracy (validation): 0.912778
+Epoch: 0012 cost= 0.158014740
+Accuracy (validation): 0.925785
+Epoch: 0013 cost= 0.144240289
+Accuracy (validation): 0.923999
+Epoch: 0014 cost= 0.139443488
+Accuracy (validation): 0.925147
+Epoch: 0015 cost= 0.123844690
+New learning rate:  0.001
+Accuracy (validation): 0.92808
+Epoch: 0016 cost= 0.113805488
+Accuracy (validation): 0.928462
+Epoch: 0017 cost= 0.103153833
+Accuracy (validation): 0.938536
+Epoch: 0018 cost= 0.098273370
+Accuracy (validation): 0.933308
+Epoch: 0019 cost= 0.090984789
+Accuracy (validation): 0.935859
+Epoch: 0020 cost= 0.085270804
+Accuracy (validation): 0.941214
+Epoch: 0021 cost= 0.078255625
+Accuracy (validation): 0.940194
+Epoch: 0022 cost= 0.075276753
+Accuracy (validation): 0.94912
+Epoch: 0023 cost= 0.078390608
+Accuracy (validation): 0.948228
+Epoch: 0024 cost= 0.067054616
+Accuracy (validation): 0.947463
+Epoch: 0025 cost= 0.063775034
+Accuracy (validation): 0.947718
+Epoch: 0026 cost= 0.065489629
+Accuracy (validation): 0.939174
+Epoch: 0027 cost= 0.059892927
+Accuracy (validation): 0.94912
+Epoch: 0028 cost= 0.052531820
+Accuracy (validation): 0.949758
+Epoch: 0029 cost= 0.056096334
+Accuracy (validation): 0.949248
+Epoch: 0030 cost= 0.051787139
+New learning rate:  0.001
+Accuracy (validation): 0.952563
+Epoch: 0031 cost= 0.048960944
+Accuracy (validation): 0.951926
+Epoch: 0032 cost= 0.050879527
+Accuracy (validation): 0.941597
+Epoch: 0033 cost= 0.048738615
+Accuracy (validation): 0.950268
+Epoch: 0034 cost= 0.049512328
+Accuracy (validation): 0.94249
+Epoch: 0035 cost= 0.048711727
+Accuracy (validation): 0.952563
+Epoch: 0036 cost= 0.046545952
+Accuracy (validation): 0.952308
+Epoch: 0037 cost= 0.041681037
+Accuracy (validation): 0.953074
+Epoch: 0038 cost= 0.041700865
+Accuracy (validation): 0.952691
+Epoch: 0039 cost= 0.042613823
+Accuracy (validation): 0.958812
+Epoch: 0040 cost= 0.036616093
+Accuracy (validation): 0.958429
+Epoch: 0041 cost= 0.034960499
+Accuracy (validation): 0.954604
+Epoch: 0042 cost= 0.039753838
+Accuracy (validation): 0.955624
+Epoch: 0043 cost= 0.035738130
+Accuracy (validation): 0.953201
+Epoch: 0044 cost= 0.035492372
+Accuracy (validation): 0.952181
+Epoch: 0045 cost= 0.039480849
+New learning rate:  0.001
+Accuracy (validation): 0.951926
+Epoch: 0046 cost= 0.035568600
+Accuracy (validation): 0.956517
+Epoch: 0047 cost= 0.033848665
+Accuracy (validation): 0.954221
+Epoch: 0048 cost= 0.035825342
+Accuracy (validation): 0.950268
+Epoch: 0049 cost= 0.033235846
+Accuracy (validation): 0.954604
+Epoch: 0050 cost= 0.031840215
+Accuracy (validation): 0.959832
+Epoch: 0051 cost= 0.031304180
+Accuracy (validation): 0.958047
+Epoch: 0052 cost= 0.026159598
+Accuracy (validation): 0.959067
+Epoch: 0053 cost= 0.033571664
+Accuracy (validation): 0.955624
+Epoch: 0054 cost= 0.033865633
+Accuracy (validation): 0.952819
+Epoch: 0055 cost= 0.033707749
+Accuracy (validation): 0.959449
+Epoch: 0056 cost= 0.029636400
+Accuracy (validation): 0.958557
+Epoch: 0057 cost= 0.028561201
+Accuracy (validation): 0.962
+Epoch: 0058 cost= 0.031104961
+Accuracy (validation): 0.951671
+Epoch: 0059 cost= 0.031257891
+Accuracy (validation): 0.962765
+Epoch: 0060 cost= 0.024280419
+New learning rate:  0.001
+Accuracy (validation): 0.961107
+Epoch: 0061 cost= 0.025771900
+Accuracy (validation): 0.958684
+Epoch: 0062 cost= 0.025455670
+Accuracy (validation): 0.957027
+Epoch: 0063 cost= 0.028855610
+Accuracy (validation): 0.953711
+Epoch: 0064 cost= 0.033365960
+Accuracy (validation): 0.957282
+Epoch: 0065 cost= 0.025081522
+Accuracy (validation): 0.963658
+Epoch: 0066 cost= 0.031195428
+Accuracy (validation): 0.957919
+Epoch: 0067 cost= 0.021706846
+Accuracy (validation): 0.964678
+Epoch: 0068 cost= 0.027917986
+Accuracy (validation): 0.962255
+Epoch: 0069 cost= 0.028546668
+Accuracy (validation): 0.96302
+Epoch: 0070 cost= 0.025660668
+Accuracy (validation): 0.962127
+Epoch: 0071 cost= 0.025626413
+Accuracy (validation): 0.959194
+Epoch: 0072 cost= 0.026506907
+Accuracy (validation): 0.963913
+Epoch: 0073 cost= 0.023433912
+Accuracy (validation): 0.960725
+Epoch: 0074 cost= 0.020824310
+Accuracy (validation): 0.957537
+Epoch: 0075 cost= 0.021372769
+New learning rate:  0.001
+Accuracy (validation): 0.967738
+Epoch: 0076 cost= 0.022620756
+Accuracy (validation): 0.961872
+Epoch: 0077 cost= 0.023795903
+Accuracy (validation): 0.96302
+Epoch: 0078 cost= 0.027775152
+Accuracy (validation): 0.965825
+Epoch: 0079 cost= 0.020796042
+Accuracy (validation): 0.962765
+Epoch: 0080 cost= 0.023293452
+Accuracy (validation): 0.964295
+Epoch: 0081 cost= 0.018771825
+Accuracy (validation): 0.963147
+Epoch: 0082 cost= 0.027776407
+Accuracy (validation): 0.965188
+Epoch: 0083 cost= 0.019601529
+Accuracy (validation): 0.960342
+Epoch: 0084 cost= 0.028105985
+Accuracy (validation): 0.963275
+Epoch: 0085 cost= 0.022790616
+Accuracy (validation): 0.964805
+Epoch: 0086 cost= 0.025688015
+Accuracy (validation): 0.965825
+Epoch: 0087 cost= 0.020859603
+Accuracy (validation): 0.966208
+Epoch: 0088 cost= 0.021483444
+Accuracy (validation): 0.963402
+Epoch: 0089 cost= 0.020440202
+Accuracy (validation): 0.96506
+Epoch: 0090 cost= 0.020897173
+New learning rate:  0.001
+Accuracy (validation): 0.960725
+Epoch: 0091 cost= 0.025588009
+Accuracy (validation): 0.961362
+Epoch: 0092 cost= 0.021704588
+Accuracy (validation): 0.965315
+Epoch: 0093 cost= 0.022328348
+Accuracy (validation): 0.962127
+Epoch: 0094 cost= 0.023801711
+Accuracy (validation): 0.962637
+Epoch: 0095 cost= 0.021426205
+Accuracy (validation): 0.967483
+Epoch: 0096 cost= 0.021081432
+Accuracy (validation): 0.961872
+Epoch: 0097 cost= 0.017672626
+Accuracy (validation): 0.963657
+Epoch: 0098 cost= 0.017382629
+Accuracy (validation): 0.965315
+Epoch: 0099 cost= 0.019210996
+Accuracy (validation): 0.963275
+Epoch: 0100 cost= 0.016906027
+Accuracy (validation): 0.965953
+Optimization Finished!
+Accuracy (test): 0.790499
+Time to calculate accuracy on test set:  0.47881174087524414
+
+Parameters:
+Learning rate (initial):  0.001
+Anneal learning rate every  15  epochs by  0
+Learning rate (final):  0.001
+Training epochs:  100
+Batch size:  100
+Dropout (conv):  0.9
+Dropout (fc):  0.9
+Padding:  VALID
 weights_mean:  0.0
 weights_stddev:  0.1
 biases_mean:  0.0
