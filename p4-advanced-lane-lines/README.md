@@ -1,6 +1,8 @@
-## Advanced Lane Finding
+# Advanced Lane Finding
+
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
+### Project Instructions
 The goals / steps of this project are the following:  
 
 * Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
@@ -12,10 +14,86 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
----
+### Navigating this directory
+* Project code is in `p4.ipynb`.
+* The images for camera calibration are stored in the folder called `camera_cal`.  
+* The images in `test_images` are for testing your pipeline on single frames.
 
-The images for camera calibration are stored in the folder called `camera_cal`.  The images in `test_images` are for testing your pipeline on single frames.  To help the reviewer examine your work, please save examples of the output from each stage of your pipeline in the folder called `ouput_images`, and include a description in the README for the project of what each image shows.    The video called `project_video.mp4` is the video your pipeline should work well on.  
 
-The `challenge_video.mp4` video is an extra (and optional) challenge for you if you want to test your pipeline under somewhat trickier conditions.  The `harder_challenge.mp4` video is another optional challenge and is brutal!
+## Project Outline:
+The code for each step is in the correspondingly named section of `p4.ipynb`.
 
-If you're feeling ambitious (again, totally optional though), don't stop there!  We encourage you to go out and take video of your own, calibrate your camera and show us how you would implement this project from scratch!
+## I. Camera Calibration
+
+### 1. Computing the camera matrix and distortion coefficients
+This was done in Step 1 of the ipynb.
+* Read in calibration images.
+* Generate object points (points I want to map the chessboard corners to in the undistorted image).
+* Find the image points (chessboard corners) using `cv2.findChessboardCorners`.
+* Calibrate the camera and obtain distortion coefficients using `cv2.calibrateCamera`.
+
+#### Example of a distortion corrected calibration image.
+![](readme-images/distortion-corrected-calib-image.png)
+
+
+## Pipeline (test images)
+
+### 2. Apply distortion correction to each image
+* Apply `cv2.undistort` with the camera matrix and distortion coefficients obtained in Step 1. 
+
+#### Example of a distortion-corrected image
+![](readme-images/distortion-corrected-image.png)
+
+### 3. Create a thresholded binary image
+
+* Threshold x gradient (for grayscaled image)
+* Threshold colour channel (S channel)
+* Combine the two binary thresholds to generate a binary image.
+
+#### Example of a thresholded binary image
+![](readme-images/thresholded-binary-image.png)
+
+
+### 4. Perspective transform
+* Select only a hard-coded region of interest using a binary mask.
+![](readme-images/masked-thresholded-binary-image.png)
+* Transform the image from the car camera's perspective to a birds-eye-view perspective.
+* Hard-code the source and destination polygon coordinates and obtain the matrix `M` that maps them onto each other using `cv2.getPerspective`.
+* Warp the image to the new birds-eye-view perspective using `cv2.warpPerspective` and the perspective transform matrix `M` we just obtained.
+#### Example of a transformed image
+Before (masked):
+![](readme-images/masked-thresholded-binary-image.png)
+After:
+![](readme-images/birds-eye-view-image.png)
+
+### 5. Identify lane-line pixels and fit their positions with a polynomial
+
+#### Identify lane line pixels
+* Divide the image into `n` horizontal strips (steps) of equal height.
+* For each step, take a count of all the pixels at each x-value within the step window using a histogram generated from `np.sum`.
+* Smoothen the histogram using `scipy.signal.medfilt`.
+* Find the peaks in the left and right halves (one half for each lane line) histogram using `signal.find_peaks_swt`.
+* Get (add to our collection of lane line pixels) the pixels in that horizontal strip that have x coordinates close to the two peak x coordinates.
+
+#### Fit positions of lane-line pixels with a polynomial
+* Fit a second order polynomial to each lane line using `np.polyfit`.
+
+#### Example plot
+TODO: Add
+
+### 6. Calculate the radius of curvature of the lane and the position of the vehicle with respect to the center
+TODO: Add
+
+
+### Result
+example image of your result plotted back down onto the road such that the lane area is identified clearly.
+
+## III. Pipeline (Video)
+
+[Link to video output](#)
+
+## IV. Discussion
+
+* Discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?
+
+* Approach, techniques
