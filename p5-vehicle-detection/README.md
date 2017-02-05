@@ -29,8 +29,8 @@ Some example images for testing your pipeline on single frames are located in th
 1. Read in all `vehicle` and `non-vehicle` images.
 Here are two example images, the first from the `vehicle` class and the second from the `non-vehicle` class:
 
-![Vehicle](vehicles/GTI_Far/image0000.png)
-![Non-vehicle](non-vehicles/Extras/extra1.png)
+![Vehicle](./readme_images/vehicle-example9.png)
+![Non-vehicle](./readme_images/non-vehicle-example1.png)
 
 2. Use `skimage.feature.hog(training_image, [parameters=parameter_values])` to extract HOG features and HOG visualisation.
     * Wrapped in function `get_hog_features`.
@@ -75,7 +75,7 @@ Code in Section 2.
 
 Sample image:
 
-![Sample image of bounding boxes around classified windows](1.2.png)
+![Sample image of bounding boxes around classified windows](./readme_images/1.2.png)
 ---
 
 ### Video Implementation
