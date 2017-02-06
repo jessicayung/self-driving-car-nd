@@ -2,6 +2,8 @@ p2-traffic-signs/traffic-sign-data/train.p
 
 p2-traffic-signs/traffic-sign-data/test.p
 
+p3-behavioural-cloning/data-udacity/
+
 .idea/
 
 *.zip
@@ -17,3 +19,18 @@ p1-lane-lines/annotated-videos/
 *.npy
 
 *.p
+
+*.mp4
+
+computer-vision-notes-and-labs/vehicles_smallset
+
+computer-vision-notes-and-labs/non-vehicles_smallset
+
+p5-vehicle-detection/vehicles/
+
+p5-vehicle-detection/non-vehicles/
+
+p5-vehicle-detection/hogviz/
+
+SDCND_StudentHandbook_v2.pdf
+
