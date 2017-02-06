@@ -64,8 +64,11 @@ This was done in Step 1 of the ipynb.
 
 #### Example of a transformed image
 Before (masked):
+
 ![](readme_images/masked-thresholded-binary-image.png)
+
 After:
+
 ![](readme_images/birds-eye-view-image.png)
 
 ### 5. Identify lane-line pixels and fit their positions with a polynomial
@@ -82,9 +85,11 @@ After:
 
 #### Example plot
 Polynomial fitted to birds-eye-view image:
+
 ![](readme_images/fit-lanelines-with-poly.png)
 
 Polynomial drawn on image using helper function `draw_poly`:
+
 ![](readme_images/drawn-poly.png)
 
 ### 6. Calculate the radius of curvature of the lane and the position of the vehicle with respect to the center
@@ -97,9 +102,11 @@ Polynomial drawn on image using helper function `draw_poly`:
 * Combine lane lines with original image (version corrected for distortion) using `cv2.add`.
 
 Lane lines warped back onto original perspective:
+
 ![](readme_images/warped-back-poly.png)
 
 #### Result: Lane lines combined with original image:
+
 ![](readme_images/combined-image-distortion-corrected.png)
 
 ## III. Pipeline (Video)
