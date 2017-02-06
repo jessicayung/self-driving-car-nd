@@ -33,7 +33,7 @@ This was done in Step 1 of the ipynb.
 * Calibrate the camera and obtain distortion coefficients using `cv2.calibrateCamera`.
 
 #### Example of a distortion corrected calibration image.
-![](readme-images/distortion-corrected-calib-image.png)
+![](readme_images/distortion-corrected-calib-image.png)
 
 
 ## Pipeline (test images)
@@ -42,7 +42,7 @@ This was done in Step 1 of the ipynb.
 * Apply `cv2.undistort` with the camera matrix and distortion coefficients obtained in Step 1. 
 
 #### Example of a distortion-corrected image
-![](readme-images/distortion-corrected-image.png)
+![](readme_images/distortion-corrected-image.png)
 
 ### 3. Create a thresholded binary image
 
@@ -51,20 +51,22 @@ This was done in Step 1 of the ipynb.
 * Combine the two binary thresholds to generate a binary image.
 
 #### Example of a thresholded binary image
-![](readme-images/thresholded-binary-image.png)
+![](readme_images/thresholded-binary-image.png)
 
 
 ### 4. Perspective transform
 * Select only a hard-coded region of interest using a binary mask.
-![](readme-images/masked-thresholded-binary-image.png)
+
+![](readme_images/masked-thresholded-binary-image.png)
 * Transform the image from the car camera's perspective to a birds-eye-view perspective.
 * Hard-code the source and destination polygon coordinates and obtain the matrix `M` that maps them onto each other using `cv2.getPerspective`.
 * Warp the image to the new birds-eye-view perspective using `cv2.warpPerspective` and the perspective transform matrix `M` we just obtained.
+
 #### Example of a transformed image
 Before (masked):
-![](readme-images/masked-thresholded-binary-image.png)
+![](readme_images/masked-thresholded-binary-image.png)
 After:
-![](readme-images/birds-eye-view-image.png)
+![](readme_images/birds-eye-view-image.png)
 
 ### 5. Identify lane-line pixels and fit their positions with a polynomial
 
@@ -79,21 +81,33 @@ After:
 * Fit a second order polynomial to each lane line using `np.polyfit`.
 
 #### Example plot
-TODO: Add
+Polynomial fitted to birds-eye-view image:
+![](readme_images/fit-lanelines-with-poly.png)
+
+Polynomial drawn on image using helper function `draw_poly`:
+![](readme_images/drawn-poly.png)
 
 ### 6. Calculate the radius of curvature of the lane and the position of the vehicle with respect to the center
-TODO: Add
+
+* Code: `left_curverad = ((1 + (2*left_fit[0]*y_eval + left_fit[1])**2)**1.5) /np.absolute(2*left_fit[0])`
 
 
-### Result
-example image of your result plotted back down onto the road such that the lane area is identified clearly.
+### 7. Plot result back down onto tho road such that the lane area is identified clearly.
+* Warp lane lines back onto original image (car camera's perspective) using `cv2.warpPerspective`.
+* Combine lane lines with original image (version corrected for distortion) using `cv2.add`.
+
+Lane lines warped back onto original perspective:
+![](readme_images/warped-back-poly.png)
+
+#### Result: Lane lines combined with original image:
+![](readme_images/combined-image-distortion-corrected.png)
 
 ## III. Pipeline (Video)
 
-[Link to video output](#)
+[TODO: Link to video output](#)
 
 ## IV. Discussion
 
-* Discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?
+* TODO: Discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?
 
 * Approach, techniques
