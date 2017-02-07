@@ -323,10 +323,13 @@ def histogram_pixels(warped_thresholded_image, offset=50, steps=6,
     return collapse_into_single_arrays(left_x, left_y, right_x, right_y)
 
 
-def fit_second_order_poly(indep, dep):
+def fit_second_order_poly(indep, dep, return_coeffs=False):
     fit = np.polyfit(indep, dep, 2)
     fitdep = fit[0]*indep**2 + fit[1]*indep + fit[2]
-    return fitdep
+    if return_coeffs == True:
+        return fitdep, fit
+    else:
+        return fitdep
 
 
 ## 7. Warp the detected lane boundaries back onto the original image.¶
