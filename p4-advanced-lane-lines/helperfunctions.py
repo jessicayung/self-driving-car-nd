@@ -331,17 +331,13 @@ def fit_second_order_poly(indep, dep):
 
 ## 7. Warp the detected lane boundaries back onto the original image.¶
 
-def left_lane_poly(yval):
+def lane_poly(yval, poly_coeffs):
     """Returns x value for poly given a y-value.
     Note here x = Ay^2 + By + C."""
-    return left_fit[0]*yval**2 + left_fit[1]*yval + left_fit[2]
+    return poly_coeffs[0]*yval**2 + poly_coeffs[1]*yval + poly_coeffs[2]
 
 
-def right_lane_poly(yval):
-    return right_fit[0]*yval**2 + right_fit[1]*yval + right_fit[2]
-
-
-def draw_poly(img, poly, steps, color=[255, 0, 0], thickness=10, dashed=False):
+def draw_poly(img, poly, poly_coeffs, steps, color=[255, 0, 0], thickness=10, dashed=False):
     img_height = img.shape[0]
     pixels_per_step = img_height // steps
 
@@ -349,8 +345,8 @@ def draw_poly(img, poly, steps, color=[255, 0, 0], thickness=10, dashed=False):
         start = i * pixels_per_step
         end = start + pixels_per_step
 
-        start_point = (int(poly(start)), start)
-        end_point = (int(poly(end)), end)
+        start_point = (int(poly(start, poly_coeffs=poly_coeffs)), start)
+        end_point = (int(poly(end, poly_coeffs=poly_coeffs)), end)
 
         if dashed == False or i % 2 == 1:
             img = cv2.line(img, end_point, start_point, color, thickness)

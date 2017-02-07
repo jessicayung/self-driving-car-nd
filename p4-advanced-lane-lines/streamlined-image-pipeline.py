@@ -95,8 +95,8 @@ def image_pipeline(filepath):
 
     ## 7. Warp the detected lane boundaries back onto the original image.
 
-    polyfit_left = draw_poly(blank_canvas, left_lane_poly, 30)
-    polyfit_drawn = draw_poly(polyfit_left, right_lane_poly, 30)
+    polyfit_left = draw_poly(blank_canvas, lane_poly, left_fit, 30)
+    polyfit_drawn = draw_poly(polyfit_left, lane_poly, right_fit, 30)
     # plt.imshow(polyfit_drawn, cmap="gray")
 
     lane_lines = cv2.warpPerspective(polyfit_drawn, Minv, (imshape[1], imshape[0]), flags=cv2.INTER_LINEAR)
