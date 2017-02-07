@@ -268,9 +268,6 @@ def histogram_pixels(warped_thresholded_image, offset=50, steps=6,
     pixels_per_step = offset_height / steps
 
     for step in range(steps):
-        # Printouts for debugging
-        print("Step ", step)
-
         left_x_window_centres = []
         right_x_window_centres = []
         y_window_centres = []
