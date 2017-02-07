@@ -219,7 +219,7 @@ def get_pixel_in_window(img, x_center, y_center, size):
     :return: x, y of detected pixels
     """
     half_size = size // 2
-    window = img[y_center - half_size:y_center + half_size, x_center - half_size:x_center + half_size]
+    window = img[int(y_center - half_size):int(y_center + half_size), int(x_center - half_size):int(x_center + half_size)]
 
     x, y = (window.T == 1).nonzero()
 
@@ -252,7 +252,8 @@ def collapse_into_single_arrays(leftx, lefty, rightx, righty):
 
 
 def histogram_pixels(warped_thresholded_image, offset=50, steps=6,
-                     window_radius=200, medianfilt_kernel_size=51):
+                     window_radius=200, medianfilt_kernel_size=51,
+                     horizontal_offset=50):
     # Initialise arrays
     left_x = []
     left_y = []
@@ -262,6 +263,7 @@ def histogram_pixels(warped_thresholded_image, offset=50, steps=6,
     # Parameters
     height = warped_thresholded_image.shape[0]
     offset_height = height - offset
+    width = warped_thresholded_image.shape[1]
     half_frame = warped_thresholded_image.shape[1] // 2
     pixels_per_step = offset_height / steps
 
@@ -278,7 +280,7 @@ def histogram_pixels(warped_thresholded_image, offset=50, steps=6,
         window_end_y = window_start_y - pixels_per_step + offset
 
         # Take a count of all the pixels at each x-value in the horizontal slice
-        histogram = np.sum(warped_thresholded_image[window_end_y:window_start_y, :], axis=0)
+        histogram = np.sum(warped_thresholded_image[int(window_end_y):int(window_start_y), int(horizontal_offset):int(width - horizontal_offset)], axis=0)
         # plt.plot(histogram)
 
         # Smoothen the histogram
