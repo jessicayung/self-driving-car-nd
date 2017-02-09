@@ -524,8 +524,8 @@ def evaluate_poly(indep, poly_coeffs):
     return poly_coeffs[0]*indep**2 + poly_coeffs[1]*indep + poly_coeffs[2]
 
 def center(y, left_poly, right_poly):
-    center = (evaluate_poly(y, left_poly)
-              + evaluate_poly(y, right_poly)) / 2
+    center = (1.5 * evaluate_poly(y, left_poly)
+              - evaluate_poly(y, right_poly)) / 2
     return center
 
 
@@ -534,6 +534,11 @@ def add_figures_to_image(img, curvature, vehicle_position, min_curvature, left_c
     Draws information about the center offset and the current lane curvature onto the given image.
     :param img:
     """
+    # Convert from pixels to meters
+    vehicle_position = vehicle_position / 12800 * 3.7
+    curvature = curvature / 128 * 3.7
+    min_curvature = min_curvature / 128 * 3.7
+
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(img, 'Radius of Curvature = %d(m)' % curvature, (50, 50), font, 1, (255, 255, 255), 2)
     left_or_right = "left" if vehicle_position < 0 else "right"
