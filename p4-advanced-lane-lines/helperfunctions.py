@@ -529,7 +529,7 @@ def center(y, left_poly, right_poly):
     return center
 
 
-def add_figures_to_image(img, curvature, vehicle_position):
+def add_figures_to_image(img, curvature, vehicle_position, min_curvature, left_coeffs=(0,0,0), right_coeffs=(0,0,0)):
     """
     Draws information about the center offset and the current lane curvature onto the given image.
     :param img:
@@ -539,6 +539,27 @@ def add_figures_to_image(img, curvature, vehicle_position):
     left_or_right = "left" if vehicle_position < 0 else "right"
     cv2.putText(img, 'Vehicle is %.2fm %s of center' % (np.abs(vehicle_position), left_or_right), (50, 100), font, 1,
                 (255, 255, 255), 2)
+    cv2.putText(img, 'Min Radius of Curvature = %d(m)' % min_curvature, (50, 150), font, 1, (255, 255, 255), 2)
+    cv2.putText(img, 'Left poly coefficients = %.3f %.3f %.3f' % (left_coeffs[0], left_coeffs[1], left_coeffs[2]), (50, 200), font, 1, (255, 255, 255), 2)
+    cv2.putText(img, 'Right poly coefficients = %.3f %.3f %.3f' % (right_coeffs[0], right_coeffs[1], right_coeffs[2]), (50, 250), font, 1, (255, 255, 255), 2)
+
+
+def plausible_curvature(left_curverad, right_curverad):
+    if right_curverad < 500 or left_curverad < 500:
+        return False
+    else:
+        return True
+
+def plausible_continuation_of_traces(left_coeffs, right_coeffs, prev_left_coeffs, prev_right_coeffs):
+    if prev_left_coeffs == None or prev_right_coeffs == None:
+        return True
+    b_left = np.absolute(prev_left_coeffs[1] - left_coeffs[1])
+    b_right = np.absolute(prev_right_coeffs[1] - right_coeffs[1])
+    if b_left > 1 or b_right > 1:
+        return False
+    else:
+        return True
+
 
 ## 7. Warp the detected lane boundaries back onto the original image.¶
 
