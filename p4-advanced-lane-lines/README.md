@@ -49,6 +49,8 @@ This was done in Step 1 of the ipynb.
 * Threshold x gradient (for grayscaled image)
 * Threshold colour channel (S channel)
 * Combine the two binary thresholds to generate a binary image.
+* The parameters (e.g. thresholds) were determined via trial and error (see Discussion). 
+    * Improvement: determine the parameters in a more rigorous way.
 
 #### Example of a thresholded binary image
 ![](readme_images/thresholded-binary-image.png)
@@ -111,10 +113,27 @@ Lane lines warped back onto original perspective:
 
 ## III. Pipeline (Video)
 
-[TODO: Link to video output](#)
+I condensed the operations into a single function `image_pipeline` in the ipynb enabled by helper functions in the file `helperfunctions.py`.
+
+Code:
+```
+from moviepy.editor import VideoFileClip
+
+output = 'project_output.mp4'
+clip1 = VideoFileClip("project_video.mp4").subclip(0,5)
+output_clip = clip1.fl_image(image_pipeline)
+%time output_clip.write_videofile(output, audio=False)
+```
+
+[TODO: Link to video output](./output.mp4)
 
 ## IV. Discussion
 
-* TODO: Discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?
+* Problem 1: Noise interfering with detection of lane lines, resulting in lines with higher curvature being drawn
+    * Instance 1: `test1.jpg`
+        * Solution: increase the minimum threshold for the x gradient from 20 to 40 to filter out noise. (Increasing it to 50 left out parts of the lane.)
+    * Instance 2: `test6.jpg`
+        * Solution: Add a positive horizontal offset so the parts to the far right are not included in the histogram.
 
-* Approach, techniques
+* Problem 2: No lane line detected (usually right lane line)
+    * Solution: Relax x gradient and S channel thresholds using a while loop that relaxes the thresholds by a tiny amount and then repeats the detection process if no lane line is detected. This allows us te relax the thresholds when no lane line is detected without adding noise to frames where lane lines were detected on the first go (e.g. if we'd just changed the thresholds directly).
