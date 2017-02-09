@@ -520,6 +520,26 @@ def fit_second_order_poly(indep, dep, return_coeffs=False):
     else:
         return fitdep
 
+def evaluate_poly(indep, poly_coeffs):
+    return poly_coeffs[0]*indep**2 + poly_coeffs[1]*indep + poly_coeffs[2]
+
+def center(y, left_poly, right_poly):
+    center = (evaluate_poly(y, left_poly)
+              + evaluate_poly(y, right_poly)) / 2
+    return center
+
+
+def add_figures_to_image(img, curvature, vehicle_position):
+    """
+    Draws information about the center offset and the current lane curvature onto the given image.
+    :param img:
+    """
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(img, 'Radius of Curvature = %d(m)' % curvature, (50, 50), font, 1, (255, 255, 255), 2)
+    left_or_right = "left" if vehicle_position < 0 else "right"
+    cv2.putText(img, 'Vehicle is %.2fm %s of center' % (np.abs(vehicle_position), left_or_right), (50, 100), font, 1,
+                (255, 255, 255), 2)
+
 ## 7. Warp the detected lane boundaries back onto the original image.¶
 
 def lane_poly(yval, poly_coeffs):
