@@ -555,7 +555,7 @@ def plausible_continuation_of_traces(left_coeffs, right_coeffs, prev_left_coeffs
         return True
     b_left = np.absolute(prev_left_coeffs[1] - left_coeffs[1])
     b_right = np.absolute(prev_right_coeffs[1] - right_coeffs[1])
-    if b_left > 1 or b_right > 1:
+    if b_left > 0.5 or b_right > 0.5:
         return False
     else:
         return True

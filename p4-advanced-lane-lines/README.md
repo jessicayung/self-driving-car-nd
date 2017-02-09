@@ -15,13 +15,14 @@ The goals / steps of this project are the following:
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
 ### Navigating this directory
-* Project code is in `p4.ipynb`.
+* Project pipelines are in `p4-advanced-lane-lines.ipynb`.
+* Helper functions are in `helperfunctions.py`.
 * The images for camera calibration are stored in the folder called `camera_cal`.  
 * The images in `test_images` are for testing your pipeline on single frames.
 
 
 ## Project Outline:
-The code for each step is in the correspondingly named section of `p4.ipynb`.
+The code for each step is in the correspondingly named section of `p4-advanced-lane-lines.ipynb`.
 
 ## I. Camera Calibration
 
@@ -36,7 +37,7 @@ This was done in Step 1 of the ipynb.
 ![](readme_images/distortion-corrected-calib-image.png)
 
 
-## Pipeline (test images)
+## Image Pipeline
 
 ### 2. Apply distortion correction to each image
 * Apply `cv2.undistort` with the camera matrix and distortion coefficients obtained in Step 1. 
@@ -111,6 +112,15 @@ Lane lines warped back onto original perspective:
 
 ![](readme_images/combined-image-distortion-corrected.png)
 
+### 8. Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
+
+![](readme_images/visual_display_output.png)
+
+## IIB. Streamlined Image Pipeline
+
+See Section IIB of `p4-advanced-lane-lines.ipynb` for the streamlined image pipeline that incorporates the video pipeline checks discussed below.
+
+
 ## III. Pipeline (Video)
 
 I condensed the operations into a single function `image_pipeline` in the ipynb enabled by helper functions in the file `helperfunctions.py`.
@@ -125,7 +135,9 @@ output_clip = clip1.fl_image(image_pipeline)
 %time output_clip.write_videofile(output, audio=False)
 ```
 
-[TODO: Link to video output](./output.mp4)
+I also added a few checks to eliminate and overwrite implausibly drawn lane lines, which I discuss in the section below.
+
+[Video output](./project_output.mp4)
 
 ## IV. Discussion
 
@@ -136,4 +148,9 @@ output_clip = clip1.fl_image(image_pipeline)
         * Solution: Add a positive horizontal offset so the parts to the far right are not included in the histogram.
 
 * Problem 2: No lane line detected (usually right lane line)
-    * Solution: Relax x gradient and S channel thresholds using a while loop that relaxes the thresholds by a tiny amount and then repeats the detection process if no lane line is detected. This allows us te relax the thresholds when no lane line is detected without adding noise to frames where lane lines were detected on the first go (e.g. if we'd just changed the thresholds directly).
+    * Solution: Relax x gradient and S channel thresholds using a `while` loop that relaxes the thresholds by a tiny amount and then repeats the detection process if no lane line is detected. This allows us te relax the thresholds when no lane line is detected without adding noise to frames where lane lines were detected on the first go (e.g. if we'd just changed the thresholds directly).
+    
+* Problem 3: Overly curvy (or otherwise implausible) lane lines drawn
+    * Solution: Check for two things. If either criteria is not met, replace the lane line for this frame with the previous accepted lane line if it exists. This approximation works because lane lines are continuous and do not change shape quickly.
+        * Criteria 1: Curvature is plausible, i.e. radius of curvature is smaller than 500m. (`plausible_curvature`)
+        * Criteria 2: The lane lines drawn are similar to the previous set of (accepted) lane lines drawn. (`plausible_continuation_of_traces`)
