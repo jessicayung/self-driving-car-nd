@@ -111,3 +111,115 @@ hog_feat: True
 Feature vector length:1796
 0.0664Seconds to train SVC...
 Test Accuracy of SVC = 0.995
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.075Seconds to train SVC...
+Test Accuracy of SVC = 1.0
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.0716Seconds to train SVC...
+Test Accuracy of SVC = 0.99
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.0758Seconds to train SVC...
+Test Accuracy of SVC = 1.0
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.0718Seconds to train SVC...
+Test Accuracy of SVC = 1.0
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.0731Seconds to train SVC...
+Test Accuracy of SVC = 0.995
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.0583Seconds to train SVC...
+Test Accuracy of SVC = 0.985
+
+hogviz/rgb_ss1616_hb_16_TTT/o5_ppc8_cpb2_hc0
+Parameters:
+color_space: RGB
+orient: 5
+pix_per_cell: 8
+cell_per_block: 2
+hog_channel: 0
+spatial_size: (16, 16)
+hist_bins: 16
+spatial_feat: True
+hist_feat: True
+hog_feat: True
+Feature vector length:1796
+0.0671Seconds to train SVC...
+Test Accuracy of SVC = 0.99
