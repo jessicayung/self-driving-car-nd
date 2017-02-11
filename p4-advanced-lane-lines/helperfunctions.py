@@ -523,6 +523,16 @@ def fit_second_order_poly(indep, dep, return_coeffs=False):
 def evaluate_poly(indep, poly_coeffs):
     return poly_coeffs[0]*indep**2 + poly_coeffs[1]*indep + poly_coeffs[2]
 
+def highlight_lane_line_area(mask_template, left_poly, right_poly, start_y=0, end_y =720):
+    area_mask = mask_template
+    for y in range(start_y, end_y):
+        left = evaluate_poly(y, left_poly)
+        right = evaluate_poly(y, right_poly)
+        area_mask[y][int(left):int(right)] = 1
+
+    return area_mask
+
+
 def center(y, left_poly, right_poly):
     center = (1.5 * evaluate_poly(y, left_poly)
               - evaluate_poly(y, right_poly)) / 2

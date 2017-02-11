@@ -95,6 +95,10 @@ Polynomial drawn on image using helper function `draw_poly`:
 
 ![](readme_images/drawn-poly.png)
 
+Lane line area highlighted using helper function `highlight_lane_line_area`:
+
+![](readme_images/drawn-poly-colour.png)
+
 ### 6. Calculate the radius of curvature of the lane and the position of the vehicle with respect to the center
 
 * Code: `left_curverad = ((1 + (2*left_fit[0]*y_eval + left_fit[1])**2)**1.5) /np.absolute(2*left_fit[0])`
@@ -103,10 +107,6 @@ Polynomial drawn on image using helper function `draw_poly`:
 ### 7. Plot result back down onto tho road such that the lane area is identified clearly.
 * Warp lane lines back onto original image (car camera's perspective) using `cv2.warpPerspective`.
 * Combine lane lines with original image (version corrected for distortion) using `cv2.add`.
-
-Lane lines warped back onto original perspective:
-
-![](readme_images/warped-back-poly.png)
 
 #### Result: Lane lines combined with original image:
 
