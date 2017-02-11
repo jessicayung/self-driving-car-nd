@@ -40,6 +40,9 @@ heatmap_template = np.zeros_like(image[:, :, 0]).astype(np.float)
 
 # Adapted from Udacity L22 lesson_functions.py
 
+def normalise(image):
+    return (image - image.mean()) / (image.max() - image.min())
+
 # Define a function to return HOG features and visualization
 def get_hog_features(img, orient, pix_per_cell, cell_per_block,
                      vis=True, feature_vec=True):
@@ -298,7 +301,10 @@ def search_windows(img, windows, clf, scaler, color_space='RGB',
                                        hog_channel=hog_channel, spatial_feat=spatial_feat,
                                        hist_feat=hist_feat, hog_feat=hog_feat)
         # 5) Scale extracted features to be fed to classifier
+        # print("features: ", features)
+
         test_features = scaler.transform(np.array(features).reshape(1, -1))
+        # print("Test features: ", test_features)
         # 6) Predict using your classifier
         prediction = clf.predict(test_features)
         # 7) If positive (prediction == 1) then save the window
