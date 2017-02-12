@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 
 from skimage.feature import hog
 
-## Default parameters
+## 0. Default parameters
 color_space = 'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 orient = 5  # HOG orientations
 pix_per_cell = 8 # HOG pixels per cell

@@ -21,26 +21,27 @@ Some example images for testing your pipeline on single frames are located in th
 
 
 ## Project Process
-### Histogram of Oriented Gradients (HOG)
+### I. Histogram of Oriented Gradients (HOG)
 
 #### 1. Extract HOG features from the training images.
 
-
 1. Read in all `vehicle` and `non-vehicle` images.
 Here are two example images, the first from the `vehicle` class and the second from the `non-vehicle` class:
-
-![Vehicle](./readme_images/vehicle-example9.png)
-![Non-vehicle](./readme_images/non-vehicle-example1.png)
+    * ![Vehicle](./readme_images/vehicle-example9.png)
+    * ![Non-vehicle](./readme_images/non-vehicle-example1.png)
 
 2. Use `skimage.feature.hog(training_image, [parameters=parameter_values])` to extract HOG features and HOG visualisation.
     * Wrapped in function `get_hog_features`.
     
-Code in second cell in Section 1.1 in `p5.ipynb`. Relevant functions:  `get_hog_features` and `extract_features`.
+Code in Section 1 of `helperfunctions.py`. Relevant functions:  `get_hog_features` and `extract_features`.
 
 #### 2. Choose HOG parameters.
 
 * I wanted to optimise for HOG parameters systematically, so I wrote a script `hog_experiment.py` that enables me to easily run through different HOG parameters and save the classifier accuracy, the HOG visualisation (image) and bounding boxes overlaid on the video frame (image).
-* I then picked the HOG parameters based on classifier accuracies and looking at the output images. I would like to make this process more rigorous instead of sort of basing it on intuition. It was difficult to do this because the classifier accuracy was usually above 99% and was often shown as 1.0 even if the classifier later drew many false positive bounding boxes.
+    * I used a spreadsheet to note down the parameters used each time, the accuracy, training time and the quality of the bounding boxes for each of the six test images. (E.g. was each car detected? If so, how well was it covered by the bounding boxes (how many bounding boxes + did it cover the car in full or only partially?) How many false positives were there?)
+* I then picked the HOG parameters based on classifier accuracies and looking at the output images. I would like to make this process more rigorous instead of sort of basing it on intuition. 
+    * It was difficult to do this because the classifier accuracy was usually above 99% and was often shown as 1.0 even if the classifier later drew many false positive bounding boxes.
+    * I later realised that the accuracy had been so high because I'd only been using 500 images from each category (vehicles and non-vehicles). But I still couldn't rely only on the classifier accuracy as a measure because a higher accuracy didn't always give me 'better' bounding boxes.
 
 Code in second cell in Section 1.2.
 
@@ -50,16 +51,14 @@ Code in second cell in Section 1.2.
 2. Split data into shuffled training and test sets
 3. Train linear SVM using `sklearn.svm.LinearSVC()`.
 
-Data preprocessing Code in Section 1.2, classifier trained in Section 1.3.
+Data preprocessing code in Section 1.2, classifier trained in Section 1.3.
 
-### Sliding Window Search
+### II. Sliding Window Search
 
 #### 1. Implement a sliding window search.
 
 1. Define windows to search using helper function `slide_window`.
     * Restricted search space to lower half of the image (altered value of variable `y_start_stop`) because cars only appear on the road and not in the sky.
-    * Scales to search: TODO:
-    * How much to overlap windows: TODO
 2.  Implement sliding window search using helper function `search_windows`.
     * For each window, 
         * extract features for that window, 
@@ -78,28 +77,27 @@ Sample image:
 ![Sample image of bounding boxes around classified windows](./readme_images/1.2.png)
 ---
 
-### Video Implementation
+### III. Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 
-[Will link to video result](project_video.mp4)
-
+[Video result](project_output.mp4)
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-1. Record positions of positive detections in each (video) frame.
-2. Create a heatmap of these positions (past 20 frames).
-3. Threshold the heatmap to identify vehicle positions.
-4. Identify blobs in the heatmap and determine their x and y-wise lengths.
-    * Detect blobs using [`skimage.feature.blob_doh()`](http://scikit-image.org/docs/dev/auto_examples/plot_blob.html)
-    * Determine x and y-wise lengths using [`skimage.morphology.watershed()`](http://scikit-image.org/docs/dev/auto_examples/plot_watershed.html)
-5. Construct bounding boxes to cover the area of each blob detected.
-    * Assumed each bounding box corresponds to a vehicle.
+Pipeline:
+1. For each frame, apply the image pipeline and add the detected bounding boxes (positive detections) to a global list `bboxes_list`.
+    * See function `add_bboxes` in *Section 4.1 Streamline image pipeline* in `p5-vehicle-detection.ipynb`.
+    * See function `add_bboxes_to_list` in *Section 4.2 Convert image pipeline into video pipeline* in `p5-vehicle-detection.ipynb`.
+2. Construct a heatmap from the most recent 20 frames of video (or using the number of frames available if there have been fewer than 20 frames before the current frame).
+    * See function `add_heat` in *Section 4.3 Create heat map* in `p5-vehicle-detection.ipynb`. 
+3. Reject false positives: threshold the heatmap.
+4. Draw bounding boxes around the area of each labelled area detected.
+    * Label image using `scipy.ndimage.measurements.labels`
+    * Draw bounding boxes using helper function `draw_labeled_bboxes` in `helperfunctions.py`.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used blob detection in Sci-kit Image (Determinant of a Hessian  worked best for me) to identify individual blobs in the heatmap and then determined the extent of each blob using . I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
-
-Sample image of heatmap and bounding boxes overlaid on a video frame:
-![To include]()
+Sample image of heatmap:
+![](./readme_images/heatmap.png)
 
 ---
 
