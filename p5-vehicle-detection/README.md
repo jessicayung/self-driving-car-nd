@@ -86,9 +86,10 @@ Sample image:
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 Pipeline:
+
 1. For each frame, apply the image pipeline and add the detected bounding boxes (positive detections) to a global list `bboxes_list`.
-    * See function `add_bboxes` in *Section 4.1 Streamline image pipeline* in `p5-vehicle-detection.ipynb`.
-    * See function `add_bboxes_to_list` in *Section 4.2 Convert image pipeline into video pipeline* in `p5-vehicle-detection.ipynb`.
+   * See function `add_bboxes` in *Section 4.1 Streamline image pipeline* in `p5-vehicle-detection.ipynb`.
+   * See function `add_bboxes_to_list` in *Section 4.2 Convert image pipeline into video pipeline* in `p5-vehicle-detection.ipynb`.
 2. Construct a heatmap from the most recent 20 frames of video (or using the number of frames available if there have been fewer than 20 frames before the current frame).
     * See function `add_heat` in *Section 4.3 Create heat map* in `p5-vehicle-detection.ipynb`. 
 3. Reject false positives: threshold the heatmap.
@@ -97,9 +98,11 @@ Pipeline:
     * Draw bounding boxes using helper function `draw_labeled_bboxes` in `helperfunctions.py`.
 
 Sample image of heatmap:
+
 ![](./readme_images/heatmap.png)
 
 Sample image of labels:
+
 ![](./readme_images/labels.png)
 
 ---
