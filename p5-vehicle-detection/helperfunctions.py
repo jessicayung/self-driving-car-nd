@@ -173,7 +173,7 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
 
 ## 2. Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
 def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
-                 xy_window=(64, 64), xy_overlap=(0.5, 0.5)):
+                 xy_window=(64, 64), xy_overlap=(0.5, 0.5), polygon_mask=None):
     """Returns all windows to search in an image.
     No classification has been done at this stage.
     """
@@ -186,17 +186,22 @@ def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
         y_start_stop[0] = 0
     if y_start_stop[1] == None:
         y_start_stop[1] = img.shape[0]
+
     # Compute the span of the region to be searched
     xspan = x_start_stop[1] - x_start_stop[0]
     yspan = y_start_stop[1] - y_start_stop[0]
+
     # Compute the number of pixels per step in x/y
     nx_pix_per_step = np.int(xy_window[0] * (1 - xy_overlap[0]))
     ny_pix_per_step = np.int(xy_window[1] * (1 - xy_overlap[1]))
+
     # Compute the number of windows in x/y
     nx_windows = np.int(xspan / nx_pix_per_step) - 1
     ny_windows = np.int(yspan / ny_pix_per_step) - 1
+
     # Initialize a list to append window positions to
     window_list = []
+
     # Loop through finding x and y window positions
     # Note: you could vectorize this step, but in practice
     # you'll be considering windows one by one with your
@@ -209,8 +214,12 @@ def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
             starty = ys * ny_pix_per_step + y_start_stop[0]
             endy = starty + xy_window[1]
 
-            # Append window position to list
-            window_list.append(((startx, starty), (endx, endy)))
+            if polygon_mask is not None:
+                if polygon_mask[int(starty)][int(startx)] > 0:
+                    # Append window position to list
+                    window_list.append(((startx, starty), (endx, endy)))
+            else:
+                window_list.append(((startx, starty), (endx, endy)))
     # Return the list of windows
     return window_list
 
