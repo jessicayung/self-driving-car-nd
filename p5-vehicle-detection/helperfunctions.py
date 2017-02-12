@@ -342,7 +342,7 @@ def apply_threshold(heatmap, threshold):
     return heatmap
 
 
-def create_heatmaps(all_bboxes, recent_frames_used=10, threshold=0):
+def create_heatmaps(all_bboxes, recent_frames_used=20, threshold=5):
     """
     Produces a heatmap for each frame in `all_bboxes` and returns
     an array of heatmaps.
