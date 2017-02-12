@@ -38,6 +38,7 @@ Code in Section 1 of `helperfunctions.py`. Relevant functions:  `get_hog_feature
 #### 2. Choose HOG parameters.
 
 * I wanted to optimise for HOG parameters systematically, so I wrote a script `hog_experiment.py` that enables me to easily run through different HOG parameters and save the classifier accuracy, the HOG visualisation (image) and bounding boxes overlaid on the video frame (image).
+    * I later used `p5-for-tuning-classifier-parameters.ipynb`.
     * I used a spreadsheet to note down the parameters used each time, the accuracy, training time and the quality of the bounding boxes for each of the six test images. (E.g. was each car detected? If so, how well was it covered by the bounding boxes (how many bounding boxes + did it cover the car in full or only partially?) How many false positives were there?)
 * I then picked the HOG parameters based on classifier accuracies and looking at the output images. I would like to make this process more rigorous instead of sort of basing it on intuition. 
     * It was difficult to do this because the classifier accuracy was usually above 99% and was often shown as 1.0 even if the classifier later drew many false positive bounding boxes.
@@ -81,15 +82,14 @@ Sample image:
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 
-[Video result](output_v4.mp4)
+[Video result](output_v5.mp4)
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 Pipeline:
-
 1. For each frame, apply the image pipeline and add the detected bounding boxes (positive detections) to a global list `bboxes_list`.
-   * See function `add_bboxes` in *Section 4.1 Streamline image pipeline* in `p5-vehicle-detection.ipynb`.
-   * See function `add_bboxes_to_list` in *Section 4.2 Convert image pipeline into video pipeline* in `p5-vehicle-detection.ipynb`.
+    * See function `add_bboxes` in *Section 4.1 Streamline image pipeline* in `p5-vehicle-detection.ipynb`.
+    * See function `add_bboxes_to_list` in *Section 4.2 Convert image pipeline into video pipeline* in `p5-vehicle-detection.ipynb`.
 2. Construct a heatmap from the most recent 20 frames of video (or using the number of frames available if there have been fewer than 20 frames before the current frame).
     * See function `add_heat` in *Section 4.3 Create heat map* in `p5-vehicle-detection.ipynb`. 
 3. Reject false positives: threshold the heatmap.
@@ -98,11 +98,9 @@ Pipeline:
     * Draw bounding boxes using helper function `draw_labeled_bboxes` in `helperfunctions.py`.
 
 Sample image of heatmap:
-
 ![](./readme_images/heatmap.png)
 
 Sample image of labels:
-
 ![](./readme_images/labels.png)
 
 ---
@@ -111,6 +109,14 @@ Sample image of labels:
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Problems:
-* When building the video pipeline, my functions failed to detect any vehicles for one of the frames. This returned `AttributeError: 'NoneType' object has no attribute 'shape' `. 
-* I can't assess the strength of the parameter combination using only one instance of bounding boxes detected in an image. The bounding boxes detected by the same combination of parameters varies.
+Blooper problems:
+
+1. When building the video pipeline, my functions failed to detect any vehicles for one of the frames. This returned `AttributeError: 'NoneType' object has no attribute 'shape' `. 
+    * It turned out there was no return object for my function.
+2. My classifier accuracy was 1.0 for a long time. It turned out I'd only been using the first 500 images from each category (vehicle and non-vehicle).
+
+Persistent problems:
+
+1. I can't assess the strength of the parameter combination using only one instance of bounding boxes detected in an image. The bounding boxes detected by the same combination of parameters varies.
+2. The pipeline still misses out cars often. It is especially likely to fail when there are shadows.
+3. Interestingly the model performed much better when I didn't use spatial or histogram features. This shows that adding more features (even if they sound like they might help) can make a model do worse.
