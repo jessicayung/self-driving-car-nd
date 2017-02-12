@@ -1,7 +1,3 @@
-p2-traffic-signs/traffic-sign-data/train.p
-
-p2-traffic-signs/traffic-sign-data/test.p
-
 p3-behavioural-cloning/data-udacity/
 
 .idea/
@@ -34,3 +30,6 @@ p5-vehicle-detection/hogviz/
 
 SDCND_StudentHandbook_v2.pdf
 
+*/.ipynb_checkpoints/*
+
+.DS_Store
