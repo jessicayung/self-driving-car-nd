@@ -58,7 +58,7 @@ def generator(samples, batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                name = './data-udacity-flipped/IMG/'+batch_sample[0].split('/')[-1]
+                name = './data-udacity/IMG/'+batch_sample[0].split('/')[-1]
                 center_image = mpimg.imread(name)
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
