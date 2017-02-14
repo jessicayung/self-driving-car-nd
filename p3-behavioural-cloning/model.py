@@ -1,107 +1,145 @@
-## Imports
+import os
+import csv
+import cv2
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-%matplotlib inline
-
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D
-from keras.optimizers import SGD, Adam, RMSprop
-from keras.utils import np_utils
-from keras.models import model_from_json
 
 from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
+
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten, SpatialDropout2D, ELU
+from keras.layers import Convolution2D, MaxPooling2D, Cropping2D
+from keras.layers.core import Lambda
+
+from keras.optimizers import SGD, Adam, RMSprop
+from keras.utils import np_utils
+
+from keras.callbacks import ModelCheckpoint
+
+from keras.models import model_from_json
 
 
-## Import data
-# Added header row manually to CSV.
-driving_csv = pd.read_csv("data/driving_log.csv")
 
-# Examine data
-print("Number of datapoints: %d" % len(driving_csv))
+## 1. Prepare and create generator
 
-driving_csv.head()
+# Choose whether or not to use reduced dataset. 
+# Reduced dataset halves the number of examples with steering angle = 0.
+reduced = False
 
-# Extract centre image and steering angle from table
-# Format: X_path: centre image name, y: steeringa angle
-X_path = [driving_csv.loc[i]["Centre Image"] \
-              for i in range(len(driving_csv))]
-y = [driving_csv.loc[i][" Steering Angle"] \
-              for i in range(len(driving_csv))]
-
-# Import images
-X_images = [mpimg.imread(image_path) for image_path in X_path]
-
-# View image
-print("Images: %d" % len(X_images))
-print("Sample image")
-plt.imshow(X_images[0])
-# X_images[0]
-
-# Check image shape
-print("Image shape: ", X_images[0].shape)
+if reduced == True:
+    csv_filepath = 'data-udacity/driving_log_reduced.csv'
+else:
+    csv_filepath = 'data-udacity/driving_log.csv'
 
 
-## Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X_images, y, test_size=0.1, random_state=42)
+# Save filepaths of images to `samples` to load into generator    
+samples = []
+with open(csv_filepath) as csvfile:
+    reader = csv.reader(csvfile)
+    for line in reader:
+        samples.append(line)
+# Remove header
+samples = samples[1:]
+ 
+# Split samples into training and validation sets to reduce overfitting
+train_samples, validation_samples = train_test_split(samples, test_size=0.1)
 
-X_train = np.array(X_train)
-X_test = np.array(X_test)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
+# Define generator function
+def generator(samples, batch_size=32):
+    num_samples = len(samples)
+    while 1: # Loop forever so the generator never terminates
+        shuffle(samples)
+        for offset in range(0, num_samples, batch_size):
+            batch_samples = samples[offset:offset+batch_size]
+
+            images = []
+            angles = []
+            for batch_sample in batch_samples:
+                name = './data-udacity-flipped/IMG/'+batch_sample[0].split('/')[-1]
+                center_image = mpimg.imread(name)
+                center_angle = float(batch_sample[3])
+                images.append(center_image)
+                angles.append(center_angle)
+
+            X_train = np.array(images)
+            y_train = np.array(angles)
+            
+            yield shuffle(X_train, y_train)
+
+# Compile and train the model using the generator function
+train_generator = generator(train_samples, batch_size=32)
+validation_generator = generator(validation_samples, batch_size=32)
 
 
-## Build model
+## 2. Data Preprocessing functions
+
+def resize(image):
+    import tensorflow as tf  # This import is required here otherwise the model cannot be loaded in drive.py
+    return tf.image.resize_images(image, 66, 200)
+
+
+## 3. Model (data preprocessing incorporated into model)
+
 model = Sequential()
-model.add(Convolution2D(160, 3, 3, border_mode='same',
-                        input_shape=(160,320,3)))
-model.add(Activation('relu'))
-model.add(Convolution2D(32, 3, 3))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
 
-model.add(Convolution2D(64, 3, 3, border_mode='same'))
-model.add(Activation('relu'))
-model.add(Convolution2D(64, 3, 3))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+# Crop 50 pixels from the top of the image and 20 from the bottom
+model.add(Cropping2D(cropping=((50, 20), (0, 0)),
+                     dim_ordering='tf', # default
+                     input_shape=(160, 320, 3)))
+
+# Resize the data
+model.add(Lambda(resize))
+
+model.add(Lambda(lambda x: x[:,:,:,0:1]))
+
+model.add(Lambda(lambda x: (x/127.5) - 1.))
+
+model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
+model.add(ELU())
+
+model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
+model.add(ELU())
+
+model.add(Convolution2D(64, 5, 5, subsample=(2, 2), border_mode="same"))
 
 model.add(Flatten())
+model.add(Dropout(.2))
+model.add(ELU())
+
 model.add(Dense(512))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
+model.add(Dropout(.5))
+model.add(ELU())
+
 model.add(Dense(1))
 
-# Compile model
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='mean_squared_error',
-              optimizer=sgd,
-              metrics=['accuracy'])
+adam = Adam(lr=0.0001)
+
+model.compile(optimizer=adam, loss="mse", metrics=['accuracy'])
 
 
-## Train model
-batch_size = 50
-nb_epoch = 10
+## 4. Train model
+batch_size = 32
+nb_epoch = 20
 
-model.fit(X_train, y_train,
-              batch_size=batch_size,
-              nb_epoch=nb_epoch,
-              validation_split=0.1,
-              # validation_data=(X_test, y_test),
-              show_accuracy=True,
-              shuffle=True)
+# Save model weights after each epoch
+checkpointer = ModelCheckpoint(filepath="./tmp/comma-weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=1, save_best_only=False)
+
+# Train model using generator
+model.fit_generator(train_generator, 
+                    samples_per_epoch=len(train_samples), 
+                    validation_data=validation_generator,
+                    nb_val_samples=len(validation_samples), nb_epoch=nb_epoch,
+                    callbacks=[checkpointer])
 
 
-## Extract model data
-# Save weights
+## 5. Save model
+
+model_json = model.to_json()
+with open("model-comma.json", "w") as json_file:
+    json_file.write(model_json)
+    
 model.save_weights("model.h5")
-
-# Save model config (architecture)
-json_string = model.to_json()
-with open("model.json", "w") as f:
-    f.write(json_string)    
+print("Saved model to disk")
