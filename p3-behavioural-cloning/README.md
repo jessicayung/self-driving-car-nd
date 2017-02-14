@@ -21,7 +21,7 @@ This README contains info on
 * `data/`: file with training data
     * Attributes such as 'steering angle' mapped to image paths in `driving_log.csv`.
     * Images in `IMG/`.
-* `p3-bcloning-model.ipynb`: Notebook I am developing the model in. Has nice visualisations.
+* `p3-explore1.ipynb`: Notebook I am developing the model in.
 
 ## 2. Dataset Characteristics
 
@@ -36,43 +36,48 @@ The model was trained by driving a car in the left-hand-side track of Udacity's 
 * Steering angle (variable to predict, a float ranging from -1.0 to 1.0 inclusive)
 
 ### What data was recorded
+
+I ended up using Udacity's data, but here is how I gathered my initial data:
+
 1. Whole laps: I recorded driving the car around the training track for two to three laps. 
 2. Recovery: I then recorded driving the car only from the side of the road to the center, both along straight roads and along curves. This was so the model could learn to drive back to the center of the road if it swerved to the side. I did not record driving off to the side of the road because that's not something I want the model to do.
 
 #### Sample Data
-Here are two examples of images and attributes from the dataset.
+Here are three examples of images and attributes from the dataset.
 
-Example One: Curve
+Example One: Left turn
 
-![Center Image](data/IMG/center_2016_12_10_19_17_14_586.jpg)
-
-![Left Image](data/IMG/left_2016_12_10_19_17_14_586.jpg)
-
-![Right Image](data/IMG/right_2016_12_10_19_17_14_586.jpg)
+![Center Image](readme-images/steer_left.png)
 
 <table>
 <th>Steering Angle</th><th>Throttle</th><th>Brake</th><th>Speed</th>
-<tr><td>-0.3281459</td><td>1</td><td>0</td><td>20.86732</td></tr>
+<tr><td>-0.923744</td><td>0.668526</td><td>0.0</td><td>29.98325</td></tr>
 </table>
 
 Example Two: Straight road
 
-![Center Image](data/IMG/center_2016_12_10_19_17_15_755.jpg)
-
-![Left Image](data/IMG/left_2016_12_10_19_17_15_755.jpg)
-
-![Right Image](data/IMG/right_2016_12_10_19_17_15_755.jpg)
+![Center Image](readme-images/steer_straight.png)
 
 <table>
 <th>Steering Angle</th><th>Throttle</th><th>Brake</th><th>Speed</th>
-<tr><td>0</td><td>0.6794708</td><td>0</td><td>30.11689</td></tr>
+<tr><td>0.000000</td><td>0.000000</td><td>0.0</td><td>22.14829</td></tr>
+</table>
+
+
+Example Three: Right turn
+
+![Center Image](readme-images/steer_right.png)
+
+<table>
+<th>Steering Angle</th><th>Throttle</th><th>Brake</th><th>Speed</th>
+<tr><td>1.000000</td><td>0.495593</td><td>0.0</td><td>20.15795</td></tr>
 </table>
 
 
 ### How the model was trained
-The model was trained using the center image as input (X) and the steering angle as the variable to predict (y). Around 3000 datapoints were used to train the model.
+The model was trained using the center image as input (X) and the steering angle as the variable to predict (y). Around 8000 datapoints were used to train the model.
 
-Due to limitations in GPU memory, I fed training examples in batches of 50. (See *Model Architecture* for details on the model.)
+Due to limitations in GPU memory, I fed training examples in batches of 32 using a generator. (See *Model Architecture* for details on the model.)
 
 
 ## 3. Solution Design
@@ -81,21 +86,33 @@ Due to limitations in GPU memory, I fed training examples in batches of 50. (See
 The target is for the car to drive within the lane lines, so the main features the model needs to recognise from the center image are the lane lines.
 
 ### Pre-processing of input data
-The X input fed into the model are the original unprocessed images taken by the camera.
+The X input fed into the model are the original unprocessed images taken by the camera. They are of size 160x320 pixels with 3 channels (RGB).
 
-* I considered converting the images into black images with lane lines traced in white (as in the Lane Lines project), but did not do that because the model will be tested in a simulator and likely cannot do such processing within the simulator (and do it in real time - the lane lines test video was 7 seconds long but it took longer than 7 seconds to trace out lane lines on top of the video.)
-    * It will be interesting to see if the model can learn to drive within the lane even with so many irrelevant features in the image.
-* I also considered resizing the image (reducing dimensions by a factor of 10) but was not sure if that could translate into the simulator.
+#### Pre-processing steps:
+
+* Crop away parts of the test image that are irrelevant to determining the steering angle (parts that don't include the track).
+    * i.e. crop away the top 50 rows of pixels and bottom 20 rows of pixels).
+* Resize the image (make it smaller) to reduce dimensions of the input data.
+* Take only 1 channel from the image to reduce the dimensions of the input data.
+    * I tried using all three channels. The performance was not significantly better.
+    * I am trying using different colour channels, e.g. HSV.
+* Normalise image because normalised input data empirically produces more accurate models. The intuition may be to make the model more robust to changes in e.g. lighting. 
+
+All these preprocessing steps were taken inside the model so that these steps could:
+
+1. be easily applied to new input images as they came in, and
+2. make the most of parallelised computing if available to reduce computation time.
 
 ### Approach taken for designing model architecture
 
 #### Convolutions
+
 * Convolutions generally seem to perform well on images, so I tried adding a few convolution layers to my model.
     * Hand-wavey reasoning: I wanted the model to recognise the lane lines were lane lines no matter where the model found them. 
 * It was less clear whether convolutions were a good idea because translations and slight rotations of shapes (lane lines) matter a lot here. It's not like cases of image classification where regardless of where the cat in the image is, it's still a cat. If the car is to the side of the lane, it should steer differently than if it is in the center of a lane.
 
 #### Activations and Dropout
-* Activation to introduce non-linearities into the model: I chose ReLU as my activation.
+* Activation to introduce non-linearities into the model: I chose ReLU as my activation. (Comma.ai's model using ELU activations so I retained those when experimenting with their model.)
     * ReLU: `h = max(0,a) where a = Wx + b`.
     * Reduced likelihood the gradient (wrt the weights) will vanish when `a > 0`, vs sigmoids where the gradient becomes smaller as the magnitude of x increases.
         * Constant gradients of ReLUs -> Faster learning.
@@ -111,50 +128,126 @@ References: [Advantages of ReLU over sigmoid functions in DNNs](http://stats.sta
 #### Final layer
 * This is a regression and not a classification problem since the output (steering angle) is continuous, ranging from -1.0 to 1.0.
     * So instead of ending with a softmax layer, I used a 1-neuron fully connected layer as my final layer.
-
-*Aside: I planned on using an Adam optimiser but realised I didn't.*
+    * I also added a `tanh` activation to ensure output was in the range (-1.0,1.0). This means the model will necessarily predict 'wrongly' when y = 1.0 or -1.0 when training, but the number of such cases (2 in the training set) is small and there is no diffeence between the model outputting a steering angle of 0.9999 and 1.0 in practice.
 
 
 ## 4. Model architecture
-Is the model architecture documented?
 
-The model is a Sequential model comprising two blocks of convolution layers and one block of fully-connected layers. If we include ReLU, maxpooling, dropout and input reshaping layers, the model has 17 layers. The model 
+Of all the models I tried, the model adapted from Comma.ai's model worked best. I also tried (1) a scaled-down version of NVIDIA's pipeline and (2) various combinations of conv layers combined with fully connected layers.
 
-Each block of convolution layers comprises:
-* Convolution (ReLU Activation) -> Convolution (-> ReLU Activation) -> MaxPooling (-> Dropout)
+The model is a Sequential model comprising three convolution layers and two fully-connected layers.
 
-The block of fully connected layers comprises:
-* A Flatten layer -> Fully-connected (Dense) layer (-> ReLU Activation) -> Dropout -> Fully-connected layer.
-
-The specifications of the model are below:
+The model code and specifications are below:
 ```
 model = Sequential()
-model.add(Convolution2D(160, 3, 3, border_mode='same',
-                        input_shape=(160,320,3)))
-model.add(Activation('relu'))
-model.add(Convolution2D(32, 3, 3))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
 
-model.add(Convolution2D(64, 3, 3, border_mode='same'))
-model.add(Activation('relu'))
-model.add(Convolution2D(64, 3, 3))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+# Crop 50 pixels from the top of the image and 20 from the bottom
+model.add(Cropping2D(cropping=((50, 20), (0, 0)),
+                     dim_ordering='tf', # default
+                     input_shape=(160, 320, 3)))
+
+# Resize the data
+model.add(Lambda(resize))
+
+# 
+model.add(Lambda(lambda x: x[:,:,:,0:1]))
+
+# Normalise the data
+model.add(Lambda(lambda x: (x/127.5) - 1.))
+
+model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
+model.add(ELU())
+
+model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
+model.add(ELU())
+
+model.add(Convolution2D(64, 5, 5, subsample=(2, 2), border_mode="same"))
 
 model.add(Flatten())
-model.add(Dense(512))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(1))
+model.add(Dropout(.2))
+model.add(ELU())
 
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='mean_squared_error',
-              optimizer=sgd,
-              metrics=['accuracy'])
-              
-batch_size = 100
-nb_epoch = 10
+model.add(Dense(512))
+model.add(Dropout(.5))
+model.add(ELU())
+
+model.add(Dense(1, activation="tanh"))
+
+adam = Adam(lr=0.0001)
+
+model.compile(optimizer=adam, loss="mse", metrics=['accuracy'])
+
 ```
+
+Specs in a table:
+
+<table>
+	<th>Layer</th><th>Details</th>
+	<tr>
+		<td>Convolution Layer 1</td>
+		<td>
+			<ul>
+				<li>Filters: 16</li>
+				<li>Kernel: 8 x 8</li>
+				<li>Stride: 4 x 4</li>
+				<li>Padding: SAME</li>
+				<li>Activation: ELU</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Convolution Layer 2</td>
+		<td>
+			<ul>
+				<li>Filters: 32</li>
+				<li>Kernel: 5 x 5</li>
+				<li>Stride: 2 x 2</li>
+				<li>Padding: SAME</li>
+				<li>Activation: ELU</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Convolution Layer 3</td>
+		<td>
+			<ul>
+				<li>Filters: 64</li>
+				<li>Kernel: 5 x 5</li>
+				<li>Stride: 2 x 2</li>
+				<li>Padding: SAME</li>
+				<li>Activation: ELU</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Flatten layer</td>
+		<td>
+			<ul>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Fully Connected Layer 1</td>
+		<td>
+			<ul>
+				<li>Neurons: 512</li>
+				<li>Dropout: 0.5</li>
+				<li>Activation: ELU</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>Fully Connected Layer 2</td>
+		<td>
+			<ul>
+				<li>Neurons: 1</li>
+				<li>Activation: tanh</li>
+			</ul>
+		</td>
+	</tr>
+
+</table>
+
+## 5. Discussion
+
+1. I could not run some models because they had too many parameters and both my laptop and the AWS server I rented ran out of memory. (E.g. I had to adjust the parameters on the NVIDIA model to reduce the total number of parameters from over 5 billion to 1.7 million.)
