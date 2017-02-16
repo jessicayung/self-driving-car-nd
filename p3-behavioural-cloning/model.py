@@ -25,29 +25,28 @@ from keras.models import model_from_json
 
 ## 1. Prepare and create generator
 
-# Choose whether or not to use reduced dataset. 
-# Reduced dataset halves the number of examples with steering angle = 0.
-reduced = False
-
-if reduced == True:
-    csv_filepath = 'data-udacity/driving_log_reduced.csv'
-else:
-    csv_filepath = 'data-udacity/driving_log.csv'
-
-
 # Save filepaths of images to `samples` to load into generator    
 samples = []
-with open(csv_filepath) as csvfile:
-    reader = csv.reader(csvfile)
-    for line in reader:
-        samples.append(line)
+
+def add_to_samples(csv_filepath, samples):
+    with open(csv_filepath) as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            samples.append(line)
+    return samples
+
+samples = add_to_samples('data-udacity/driving_log.csv', samples)
+
+samples = add_to_samples('data-recovery-annie/driving_log.csv', samples) # header already removed
+
 # Remove header
 samples = samples[1:]
  
+print("Samples: ", len(samples))        
+
 # Split samples into training and validation sets to reduce overfitting
 train_samples, validation_samples = train_test_split(samples, test_size=0.1)
 
-# Define generator function
 def generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1: # Loop forever so the generator never terminates
@@ -58,7 +57,7 @@ def generator(samples, batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                name = './data-udacity/IMG/'+batch_sample[0].split('/')[-1]
+                name = './data-udacity/'+batch_sample[0]
                 center_image = mpimg.imread(name)
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
@@ -69,46 +68,51 @@ def generator(samples, batch_size=32):
             
             yield shuffle(X_train, y_train)
 
-# Compile and train the model using the generator function
+# compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=32)
 validation_generator = generator(validation_samples, batch_size=32)
 
 
 ## 2. Data Preprocessing functions
 
-def resize(image):
+def resize_comma(image):
     import tensorflow as tf  # This import is required here otherwise the model cannot be loaded in drive.py
-    return tf.image.resize_images(image, 66, 200)
+    return tf.image.resize_images(image, 40, 160)
 
 
 ## 3. Model (data preprocessing incorporated into model)
 
+# Model adapted from Comma.ai model
+
 model = Sequential()
 
-# Crop 50 pixels from the top of the image and 20 from the bottom
-model.add(Cropping2D(cropping=((50, 20), (0, 0)),
+# Crop 70 pixels from the top of the image and 25 from the bottom
+model.add(Cropping2D(cropping=((70, 25), (0, 0)),
                      dim_ordering='tf', # default
                      input_shape=(160, 320, 3)))
 
 # Resize the data
-model.add(Lambda(resize))
+model.add(Lambda(resize_comma))
 
-model.add(Lambda(lambda x: x[:,:,:,0:1]))
+# Normalise the data
+model.add(Lambda(lambda x: (x/255.0) - 0.5))
 
-model.add(Lambda(lambda x: (x/127.5) - 1.))
-
+# Conv layer 1
 model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
 model.add(ELU())
 
+# Conv layer 2
 model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
 model.add(ELU())
 
+# Conv layer 3
 model.add(Convolution2D(64, 5, 5, subsample=(2, 2), border_mode="same"))
 
 model.add(Flatten())
 model.add(Dropout(.2))
 model.add(ELU())
 
+# Fully connected layer 1
 model.add(Dense(512))
 model.add(Dropout(.5))
 model.add(ELU())
@@ -119,13 +123,15 @@ adam = Adam(lr=0.0001)
 
 model.compile(optimizer=adam, loss="mse", metrics=['accuracy'])
 
+print("Model summary:\n", model.summary())
+
 
 ## 4. Train model
 batch_size = 32
 nb_epoch = 20
 
 # Save model weights after each epoch
-checkpointer = ModelCheckpoint(filepath="./tmp/comma-weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=1, save_best_only=False)
+checkpointer = ModelCheckpoint(filepath="./tmp/v2-weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=1, save_best_only=False)
 
 # Train model using generator
 model.fit_generator(train_generator, 
@@ -138,7 +144,7 @@ model.fit_generator(train_generator,
 ## 5. Save model
 
 model_json = model.to_json()
-with open("model-comma.json", "w") as json_file:
+with open("model.json", "w") as json_file:
     json_file.write(model_json)
     
 model.save_weights("model.h5")
