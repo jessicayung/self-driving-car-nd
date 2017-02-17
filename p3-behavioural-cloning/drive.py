@@ -39,7 +39,7 @@ def telemetry(sid, data):
     image_array = np.asarray(image)
     transformed_image_array = image_array[None, :, :, :]
     # This model currently assumes that the features of the model are just the images. Feel free to change this.
-    steering_angle = float(model.predict(transformed_image_array, batch_size=1))
+    steering_angle = float(model.predict(transformed_image_array, batch_size=1)) * 5.0
     # The driving model currently just outputs a constant throttle. Feel free to edit this.
     speed = float(speed)
     if speed > 15:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     model.compile("adam", "mse")
     weights_file = args.model.replace('json', 'h5')
-    weights_file = "tmp/comma-v2.13-0.01.hdf5"
+#    weights_file = "tmp/comma-4c.08-0.03.hdf5"
     model.load_weights(weights_file)
 
     # wrap Flask application with engineio's middleware

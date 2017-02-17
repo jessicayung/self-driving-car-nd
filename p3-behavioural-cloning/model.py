@@ -117,6 +117,10 @@ model.add(Dense(512))
 model.add(Dropout(.5))
 model.add(ELU())
 
+# Fully connected layer 2
+model.add(Dense(50))
+model.add(ELU())
+
 model.add(Dense(1))
 
 adam = Adam(lr=0.0001)

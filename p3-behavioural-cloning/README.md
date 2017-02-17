@@ -140,7 +140,7 @@ References: [Advantages of ReLU over sigmoid functions in DNNs](http://stats.sta
 
 Of all the models I tried, the model adapted from Comma.ai's model worked best. I also tried (1) a scaled-down version of NVIDIA's pipeline and (2) various combinations of conv layers combined with fully connected layers.
 
-The model is a Sequential model comprising three convolution layers and two fully-connected layers.
+The model is a Sequential model comprising three convolution layers and three fully-connected layers. The model weights used were those obtained after training for **20 epochs**.
 
 The model code and specifications are below:
 ```
@@ -175,6 +175,10 @@ model.add(ELU())
 # Fully connected layer 1
 model.add(Dense(512))
 model.add(Dropout(.5))
+model.add(ELU())
+
+# Fully connected layer 2
+model.add(Dense(50))
 model.add(ELU())
 
 model.add(Dense(1))
@@ -242,8 +246,18 @@ Specs in a table:
 			</ul>
 		</td>
 	</tr>
-	<tr>
+   	<tr>
 		<td>Fully Connected Layer 2</td>
+		<td>
+			<ul>
+				<li>Neurons: 50</li>
+				<li>Activation: ELU</li>
+			</ul>
+		</td>
+	</tr>
+
+	<tr>
+		<td>Fully Connected Layer 3</td>
 		<td>
 			<ul>
 				<li>Neurons: 1</li>
@@ -260,3 +274,4 @@ Specs in a table:
     * I successfully ran these models after adding a `subsample` parameter to reduce the number of parameters in each layer.
 2. It was hard to compare performance of parameter tweaks rigorously because it's hard to quantify the model's performance on the track. Is driving into the water better or worse than driving into the mountains? I had to use my intuition and a rough measure of how far the car got along the track and how stably it was driving to measure performance and direct how I was tweaking parameters or using different datasets.
 3. DNNs still seem like a black box. In the end what made my car able to drive through the whole track was adding high quality recovery data, not adjusting the model. This shows the importance of the data you put into the model. 
+4. Strangely a trained model that worked (drove around the track fine) on Thurs 16 Feb did not work on Friday 17 Feb. I used the same simulator and ran the model three times on Thursday (it worked each time) and at least three times on Friday (it did not work even once).
