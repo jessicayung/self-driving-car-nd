@@ -15,6 +15,7 @@ This README contains info on
 
 ## 1. Files in this repo
 * `model.py`: Python script to import data, train model and save model.
+    * [Video of the model driving](https://www.youtube.com/watch?v=WCat1CpKQc4) 
 * `model.json`: Model architecture.
 * `model.h5`: Model weights (Large file, > 300MB).
 * `drive.py`: Python script that tells the car in the simulator how to drive
