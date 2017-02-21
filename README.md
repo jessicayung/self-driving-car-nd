@@ -9,9 +9,18 @@ See also: My notes for [Udacity's Machine Learning Nanodegree](https://github.co
 
 ## Program Outline:
 ### Term 1: Deep Learning and Computer Vision
+
 - Project 1: Finding Lane Lines (Intro to Computer Vision)
 - Project 2: Traffic Sign Classifier (Deep Learning)
-	- `deep-learning`: Notes on Deep Learning, Tensorflow and Keras
+- Project 3: Behavioural Cloning (Deep Learning)
+	- Train a car to drive in a 3D simulator using a deep neural network. 
+	- Input data comprises steering angles and camera images captured by driving with a keyboard / mouse / joystick in the simulator.
+- Project 4: Advanced Lane Lines (Computer Vision)
+- Project 5: Vehicle Detection (Computer Vision)
+
+- `deep-learning-notes-and-labs`: Notes on Deep Learning, Tensorflow and Keras
+- `computer-vision-notes-and-labs`: Notes on Computer Vision
+
 
 ### Term 2: Sensor Fusion, Localisation and Control
 - Sensor Fusion: Integrating different types of sensors.
