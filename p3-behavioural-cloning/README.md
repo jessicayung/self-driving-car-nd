@@ -19,11 +19,11 @@ This README contains info on
 * `model.json`: Model architecture.
 * `model.h5`: Model weights (Large file, > 300MB).
 * `drive.py`: Python script that tells the car in the simulator how to drive
-* `data/`: file with training data
+* `data/`: file with training data (no longer in repo)
     * Attributes such as 'steering angle' mapped to image paths in `driving_log.csv`.
     * Images in `IMG/`.
 * `p3-behavioural-cloning.ipynb`: Notebook with final model.
-* `p3-explore1.ipynb`: Notebook developed the model in. It contains more rough work than `p3-behavioural-cloning.ipynb`.
+* `p3-explore.ipynb`: Notebook I developed the model in. It contains more rough work than `p3-behavioural-cloning.ipynb`.
 
 ## 2. Dataset Characteristics
 
