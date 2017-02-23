@@ -1,7 +1,35 @@
 # Vehicle Detection
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-## Project Outline
+The objective of this project is to create a pipeline (model) to draw bounding boxes around cars in a video. This video was taken from a camera mounted on the front of a car.
+
+This README contains info on:
+
+1. Files in this repo
+2. Project Outline
+3. Project Process
+   * Histogram of Oriented Gradients
+   * Sliding Window Search
+   * Video Implementation: Removing False Positives and Combining Overlapping Detections
+4. Discussion
+
+## 1. Files in this repo
+* `p5-vehicle-detection.ipynb`: Notebook with final model
+* `helperfunctions.py`: Helper functions for `p5-vehicle-detection.ipynb`
+* HOG Experiment:
+   * `hog_experiment.py`: Script to gather accuracies and collect images for different HOG parameter configurations.
+   * `experiment_helper_functions.py`: Helper functions for `hog_experiment.py`
+* `p5-for-tuning-classifier-parameters.ipynb`: Notebook structured for quick testing of different parameter configurations. Contained in a notebook because I had to assess the bounding boxes visually (as opposed to the HOG experiment where, although I saved the images, I could assess performance via accuracy alone (to intuit what to try next) and so could run it as a script.
+* Logs from experiments:
+   * `logs/`: Textual logs of experiment parameters and results (accuracies)
+   * `colour_space_images/`: Test image 1 converted to different colour spaces
+* README (repo and process documentation):
+   * `README.md`: This doc!
+   * `readme_images/`: Contains images used in this doc
+* Given resources:
+   * `test_images`: Images provided by Udacity to test my model on
+
+## 2. Project Outline
 The goals / steps of this project are the following:
 
 * Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
@@ -20,7 +48,7 @@ Some example images for testing your pipeline on single frames are located in th
 **If you're feeling ambitious** (also totally optional though), don't stop there!  We encourage you to go out and take video of your own, and show us how you would implement this project on a new video!
 
 
-## Project Process
+## 3. Project Process
 ### I. Histogram of Oriented Gradients (HOG)
 
 #### 1. Extract HOG features from the training images.
@@ -105,7 +133,7 @@ Sample image of labels:
 
 ---
 
-### Discussion
+## 4. Discussion
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
