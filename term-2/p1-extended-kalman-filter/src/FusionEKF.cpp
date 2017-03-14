@@ -48,16 +48,32 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
     ekf_.x_ << 1, 1, 1, 1;
+    
+    // Create process covariance matrix
+    ekf_.Q_ = Eigen::MatrixXd(4,4);
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
+        float rho = measurement_pack.raw_measurements_[0];
+        float phi = measurement_pack.raw_measurements_[1];
+        float rhodot = measurement_pack.raw_measurements_[2];
+        float px = rho * cos(phi);
+        float py = rho * sin(phi);
+        float vx = rhodot * cos(phi);
+        float vy = rhodot * sin(phi);
+        ekf_.x_ << px, py, vx, vy;
+        previous_timestamp_ = measurement_pack.timestamp_;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
+        ekf_.x_ << measurement_pack.raw_measurements_[0],
+                   measurement_pack.raw_measurements_[1], 0, 0;
+        previous_timestamp_ = measurement_pack.timestamp_;
+        
     }
 
     // done initializing, no need to predict or update
