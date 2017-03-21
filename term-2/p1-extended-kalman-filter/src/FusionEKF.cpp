@@ -39,17 +39,21 @@ FusionEKF::FusionEKF() {
     
     // Initialise P (object covariance) as zero matrix
     ekf_.P_ = MatrixXd(4, 4);
-    ekf_.P_ << 0, 0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0, 0;
-    
+    ekf_.P_ << 1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1000, 0,
+                0, 0, 0, 1000;
+    // Initialise F with dt = 0
     ekf_.F_ = MatrixXd(4, 4);
-    ekf_.F_ << 1, 0, 0.1, 0,
-                0, 1, 0, 0.1,
+    ekf_.F_ << 1, 0, 0, 0,
+                0, 1, 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1;
     cout << "FusionEKF::FusionEFK() done" << endl;
+    
+    // Initialise H
+    
+    
 }
 
 /**
@@ -58,7 +62,6 @@ FusionEKF::FusionEKF() {
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-
 
   /*****************************************************************************
    *  Initialization
