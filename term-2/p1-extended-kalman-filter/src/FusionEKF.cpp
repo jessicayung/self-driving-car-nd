@@ -13,21 +13,21 @@ using std::vector;
  */
 FusionEKF::FusionEKF() {
   is_initialized_ = false;
-
+    cout << "Initialising FusionEKF()" << endl;
   previous_timestamp_ = 0;
 
   // initializing matrices
-  R_laser_ = MatrixXd(2, 2);
-  R_radar_ = MatrixXd(3, 3);
-  H_laser_ = MatrixXd(2, 4);
-  Hj_ = MatrixXd(3, 4);
+  ekf_.H_laser_ = MatrixXd(2, 4);
+  ekf_.Hj_ = MatrixXd(3, 4);
 
   //measurement covariance matrix - laser
-  R_laser_ << 0.0225, 0,
+  ekf_.R_laser_ = MatrixXd(2, 2);
+  ekf_.R_laser_ << 0.0225, 0,
         0, 0.0225;
 
   //measurement covariance matrix - radar
-  R_radar_ << 0.09, 0, 0,
+  ekf_.R_radar_ = MatrixXd(3, 3);
+  ekf_.R_radar_ << 0.09, 0, 0,
         0, 0.0009, 0,
         0, 0, 0.09;
     
@@ -49,11 +49,20 @@ FusionEKF::FusionEKF() {
                 0, 1, 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1;
-    cout << "FusionEKF::FusionEFK() done" << endl;
+    
+    // Initialise H laser
+    ekf_.H_laser_ << 1, 0, 0, 0,
+                0, 1, 0, 0;
     
     // Initialise H
-    
-    
+    ekf_.H_ = MatrixXd(4, 4);
+    ekf_.H_ << 1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1;
+
+    cout << "FusionEKF::FusionEKF() done" << endl;
+
 }
 
 /**
@@ -178,13 +187,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
-    // KalmanFilter::UpdateEKF
+      cout << "Radar update" << endl;
+      ekf_.UpdateEKF(measurement_pack.raw_measurements_);
       
     // set H_ to Hj when updating with a radar measurement
   } else {
     // Laser updates
-      // Laser updates
-      // KalmanFilter::Update
+      cout << "Laser update" << endl;
+      ekf_.Update(measurement_pack.raw_measurements_);
   }
 
   // print the output
