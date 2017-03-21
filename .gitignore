@@ -1,4 +1,10 @@
-p3-behavioural-cloning/data-udacity/
+term-2/sensor-fusion-utilities-mercedes/
+
+p3-behavioural-cloning/data*
+
+p3-behavioural-cloning/model-*
+
+p3-behavioural-cloning/tmp/
 
 .idea/
 
@@ -33,3 +39,13 @@ SDCND_StudentHandbook_v2.pdf
 */.ipynb_checkpoints/*
 
 .DS_Store
+
+.ipynb_checkpoints/
+
+term-2/p1-extended-kalman-filter/.DS_Store
+
+term-2/p1-extended-kalman-filter/build/
+
+term-2/p1-extended-kalman-filter/.vscode/
+
+term-2/p1-extended-kalman-filter-archive/
