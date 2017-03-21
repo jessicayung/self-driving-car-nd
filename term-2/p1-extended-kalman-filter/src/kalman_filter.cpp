@@ -1,6 +1,7 @@
 #include "kalman_filter.h"
 #include <iostream>
 
+using namespace std;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
@@ -10,9 +11,9 @@ KalmanFilter::~KalmanFilter() {}
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
                         MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
-    std::cout << "KalmanFilter::Init" << std::endl;
+    cout << "KalmanFilter::Init" << endl;
   x_ = x_in;
-  P_ = P_in;
+  P_ = P_in; // object covariance matrix
   F_ = F_in;
   H_ = H_in;
   R_ = R_in;
@@ -24,8 +25,13 @@ void KalmanFilter::Predict() {
   TODO:
     * predict the state
   */
+    cout << "KalmanFilter::Predict()" << endl;
+    cout << "x_: " << x_ << endl;
+    cout << "F_: " << F_ << endl;
     x_ = F_ * x_;
     MatrixXd Ft = F_.transpose();
+    cout << "P_: " << P_ << endl;
+    cout << "Q_: " << Q_ << endl;
     P_ = F_ * P_ * Ft + Q_;
 }
 
