@@ -67,7 +67,6 @@ void KalmanFilter::Update(const VectorXd &z) {
     cout << "P: " << P_ << endl;
     // Error: 4x4 + 2x4
     cout << "R_laser_: " << R_laser_ << endl;
-    //
     MatrixXd S = H_laser_ * P_ * Ht + R_laser_;
     cout << "S: " << S << endl;
     MatrixXd Si = S.inverse();
@@ -87,6 +86,7 @@ void KalmanFilter::Update(const VectorXd &z) {
     cout << "K: " << K << endl;
     cout << "H_laser_: " << H_laser_ << endl;
     P_ = (I - K * H_laser_) * P_;
+    cout << "P_: " << P_ << endl;
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -97,7 +97,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     cout << "KalmanFilter::UpdateEKF()" << endl;
     // VectorXd h_ (x) = h(mu) + Jacobian * (x - mu)
     cout << "H_: " << H_ << endl;
-    VectorXd z_pred = H_ * x_;
+    VectorXd z_pred = hx_;
     
     VectorXd y = z - z_pred;
     cout << "y: " << y << endl;

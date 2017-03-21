@@ -188,9 +188,21 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
       cout << "Radar update" << endl;
+      
+      ekf_.hx_ = VectorXd(3);
+      
+      float rho = sqrt(pow(ekf_.x_(0),2) + pow(ekf_.x_(1),2));
+      float phi = atan2(ekf_.x_(1),ekf_.x_(0)); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
+      float rhodot = (ekf_.x_(0) * ekf_.x_(2) + ekf_.x_(1) * ekf_.x_(3)) /rho;
+      ekf_.hx_ << rho, phi, rhodot;
+      
+      ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
+      
+      ekf_.R_ = ekf_.R_radar_;
       ekf_.UpdateEKF(measurement_pack.raw_measurements_);
       
     // set H_ to Hj when updating with a radar measurement
+      
   } else {
     // Laser updates
       cout << "Laser update" << endl;

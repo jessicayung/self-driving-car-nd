@@ -33,6 +33,7 @@ public:
   
   Eigen::MatrixXd Hj_;
   
+  Eigen::VectorXd hx_;
     
   //  std::cout << "Eigens initialised" << std::endl;
   /**
