@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     MeasurementPackage meas_package;
     GroundTruthPackage gt_package;
     istringstream iss(line);
-    long timestamp;
+    long long timestamp;
 
     // reads first element from the current line
     iss >> sensor_type;
@@ -99,12 +99,12 @@ int main(int argc, char* argv[]) {
       meas_package.sensor_type_ = MeasurementPackage::RADAR;
       meas_package.raw_measurements_ = VectorXd(3);
       float ro;
-      float theta;
+      float phi;
       float ro_dot;
       iss >> ro;
-      iss >> theta;
+      iss >> phi;
       iss >> ro_dot;
-      meas_package.raw_measurements_ << ro, theta, ro_dot;
+      meas_package.raw_measurements_ << ro, phi, ro_dot;
       iss >> timestamp;
       meas_package.timestamp_ = timestamp;
       measurement_pack_list.push_back(meas_package);
