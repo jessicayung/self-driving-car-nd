@@ -12,30 +12,30 @@ See also: My notes for [Udacity's Machine Learning Nanodegree](https://github.co
 
 
 #### 1. Deep Learning
-    - `deep-learning-notes-and-labs`: Notes on Deep Learning, Tensorflow and Keras
-    - Project 2: Traffic Sign Classifier (Deep Learning)
-    - Project 3: Behavioural Cloning (Deep Learning)
-        - Train a car to drive in a 3D simulator using a deep neural network. 
-        - Input data comprises steering angles and camera images captured by driving with a keyboard / mouse / joystick in the simulator.
+- `deep-learning-notes-and-labs`: Notes on Deep Learning, Tensorflow and Keras
+- Project 2: Traffic Sign Classifier (Deep Learning)
+- Project 3: Behavioural Cloning (Deep Learning)
+    - Train a car to drive in a 3D simulator using a deep neural network. 
+    - Input data comprises steering angles and camera images captured by driving with a keyboard / mouse / joystick in the simulator.
 
 #### 2. Computer Vision
-    - `computer-vision-notes-and-labs`: Notes on Computer Vision
-    - Project 1: Finding Lane Lines (Intro to Computer Vision)
-    - Project 4: Advanced Lane Lines (Computer Vision)
-    - Project 5: Vehicle Detection (Computer Vision)
+- `computer-vision-notes-and-labs`: Notes on Computer Vision
+- Project 1: Finding Lane Lines (Intro to Computer Vision)
+- Project 4: Advanced Lane Lines (Computer Vision)
+- Project 5: Vehicle Detection (Computer Vision)
 
 
 
 ### Term 2: Sensor Fusion, Localisation and Control
 
 #### 1. Sensor Fusion
-    - Combining lidar and radar data to track objects in the environment using Kalman filters.
+- Combining lidar and radar data to track objects in the environment using Kalman filters.
 #### 2. Localisation
-    - Locate a car relative to the world (Align a car and sensors to the map).
-    - Use particle filters to localise the vehicle.
+- Locate a car relative to the world (Align a car and sensors to the map).
+- Use particle filters to localise the vehicle.
 #### 3. Control
-    - Fundamental concepts of robotic control.
-    - Build algorithms to steer car and wheels so as to meet an objective.
+- Fundamental concepts of robotic control.
+- Build algorithms to steer car and wheels so as to meet an objective.
 
 ### Term 3: Path Planning, Controlling a Self-Driving Car
 - Path Planning: Finding a sequence of steps in a maze (navigating cities, parking lots)
