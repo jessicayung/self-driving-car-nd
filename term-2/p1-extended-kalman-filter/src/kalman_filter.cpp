@@ -10,10 +10,7 @@ KalmanFilter::KalmanFilter() {}
 KalmanFilter::~KalmanFilter() {}
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
-                        MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in
-                        // ,MatrixXd &R_laser_in, MatrixXd &R_radar_in, MatrixXd &H_laser_in,
-                        // MatrixXd &Hj_in
-)
+                        MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in)
 {
     cout << "KalmanFilter::Init" << endl;
   x_ = x_in;
@@ -22,12 +19,7 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
   H_ = H_in;
   R_ = R_in;
   Q_ = Q_in;
-/*
-  R_laser_ = R_laser_in;
-  R_radar_ = R_radar_in;
-  H_laser_ = H_laser_in;
-  Hj_ = Hj_in;
-*/
+
 }
 
 void KalmanFilter::Predict() {
@@ -53,21 +45,20 @@ void KalmanFilter::Update(const VectorXd &z) {
     
     cout << "KalmanFilter::Update()" << endl;
     cout << "x_: " << x_ << endl;
-    cout << "H_laser_: " << H_laser_ << endl;
-    VectorXd z_pred = H_laser_ * x_;
+    cout << "H__: " << H_ << endl;
+    VectorXd z_pred = H_ * x_;
     cout << "z_pred: " << z_pred << endl;
     
     cout << "z: " << z << endl;
     VectorXd y = z - z_pred;
     cout << "y: " << y << endl;
-    MatrixXd Ht = H_laser_.transpose();
+    MatrixXd Ht = H_.transpose();
     cout << "Ht: " << Ht << endl;
     
-    cout << "H_laser_: " << H_laser_ << endl;
+    cout << "H_: " << H_ << endl;
     cout << "P: " << P_ << endl;
-    // Error: 4x4 + 2x4
-    cout << "R_laser_: " << R_laser_ << endl;
-    MatrixXd S = H_laser_ * P_ * Ht + R_laser_;
+    cout << "R_: " << R_ << endl;
+    MatrixXd S = H_ * P_ * Ht + R_;
     cout << "S: " << S << endl;
     MatrixXd Si = S.inverse();
     MatrixXd PHt = P_ * Ht;
@@ -84,8 +75,8 @@ void KalmanFilter::Update(const VectorXd &z) {
     cout << "P_: " << P_ << endl;
     cout << "I: " << I << endl;
     cout << "K: " << K << endl;
-    cout << "H_laser_: " << H_laser_ << endl;
-    P_ = (I - K * H_laser_) * P_;
+    cout << "H_: " << H_ << endl;
+    P_ = (I - K * H_) * P_;
     cout << "P_: " << P_ << endl;
 }
 
@@ -109,8 +100,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     cout << "K_: " << K << endl;
     
     //new estimate
-    
-    
     x_ = x_ + (K * y);
     long x_size = x_.size();
     MatrixXd I = MatrixXd::Identity(x_size, x_size);
