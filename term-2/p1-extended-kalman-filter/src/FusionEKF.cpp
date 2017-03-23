@@ -97,14 +97,18 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */
         float rho = measurement_pack.raw_measurements_[0];
         float phi = measurement_pack.raw_measurements_[1];
+        
+        /*
         float rhodot = measurement_pack.raw_measurements_[2];
         float px = rho * cos(phi);
         float py = rho * sin(phi);
         float vx = rhodot * cos(phi);
         float vy = rhodot * sin(phi);
         ekf_.x_ << px, py, vx, vy;
+        */
+        ekf_.x_ << rho*cos(phi), rho*sin(phi), 0, 0;
         cout << "radar ekf_.x_: " << ekf_.x_ << endl;
-        previous_timestamp_ = measurement_pack.timestamp_;
+        
 
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
@@ -113,11 +117,11 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */
         ekf_.x_ << measurement_pack.raw_measurements_[0],
         measurement_pack.raw_measurements_[1], 0, 0;
-        previous_timestamp_ = measurement_pack.timestamp_;
         cout << "laser ekf_.x_: " << ekf_.x_ << endl;
 
     }
 
+    // previous_timestamp_ = measurement_pack.timestamp_;
     // done initializing, no need to predict or update
     is_initialized_ = true;
     return;
@@ -191,17 +195,42 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       
       ekf_.hx_ = VectorXd(3);
       
-      float rho = sqrt(pow(ekf_.x_(0),2) + pow(ekf_.x_(1),2));
-      float phi = atan2(ekf_.x_(1),ekf_.x_(0)); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
-      float rhodot = (ekf_.x_(0) * ekf_.x_(2) + ekf_.x_(1) * ekf_.x_(3)) /rho;
+      double px = ekf_.x_[0];
+      double py = ekf_.x_[1];
+      double vx = ekf_.x_[2];
+      double vy = ekf_.x_[3];
+
+      if(fabs(px) < 0.0001){
+          px = 0.0001;
+      }
+
+      double rho = sqrt(px*px + py*py);
+      if(fabs(rho) < 0.0001){
+          rho = 0.0001;
+          // Other people have done else phi = 0, rhodot = 0
+      }
+
+      
+
+      double phi = atan2(py,px); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
+      double rhodot = (px*vx + py*vy) /rho;
       ekf_.hx_ << rho, phi, rhodot;
       
-      ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
+      // set H_ to Hj when updating with a radar measurement
+      Hj_ = tools.CalculateJacobian(ekf_.x_);
       
+      // don't update measurement if we can't compute the Jacobian
+      // from WaterFox
+      if (Hj_.isZero(0)){
+        return;
+      }
+      
+      ekf_.H_ = Hj_;
+
       ekf_.R_ = R_radar_;
-      ekf_.UpdateEKF(measurement_pack.raw_measurements_);
-      
-    // set H_ to Hj when updating with a radar measurement
+
+      ekf_.UpdateEKF(measurement_pack.raw_measurements_);   
+    
       
   } else {
     // Laser updates

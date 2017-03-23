@@ -88,8 +88,13 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     cout << "KalmanFilter::UpdateEKF()" << endl;
     // VectorXd h_ (x) = h(mu) + Jacobian * (x - mu)
     cout << "H_: " << H_ << endl;
+
     VectorXd z_pred = hx_;
     
+
+    cout << "z_pred: " << z_pred << endl;
+    cout << "z: " << z << endl;
+    cout << "y = z - z_pred" << endl;
     VectorXd y = z - z_pred;
     cout << "y: " << y << endl;
     MatrixXd Ht = H_.transpose();
