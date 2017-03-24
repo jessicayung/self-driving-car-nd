@@ -45,7 +45,7 @@ void KalmanFilter::Update(const VectorXd &z) {
     
     cout << "KalmanFilter::Update()" << endl;
     cout << "x_: " << x_ << endl;
-    cout << "H__: " << H_ << endl;
+    cout << "H_: " << H_ << endl;
     VectorXd z_pred = H_ * x_;
     cout << "z_pred: " << z_pred << endl;
     

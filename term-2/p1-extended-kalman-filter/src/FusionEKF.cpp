@@ -89,7 +89,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       
     // Create process covariance matrix
     ekf_.Q_ = Eigen::MatrixXd(4,4);
-    // ekf_.G_ = Eigen::MatrixXd(4,2);
+
+    float px;
+    float py;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
@@ -100,24 +102,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         float rho = measurement_pack.raw_measurements_[0];
         float phi = measurement_pack.raw_measurements_[1];
         
-        double px = rho*cos(phi);
-        double py = rho*sin(phi);
-
-        if(fabs(px) < 0.0001){
-          px = 1;
-          cout << "init px too small" << endl;
-          // ekf_.P_(0,0) = 1000;
-        }
-
-        if(fabs(py) < 0.0001){
-          py = 1;
-          cout << "init py too small" << endl;
-          // ekf_.P_(1,1) = 1000;
-        }
-
-        ekf_.x_ << px, py, 0, 0;
-        cout << "radar ekf_.x_: " << ekf_.x_ << endl;
-        
+        px = rho*cos(phi);
+        py = rho*sin(phi);
 
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
@@ -126,25 +112,25 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */
         cout << "init laser" << endl;
 
-        double px = measurement_pack.raw_measurements_[0];
-        double py = measurement_pack.raw_measurements_[1];
-
-        if(fabs(px) < 0.0001){
-          px = 1;
-          cout << "init px too small" << endl;
-          // ekf_.P_(0,0) = 1000;
-        }
-
-        if(fabs(py) < 0.0001){
-          py = 1;
-          cout << "init py too small" << endl;
-          // ekf_.P_(1,1) = 1000;
-        }
-
-        ekf_.x_ << px, py, 0, 0;
-        cout << "laser ekf_.x_: " << ekf_.x_ << endl;
+        px = measurement_pack.raw_measurements_[0];
+        py = measurement_pack.raw_measurements_[1];
 
     }
+
+    // Handle small px, py
+    if(fabs(px) < 0.0001){
+        px = 1;
+        cout << "init px too small" << endl;
+    }
+
+    if(fabs(py) < 0.0001){
+        py = 1;
+        cout << "init py too small" << endl;
+    }
+
+
+    ekf_.x_ << px, py, 0, 0;
+    cout << "ekf_.x_: " << ekf_.x_ << endl;
 
     previous_timestamp_ = measurement_pack.timestamp_;
     // done initializing, no need to predict or update
@@ -185,9 +171,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     float noise_ax = 9;
     float noise_ay = 9;
     
-    cout << "Update Q" << endl;
     // Update the process covariance matrix Q
-    cout << "Multiply: " << dt_4/4 * noise_ax << endl;
     ekf_.Q_ <<  dt_4/4 * noise_ax, 0, dt_3/2 * noise_ax, 0,
                 0, dt_4/4 * noise_ay, 0, dt_3/2 * noise_ay,
                 dt_3/2 * noise_ax, 0, dt_2 * noise_ax, 0,
@@ -212,27 +196,25 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       
       ekf_.hx_ = VectorXd(3);
       
-      double px = ekf_.x_[0];
-      double py = ekf_.x_[1];
-      double vx = ekf_.x_[2];
-      double vy = ekf_.x_[3];
+      float px = ekf_.x_[0];
+      float py = ekf_.x_[1];
+      float vx = ekf_.x_[2];
+      float vy = ekf_.x_[3];
 
-      double rho;
-      double phi;
-      double rhodot;
+      float rho;
+      float phi;
+      float rhodot;
 
       if(fabs(px) < 0.0001 or fabs(py) < 0.0001){
         
         if(fabs(px) < 0.0001){
           px = 0.0001;
           cout << "px too small" << endl;
-          // ekf_.P_(0,0) = 1000;
         }
 
         if(fabs(py) < 0.0001){
           py = 0.0001;
           cout << "py too small" << endl;
-          // ekf_.P_(1,1) = 1000;
         }
         
         rho = sqrt(px*px + py*py);
@@ -245,20 +227,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         rhodot = (px*vx + py*vy) /rho;
       }      
 
-      
-      /*
-      if(fabs(rho) < 0.0001){
-          rho = 0.0001;
-          // Other people have done else phi = 0, rhodot = 0
-      }
-      */
       ekf_.hx_ << rho, phi, rhodot;
       
       // set H_ to Hj when updating with a radar measurement
       Hj_ = tools.CalculateJacobian(ekf_.x_);
       
       // don't update measurement if we can't compute the Jacobian
-      // from WaterFox
       if (Hj_.isZero(0)){
         cout << "Hj is zero" << endl;
         return;
