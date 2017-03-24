@@ -61,7 +61,7 @@ FusionEKF::FusionEKF() {
                 0, 0, 1, 0,
                 0, 0, 0, 1;
 
-    cout << "FusionEKF::FusionEKF() done" << endl;
+    cout << "FusionEKF::FusionEKF() initialised" << endl;
 
 }
 
@@ -97,15 +97,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */
         float rho = measurement_pack.raw_measurements_[0];
         float phi = measurement_pack.raw_measurements_[1];
-        
-        /*
-        float rhodot = measurement_pack.raw_measurements_[2];
-        float px = rho * cos(phi);
-        float py = rho * sin(phi);
-        float vx = rhodot * cos(phi);
-        float vy = rhodot * sin(phi);
-        ekf_.x_ << px, py, vx, vy;
-        */
+  
         ekf_.x_ << rho*cos(phi), rho*sin(phi), 0, 0;
         cout << "radar ekf_.x_: " << ekf_.x_ << endl;
         
@@ -160,14 +152,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     float noise_ax = 9;
     float noise_ay = 9;
     
-    // Update G
-    /*
-    ekf_.G_ << dt_2/2, 0,
-               0, dt_2/2,
-               dt, 0,
-               0, dt;
-    */
-    
     cout << "Update Q" << endl;
     // Update the process covariance matrix Q
     cout << "Multiply: " << dt_4/4 * noise_ax << endl;
@@ -200,20 +184,41 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       double vx = ekf_.x_[2];
       double vy = ekf_.x_[3];
 
-      if(fabs(px) < 0.0001){
-          px = 0.0001;
-      }
+      double rho;
+      double phi;
+      double rhodot;
 
-      double rho = sqrt(px*px + py*py);
+      if(fabs(px) < 0.0001 or fabs(py) < 0.0001){
+        
+        if(fabs(px) < 0.0001){
+          px = 0.0001;
+          cout << "px too small" << endl;
+          // ekf_.P_(0,0) = 1000;
+        }
+
+        if(fabs(py) < 0.0001){
+          py = 0.0001;
+          cout << "py too small" << endl;
+          // ekf_.P_(1,1) = 1000;
+        }
+        
+        rho = sqrt(px*px + py*py);
+        phi = 0;
+        rhodot = 0;
+  
+      } else {
+        rho = sqrt(px*px + py*py);
+        phi = atan2(py,px); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
+        rhodot = (px*vx + py*vy) /rho;
+      }      
+
+      
+      /*
       if(fabs(rho) < 0.0001){
           rho = 0.0001;
           // Other people have done else phi = 0, rhodot = 0
       }
-
-      
-
-      double phi = atan2(py,px); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
-      double rhodot = (px*vx + py*vy) /rho;
+      */
       ekf_.hx_ << rho, phi, rhodot;
       
       // set H_ to Hj when updating with a radar measurement
@@ -222,6 +227,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       // don't update measurement if we can't compute the Jacobian
       // from WaterFox
       if (Hj_.isZero(0)){
+        cout << "Hj is zero" << endl;
         return;
       }
       
