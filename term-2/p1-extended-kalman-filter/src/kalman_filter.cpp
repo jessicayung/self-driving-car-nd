@@ -96,6 +96,21 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     cout << "z: " << z << endl;
     cout << "y = z - z_pred" << endl;
     VectorXd y = z - z_pred;
+    // if phi is not in the range (-pi, pi), put it in that range
+    
+    bool in_pi = false;
+    while (in_pi == false) {
+      if (y(1) > 3.14159) {
+        cout << "phi > pi" << endl;
+        y(1) = y(1) - 6.2831;
+      }
+      else if (y(1) < -3.14159) {
+        cout << "phi < -pi" << endl;
+        y(1) = y(1) + 6.2831;
+      } else {
+        in_pi = true;
+      }
+    }
     cout << "y: " << y << endl;
     MatrixXd Ht = H_.transpose();
     MatrixXd S = H_ * P_ * Ht + R_;
