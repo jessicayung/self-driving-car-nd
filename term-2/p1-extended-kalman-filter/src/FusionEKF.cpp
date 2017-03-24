@@ -95,10 +95,27 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
+        cout << "init radar" << endl;
+
         float rho = measurement_pack.raw_measurements_[0];
         float phi = measurement_pack.raw_measurements_[1];
-  
-        ekf_.x_ << rho*cos(phi), rho*sin(phi), 0, 0;
+        
+        double px = rho*cos(phi);
+        double py = rho*sin(phi);
+
+        if(fabs(px) < 0.0001){
+          px = 1;
+          cout << "init px too small" << endl;
+          // ekf_.P_(0,0) = 1000;
+        }
+
+        if(fabs(py) < 0.0001){
+          py = 1;
+          cout << "init py too small" << endl;
+          // ekf_.P_(1,1) = 1000;
+        }
+
+        ekf_.x_ << px, py, 0, 0;
         cout << "radar ekf_.x_: " << ekf_.x_ << endl;
         
 
@@ -107,8 +124,24 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Initialize state.
       */
-        ekf_.x_ << measurement_pack.raw_measurements_[0],
-        measurement_pack.raw_measurements_[1], 0, 0;
+        cout << "init laser" << endl;
+
+        double px = measurement_pack.raw_measurements_[0];
+        double py = measurement_pack.raw_measurements_[1];
+
+        if(fabs(px) < 0.0001){
+          px = 1;
+          cout << "init px too small" << endl;
+          // ekf_.P_(0,0) = 1000;
+        }
+
+        if(fabs(py) < 0.0001){
+          py = 1;
+          cout << "init py too small" << endl;
+          // ekf_.P_(1,1) = 1000;
+        }
+
+        ekf_.x_ << px, py, 0, 0;
         cout << "laser ekf_.x_: " << ekf_.x_ << endl;
 
     }
