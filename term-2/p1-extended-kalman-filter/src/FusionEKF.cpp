@@ -119,12 +119,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
     // Handle small px, py
     if(fabs(px) < 0.0001){
-        px = 1;
+        px = 0.1;
         cout << "init px too small" << endl;
     }
 
     if(fabs(py) < 0.0001){
-        py = 1;
+        py = 0.1;
         cout << "init py too small" << endl;
     }
 
