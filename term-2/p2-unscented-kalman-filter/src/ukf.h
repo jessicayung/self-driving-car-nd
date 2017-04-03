@@ -150,6 +150,8 @@ public:
   void PredictMeanAndCovariance(VectorXd* x_out, MatrixXd* P_out);
 
   void PredictRadarMeasurement();
+
+  void UpdateState();
 };
 
 #endif /* UKF_H */
