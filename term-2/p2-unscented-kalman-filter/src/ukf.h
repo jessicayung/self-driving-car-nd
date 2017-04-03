@@ -153,7 +153,7 @@ public:
 
   void PredictLidarMeasurement();
 
-  void UpdateState();
+  void UpdateState(int n_z, bool is_radar);
 };
 
 #endif /* UKF_H */
