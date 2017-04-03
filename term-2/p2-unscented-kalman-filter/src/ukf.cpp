@@ -370,12 +370,6 @@ void UKF::AugmentedSigmaPoints(MatrixXd* Xsig_out) {
 
 }
 
-/**
- * Predicts sigma points, the state, and the state covariance matrix.
- * @param {double} delta_t the change in time (in seconds) between the last
- * measurement and this one.
- */
-
 void UKF::PredictSigmaPoints(double delta_t) {
 
   //set state dimension
@@ -439,6 +433,11 @@ void UKF::PredictSigmaPoints(double delta_t) {
 
 }
 
+/**
+ * Predicts sigma points, the state, and the state covariance matrix.
+ * @param {double} delta_t the change in time (in seconds) between the last
+ * measurement and this one.
+ */
 void UKF::Prediction(double delta_t) {
   /**
   TODO:
