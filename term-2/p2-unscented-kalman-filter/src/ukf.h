@@ -151,6 +151,8 @@ public:
 
   void PredictRadarMeasurement();
 
+  void PredictLidarMeasurement();
+
   void UpdateState();
 };
 
