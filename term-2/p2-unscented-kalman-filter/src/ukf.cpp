@@ -30,10 +30,10 @@ UKF::UKF() {
         0, 0, 0, 0, 1000;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 30;
+  std_a_ = 3;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 30;
+  std_yawdd_ = 1;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -63,9 +63,9 @@ UKF::UKF() {
   // Initialise F (state transition matrix) with dt = 0
   F_ = MatrixXd(4, 4);
   F_ << 1, 0, 0, 0,
-              0, 1, 0, 0,
-              0, 0, 1, 0,
-              0, 0, 0, 1;
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1;
 
 }
 
@@ -172,9 +172,7 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   float dt_2 = dt * dt;
   float dt_3 = dt_2 * dt;
   float dt_4 = dt_3 * dt;
-  
-  cout << "Modify F matrix" << endl;
-  
+    
   //Modify the F matrix so that the time is integrated
   F_(0, 2) = dt;
   F_(1, 3) = dt;
@@ -190,7 +188,6 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
               0, dt_4/4 * noise_ay, 0, dt_3/2 * noise_ay,
               dt_3/2 * noise_ax, 0, dt_2 * noise_ax, 0,
               0, dt_3/2 * noise_ay, 0, dt_2 * noise_ay;
-  cout << "Finished updating Q" << endl;
   
   // Generate sigma points
   GenerateSigmaPoints(&Xsig_);                                                                                                                                                              
@@ -200,7 +197,6 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
 
   // Predict
   Prediction(dt);
-  cout << "Predicted" << endl;
 
   /*****************************************************************************
    *  Update
@@ -481,11 +477,6 @@ void UKF::PredictMeanAndCovariance(VectorXd* x_out, MatrixXd* P_out) {
 
     P = P + weights(i) * x_diff * x_diff.transpose() ;
   }
-
-
-/*******************************************************************************
- * Student part end
- ******************************************************************************/
 
   //print result
   std::cout << "Predicted state" << std::endl;
