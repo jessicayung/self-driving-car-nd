@@ -26,6 +26,9 @@ public:
   ///* state vector: [pos1 pos2 vel_abs yaw_angle yaw_rate] in SI units and rad
   VectorXd x_;
 
+  // thing
+  VectorXd hx_;
+
   ///* state covariance matrix
   MatrixXd P_;
 

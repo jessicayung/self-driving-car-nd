@@ -52,6 +52,7 @@ UKF::UKF() {
 
   Hint: one or more values initialized above might be wildly off...
   */
+
 }
 
 UKF::~UKF() {}
@@ -75,7 +76,7 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   if (!is_initialized_) {
     /**
     TODO:
-      * Initialize the state ekf_.x_ with the first measurement.
+      * Initialize the state x_ with the first measurement.
       * Create the covariance matrix.
       * Remember: you'll need to convert radar from polar to cartesian coordinates.
     */
@@ -133,6 +134,85 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     // done initializing, no need to predict or update
     is_initialized_ = true;
     return;
+  }
+
+  /*****************************************************************************
+   *  Update
+   ****************************************************************************/
+
+  /**
+   TODO:
+     * Use the sensor type to perform the update step.
+     * Update the state and covariance matrices.
+   */
+
+  if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+    // Radar updates
+      cout << "Radar update" << endl;
+      
+      hx_ = VectorXd(3);
+      
+      float px = x_[0];
+      float py = x_[1];
+      float vx = x_[2];
+      float vy = x_[3];
+
+      float rho;
+      float phi;
+      float rhodot;
+
+      // Handling small measurements
+
+      if(fabs(px) < 0.0001 or fabs(py) < 0.0001){
+        
+        if(fabs(px) < 0.0001){
+          px = 0.0001;
+          cout << "px too small" << endl;
+        }
+
+        if(fabs(py) < 0.0001){
+          py = 0.0001;
+          cout << "py too small" << endl;
+        }
+        
+        rho = sqrt(px*px + py*py);
+        phi = 0;
+        rhodot = 0;
+  
+      } else {
+        rho = sqrt(px*px + py*py);
+        phi = atan2(py,px); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
+        rhodot = (px*vx + py*vy) /rho;
+      }      
+
+      // I don't even know what hx_ is for
+      hx_ << rho, phi, rhodot;
+      
+      /*
+      // set H_ to Hj when updating with a radar measurement
+      // NO MORE JACOBIAAAAN
+      // Hj_ = tools.CalculateJacobian(x_);
+      
+      // don't update measurement if we can't compute the Jacobian
+      if (Hj_.isZero(0)){
+        cout << "Hj is zero" << endl;
+        return;
+      }
+      */
+      
+      // Todo: What happens to H?
+      // H_ = Hj_;
+
+      // R_ = R_radar_;
+
+      UpdateRadar(measurement_pack);   
+    
+      
+  } else {
+    // Laser updates
+      cout << "Laser update" << endl;
+      
+      UpdateLidar(measurement_pack);
   }
     
     
