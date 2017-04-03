@@ -60,13 +60,82 @@ UKF::~UKF() {}
  * @param {MeasurementPackage} meas_package The latest measurement data of
  * either radar or laser.
  */
-void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
+void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   /**
   TODO:
 
   Complete this function! Make sure you switch between lidar and radar
   measurements.
   */
+    
+  /*****************************************************************************
+   *  Initialization
+   ****************************************************************************/
+
+  if (!is_initialized_) {
+    /**
+    TODO:
+      * Initialize the state ekf_.x_ with the first measurement.
+      * Create the covariance matrix.
+      * Remember: you'll need to convert radar from polar to cartesian coordinates.
+    */
+    // first measurement
+    cout << "UKF: " << endl;
+    x_ << 1, 1, 1, 1, 1;
+      
+    // Create process covariance matrix
+    // TODO: Unsure about dimensions of Q.
+    Q_ = Eigen::MatrixXd(4,4);
+
+    float px;
+    float py;
+
+    if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+      /**
+      Convert radar from polar to cartesian coordinates and initialize state.
+      */
+        cout << "init radar" << endl;
+
+        float rho = measurement_pack.raw_measurements_[0];
+        float phi = measurement_pack.raw_measurements_[1];
+        
+        px = rho*cos(phi);
+        py = rho*sin(phi);
+
+    }
+    else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
+      /**
+      Initialize state.
+      */
+        cout << "init laser" << endl;
+
+        px = measurement_pack.raw_measurements_[0];
+        py = measurement_pack.raw_measurements_[1];
+
+    }
+
+    // Handle small px, py
+    if(fabs(px) < 0.0001){
+        px = 0.1;
+        cout << "init px too small" << endl;
+    }
+
+    if(fabs(py) < 0.0001){
+        py = 0.1;
+        cout << "init py too small" << endl;
+    }
+
+
+    x_ << px, py, 0, 0, 0;
+    cout << "x_: " << x_ << endl;
+
+    previous_timestamp_ = measurement_pack.timestamp_;
+    // done initializing, no need to predict or update
+    is_initialized_ = true;
+    return;
+  }
+    
+    
 }
 
 /**

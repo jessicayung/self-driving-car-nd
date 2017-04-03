@@ -29,6 +29,9 @@ public:
   ///* state covariance matrix
   MatrixXd P_;
 
+  // process covariance matrix
+  MatrixXd Q_;
+
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
 
@@ -73,6 +76,11 @@ public:
 
   ///* the current NIS for laser
   double NIS_laser_;
+
+  // previous timestamp (Added)
+  long previous_timestamp_;
+
+
 
   /**
    * Constructor
