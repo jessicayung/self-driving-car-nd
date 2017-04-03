@@ -53,6 +53,13 @@ UKF::UKF() {
   Hint: one or more values initialized above might be wildly off...
   */
 
+  // Initialise F (state transition matrix) with dt = 0
+  F_ = MatrixXd(4, 4);
+  F_ << 1, 0, 0, 0,
+              0, 1, 0, 0,
+              0, 0, 1, 0,
+              0, 0, 0, 1;
+
 }
 
 UKF::~UKF() {}
@@ -135,6 +142,50 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     is_initialized_ = true;
     return;
   }
+
+  /*****************************************************************************
+   *  Prediction
+   ****************************************************************************/
+
+
+
+  /**
+   TODO:
+     * Update the state transition matrix F according to the new elapsed time.
+      - Time is measured in seconds.
+     * Update the process noise covariance matrix.
+     * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
+   */
+    
+  cout << "Start predicting" << endl;
+  float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
+  cout << "dt: " << dt << endl;
+  previous_timestamp_ = measurement_pack.timestamp_;
+  
+  float dt_2 = dt * dt;
+  float dt_3 = dt_2 * dt;
+  float dt_4 = dt_3 * dt;
+  
+  cout << "Modify F matrix" << endl;
+  
+  //Modify the F matrix so that the time is integrated
+  F_(0, 2) = dt;
+  F_(1, 3) = dt;
+  
+  cout << "F_: " << F_ << endl;
+  
+  // noise values
+  float noise_ax = 9;
+  float noise_ay = 9;
+  
+  // Update the process covariance matrix Q
+  Q_ <<  dt_4/4 * noise_ax, 0, dt_3/2 * noise_ax, 0,
+              0, dt_4/4 * noise_ay, 0, dt_3/2 * noise_ay,
+              dt_3/2 * noise_ax, 0, dt_2 * noise_ax, 0,
+              0, dt_3/2 * noise_ay, 0, dt_2 * noise_ay;
+  cout << "Finished updating Q" << endl;
+  Prediction(dt);
+  cout << "Predicted" << endl;
 
   /*****************************************************************************
    *  Update

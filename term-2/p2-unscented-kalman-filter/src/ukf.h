@@ -35,6 +35,9 @@ public:
   // process covariance matrix
   MatrixXd Q_;
 
+  // state transition matrix
+  MatrixXd F_;
+
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
 
