@@ -47,6 +47,18 @@ public:
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
 
+  // incoming radar measurement
+  VectorXd z_;
+
+  // mean predicted measurement
+  VectorXd z_pred_;
+
+  //sigma points in measurement space
+  MatrixXd Zsig_;
+
+  // predicted measurement covariance
+  MatrixXd S_;
+
   ///* time when the state is true, in us
   long long time_us_;
 
@@ -136,6 +148,8 @@ public:
   void PredictSigmaPoints(double delta_t);
 
   void PredictMeanAndCovariance(VectorXd* x_out, MatrixXd* P_out);
+
+  void PredictRadarMeasurement();
 };
 
 #endif /* UKF_H */
