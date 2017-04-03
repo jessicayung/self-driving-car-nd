@@ -184,6 +184,14 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
               dt_3/2 * noise_ax, 0, dt_2 * noise_ax, 0,
               0, dt_3/2 * noise_ay, 0, dt_2 * noise_ay;
   cout << "Finished updating Q" << endl;
+  
+  // Generate sigma points
+  GenerateSigmaPoints(&Xsig_);                                                                                                                                                              
+  
+  // Augment sigma points
+  AugmentedSigmaPoints(&Xsig_aug_);
+
+  // Predict
   Prediction(dt);
   cout << "Predicted" << endl;
 
@@ -269,6 +277,94 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     
 }
 
+void UKF::GenerateSigmaPoints(MatrixXd* Xsig_out) {
+
+  //set state dimension
+  int n_x = 5;
+
+  //define spreading parameter
+  double lambda = 3 - n_x;
+
+  //create sigma point matrix
+  MatrixXd Xsig = MatrixXd(n_x, 2 * n_x + 1);
+
+  //calculate square root of P
+  MatrixXd A = P_.llt().matrixL();
+
+  //set first column of sigma point matrix
+  Xsig.col(0)  = x_;
+
+  //set remaining sigma points
+  for (int i = 0; i < n_x; i++)
+  {
+    Xsig.col(i+1)     = x_ + sqrt(lambda+n_x) * A.col(i);
+    Xsig.col(i+1+n_x) = x_ - sqrt(lambda+n_x) * A.col(i);
+  }
+
+  //print result
+  //std::cout << "Xsig = " << std::endl << Xsig << std::endl;
+
+  //write result
+  *Xsig_out = Xsig;
+
+}
+
+void UKF::AugmentedSigmaPoints(MatrixXd* Xsig_out) {
+
+  //set state dimension
+  int n_x = 5;
+
+  //set augmented dimension
+  int n_aug = 7;
+
+  //Process noise standard deviation longitudinal acceleration in m/s^2
+  double std_a = 0.2;
+
+  //Process noise standard deviation yaw acceleration in rad/s^2
+  double std_yawdd = 0.2;
+
+  //define spreading parameter
+  double lambda = 3 - n_aug;
+
+  //create augmented mean vector
+  VectorXd x_aug = VectorXd(7);
+
+  //create augmented state covariance
+  MatrixXd P_aug = MatrixXd(7, 7);
+
+  //create sigma point matrix
+  MatrixXd Xsig_aug = MatrixXd(n_aug, 2 * n_aug + 1);
+ 
+  //create augmented mean state
+  x_aug.head(5) = x_;
+  x_aug(5) = 0;
+  x_aug(6) = 0;
+
+  //create augmented covariance matrix
+  P_aug.fill(0.0);
+  P_aug.topLeftCorner(5,5) = P_;
+  P_aug(5,5) = std_a*std_a;
+  P_aug(6,6) = std_yawdd*std_yawdd;
+
+  //create square root matrix
+  MatrixXd L = P_aug.llt().matrixL();
+
+  //create augmented sigma points
+  Xsig_aug.col(0)  = x_aug;
+  for (int i = 0; i< n_aug; i++)
+  {
+    Xsig_aug.col(i+1)       = x_aug + sqrt(lambda+n_aug) * L.col(i);
+    Xsig_aug.col(i+1+n_aug) = x_aug - sqrt(lambda+n_aug) * L.col(i);
+  }
+  
+  //print result
+  std::cout << "Xsig_aug = " << std::endl << Xsig_aug << std::endl;
+
+  //write result
+  *Xsig_out = Xsig_aug;
+
+}
+
 /**
  * Predicts sigma points, the state, and the state covariance matrix.
  * @param {double} delta_t the change in time (in seconds) between the last
@@ -281,6 +377,8 @@ void UKF::Prediction(double delta_t) {
   Complete this function! Estimate the object's location. Modify the state
   vector, x_. Predict sigma points, the state, and the state covariance matrix.
   */
+
+
 }
 
 /**
