@@ -25,15 +25,15 @@ UKF::UKF() {
   P_ = MatrixXd(5, 5);
   P_ << 1, 0, 0, 0, 0,
         0, 1, 0, 0, 0,
-        0, 0, 1000, 0, 0,
-        0, 0, 0, 1000, 0,
-        0, 0, 0, 0, 1000;
+        0, 0, 1, 0, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 0, 0, 1;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 3;
+  std_a_ = 0.8;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 1;
+  std_yawdd_ = 0.6;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -59,13 +59,6 @@ UKF::UKF() {
 
   Hint: one or more values initialized above might be wildly off...
   */
-
-  // Initialise F (state transition matrix) with dt = 0
-  F_ = MatrixXd(4, 4);
-  F_ << 1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1;
 
 }
 
@@ -172,12 +165,6 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   float dt_2 = dt * dt;
   float dt_3 = dt_2 * dt;
   float dt_4 = dt_3 * dt;
-    
-  //Modify the F matrix so that the time is integrated
-  F_(0, 2) = dt;
-  F_(1, 3) = dt;
-  
-  cout << "F_: " << F_ << endl;
   
   // noise values
   float noise_ax = 9;
@@ -212,6 +199,7 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     // Radar updates
       cout << "Radar update" << endl;
       
+      /*
       hx_ = VectorXd(3);
       
       float px = x_[0];
@@ -250,22 +238,10 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
       // I don't even know what hx_ is for
       hx_ << rho, phi, rhodot;
       
-      /*
-      // set H_ to Hj when updating with a radar measurement
-      // NO MORE JACOBIAAAAN
-      // Hj_ = tools.CalculateJacobian(x_);
-      
-      // don't update measurement if we can't compute the Jacobian
-      if (Hj_.isZero(0)){
-        cout << "Hj is zero" << endl;
-        return;
-      }
-      */
-      
-      // Todo: What happens to H?
-      // H_ = Hj_;
 
       // R_ = R_radar_;
+
+      */
 
       UpdateRadar(measurement_pack);   
     
@@ -304,9 +280,6 @@ void UKF::GenerateSigmaPoints(MatrixXd* Xsig_out) {
     Xsig.col(i+1+n_x) = x_ - sqrt(lambda+n_x) * A.col(i);
   }
 
-  //print result
-  //std::cout << "Xsig = " << std::endl << Xsig << std::endl;
-
   //write result
   *Xsig_out = Xsig;
 
@@ -319,12 +292,6 @@ void UKF::AugmentedSigmaPoints(MatrixXd* Xsig_out) {
 
   //set augmented dimension
   int n_aug = 7;
-
-  //Process noise standard deviation longitudinal acceleration in m/s^2
-  double std_a = 0.2;
-
-  //Process noise standard deviation yaw acceleration in rad/s^2
-  double std_yawdd = 0.2;
 
   //define spreading parameter
   double lambda = 3 - n_aug;
@@ -346,8 +313,8 @@ void UKF::AugmentedSigmaPoints(MatrixXd* Xsig_out) {
   //create augmented covariance matrix
   P_aug.fill(0.0);
   P_aug.topLeftCorner(5,5) = P_;
-  P_aug(5,5) = std_a*std_a;
-  P_aug(6,6) = std_yawdd*std_yawdd;
+  P_aug(5,5) = std_a_*std_a_;
+  P_aug(6,6) = std_yawdd_*std_yawdd_;
 
   //create square root matrix
   MatrixXd L = P_aug.llt().matrixL();
