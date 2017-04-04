@@ -23,11 +23,12 @@ UKF::UKF() {
 
   // initial covariance matrix
   P_ = MatrixXd(5, 5);
-  P_ << 1, 0, 0, 0, 0,
-        0, 1, 0, 0, 0,
-        0, 0, 1, 0, 0,
-        0, 0, 0, 1, 0,
-        0, 0, 0, 0, 1;
+  // also tried identity matrix
+  P_ << 0.0043,   -0.0013,    0.0030,   -0.0022,   -0.0020,
+          -0.0013,    0.0077,    0.0011,    0.0071,    0.0060,
+           0.0030,    0.0011,    0.0054,    0.0007,    0.0008,
+          -0.0022,    0.0071,    0.0007,    0.0098,    0.0100,
+          -0.0020,    0.0060,    0.0008,    0.0100,    0.0123;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
   std_a_ = 0.8;
@@ -89,11 +90,9 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     */
     // first measurement
     cout << "UKF: " << endl;
-    x_ << 1, 1, 1, 1, 1;
       
     // Create process covariance matrix
     // TODO: Unsure about dimensions of Q.
-    Q_ = Eigen::MatrixXd(4,4);
 
     float px;
     float py;
@@ -146,36 +145,12 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
-
-
-
-  /**
-   TODO:
-     * Update the state transition matrix F according to the new elapsed time.
-      - Time is measured in seconds.
-     * Update the process noise covariance matrix.
-     * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
-   */
     
   cout << "Start predicting" << endl;
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
   cout << "dt: " << dt << endl;
   previous_timestamp_ = measurement_pack.timestamp_;
-  
-  float dt_2 = dt * dt;
-  float dt_3 = dt_2 * dt;
-  float dt_4 = dt_3 * dt;
-  
-  // noise values
-  float noise_ax = 9;
-  float noise_ay = 9;
-  
-  // Update the process covariance matrix Q
-  Q_ <<  dt_4/4 * noise_ax, 0, dt_3/2 * noise_ax, 0,
-              0, dt_4/4 * noise_ay, 0, dt_3/2 * noise_ay,
-              dt_3/2 * noise_ax, 0, dt_2 * noise_ax, 0,
-              0, dt_3/2 * noise_ay, 0, dt_2 * noise_ay;
-  
+
   // Generate sigma points
   GenerateSigmaPoints(&Xsig_);                                                                                                                                                              
   
@@ -189,59 +164,9 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
    *  Update
    ****************************************************************************/
 
-  /**
-   TODO:
-     * Use the sensor type to perform the update step.
-     * Update the state and covariance matrices.
-   */
-
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
       cout << "Radar update" << endl;
-      
-      /*
-      hx_ = VectorXd(3);
-      
-      float px = x_[0];
-      float py = x_[1];
-      float vx = x_[2];
-      float vy = x_[3];
-
-      float rho;
-      float phi;
-      float rhodot;
-
-      // Handling small measurements
-
-      if(fabs(px) < 0.0001 or fabs(py) < 0.0001){
-        
-        if(fabs(px) < 0.0001){
-          px = 0.0001;
-          cout << "px too small" << endl;
-        }
-
-        if(fabs(py) < 0.0001){
-          py = 0.0001;
-          cout << "py too small" << endl;
-        }
-        
-        rho = sqrt(px*px + py*py);
-        phi = 0;
-        rhodot = 0;
-  
-      } else {
-        rho = sqrt(px*px + py*py);
-        phi = atan2(py,px); //  arc tangent of y/x, in the interval [-pi,+pi] radians.
-        rhodot = (px*vx + py*vy) /rho;
-      }      
-
-      // I don't even know what hx_ is for
-      hx_ << rho, phi, rhodot;
-      
-
-      // R_ = R_radar_;
-
-      */
 
       UpdateRadar(measurement_pack);   
     
