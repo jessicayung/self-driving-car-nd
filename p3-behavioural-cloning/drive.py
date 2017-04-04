@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     model.compile("adam", "mse")
     weights_file = args.model.replace('json', 'h5')
-#    weights_file = "tmp/comma-4c.08-0.03.hdf5"
+    # weights_file = "tmp/comma-4b.08-0.03.hdf5"
     model.load_weights(weights_file)
 
     # wrap Flask application with engineio's middleware
