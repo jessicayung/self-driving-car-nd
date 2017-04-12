@@ -32,6 +32,17 @@ UKF::UKF() {
           -0.0022,    0.0071,    0.0007,    0.0098,    0.0100,
           -0.0020,    0.0060,    0.0008,    0.0100,    0.0123;
 
+  // State dimension
+  n_x_ = 5;
+
+  // Augmented state dimension
+  n_aug_ = 7;
+
+  // Sigma point spreading parameter
+  // TODO: check. 
+  // Previously had lambda_ = 3 - n_x_ for GenerateSigma Points
+  lambda_ = 3 - n_aug_;
+
   //create sigma point matrix
   MatrixXd Xsig_ = MatrixXd(n_x_, 2 * n_x_ + 1);
 
@@ -73,17 +84,6 @@ UKF::UKF() {
     weights_(i) = weight;
   }
 
-  // State dimension
-  n_x_ = 5;
-
-  // Augmented state dimension
-  n_aug_ = 7;
-
-  // Sigma point spreading parameter
-  // TODO: check. 
-  // Previously had lambda_ = 3 - n_x_ for GenerateSigma Points
-  lambda_ = 3 - n_aug_;
-
   /**
   TODO:
 
@@ -91,8 +91,6 @@ UKF::UKF() {
 
   Hint: one or more values initialized above might be wildly off...
   */
-  
-
 
 
 }
@@ -240,6 +238,7 @@ void UKF::AugmentedSigmaPoints() {
   MatrixXd L = P_aug.llt().matrixL();
 
   //create augmented sigma points
+  Xsig_aug_ = MatrixXd(n_aug_, 2 * n_aug_ + 1);  
   Xsig_aug_.col(0)  = x_aug;
   for (int i = 0; i< n_aug_; i++)
   {
@@ -372,16 +371,6 @@ void UKF::PredictRadarMeasurement() {
 
   //matrix for sigma points in measurement space
   Zsig_ = MatrixXd(n_z, 2 * n_aug_ + 1);
-
-  // predicted measurement covariance
-  S_ = MatrixXd(n_z, n_z);
-
-  // incoming radar measurement
-  z_ = VectorXd(n_z);
-
-  // mean predicted measurement
-  z_pred_ = VectorXd(n_z);
-
   //transform sigma points into measurement space
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //2n+1 simga points
 
@@ -397,15 +386,23 @@ void UKF::PredictRadarMeasurement() {
     // measurement model
     Zsig_(0,i) = sqrt(p_x*p_x + p_y*p_y);                        //r
     Zsig_(1,i) = atan2(p_y,p_x);                                 //phi
-    Zsig_(2,i) = (p_x*v1 + p_y*v2 ) / sqrt(p_x*p_x + p_y*p_y);   //r_dot
+    if(fabs(sqrt(p_x*p_x + p_y*p_y)) > 0.001) {                  //r_dot
+      Zsig_(2,i) = (p_x*v1 + p_y*v2 ) / sqrt(p_x*p_x + p_y*p_y);
+    }
+    else {
+      Zsig_(2,i) = 0.0;
+    }   
   }
 
   //mean predicted measurement
+  z_pred_ = VectorXd(n_z);
   z_pred_.fill(0.0);
   for (int i=0; i < 2*n_aug_+1; i++) {
       z_pred_ = z_pred_ + weights_(i) * Zsig_.col(i);
   }
 
+  // predicted measurement covariance
+  S_ = MatrixXd(n_z, n_z);
   //measurement covariance matrix S
   S_.fill(0.0);
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //2n+1 simga points
@@ -436,9 +433,6 @@ void UKF::PredictLidarMeasurement() {
 
   //set measurement dimension
   int n_z = 2;
-
-  // incoming radar measurement
-  z_ = VectorXd(n_z);
 
   // mean predicted measurement
   z_pred_ = VectorXd(n_z);
@@ -592,6 +586,9 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
   You'll also need to calculate the lidar NIS.
   */
 
+  // incoming lidar measurement
+  z_ = VectorXd(2);
+  z_ << meas_package.raw_measurements_[0], meas_package.raw_measurements_[1];
   PredictLidarMeasurement();
   UpdateState(2, false);
 
@@ -611,6 +608,9 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   You'll also need to calculate the radar NIS.
   */
 
+  // incoming radar measurement
+  z_ = VectorXd(3);
+  z_ << meas_package.raw_measurements_[0], meas_package.raw_measurements_[1], meas_package.raw_measurements_[2];
   PredictRadarMeasurement();
   UpdateState(3, true);
 }
