@@ -208,8 +208,13 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
       
       UpdateLidar(measurement_pack);
   }
-    
-    
+  
+  /*
+  TODO: Activate when NIS values calculated
+  // print NIS
+  cout << "NIS_radar_ = " << NIS_radar_  << endl;
+  cout << "NIS_laser_ = " << NIS_laser_  << endl; 
+  */ 
 }
 
 void UKF::AugmentedSigmaPoints() {
@@ -244,7 +249,7 @@ void UKF::AugmentedSigmaPoints() {
   
   //print result
   std::cout << "Xsig_aug_ = " << std::endl << Xsig_aug_ << std::endl;
-  
+
 }
 
 void UKF::PredictSigmaPoints(double delta_t) {
@@ -303,16 +308,22 @@ void UKF::PredictSigmaPoints(double delta_t) {
 
 void UKF::PredictMeanAndCovariance() {
 
+  //create vector for predicted state
+  VectorXd x = VectorXd(n_x_);
+
+  //create covariance matrix for prediction
+  MatrixXd P = MatrixXd(n_x_, n_x_);
+
   //predicted state mean
   // TODO:  check if still fill with zeroes?
-  x_.fill(0.0);
+  x.fill(0.0);
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
-    x_ = x_ + weights_(i) * Xsig_pred_.col(i);
+    x = x + weights_(i) * Xsig_pred_.col(i);
   }
 
   //predicted state covariance matrix
   // TODO:  check if still fill with zeroes?
-  P_.fill(0.0);
+  P.fill(0.0);
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
 
     // state difference
@@ -321,8 +332,11 @@ void UKF::PredictMeanAndCovariance() {
     while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;
     while (x_diff(3)<-M_PI) x_diff(3)+=2.*M_PI;
 
-    P_ = P_ + weights_(i) * x_diff * x_diff.transpose() ;
+    P = P + weights_(i) * x_diff * x_diff.transpose() ;
   }
+
+  x_ = x;
+  P_ = P;
 
   //print result
   std::cout << "Predicted state" << std::endl;
@@ -346,7 +360,7 @@ void UKF::Prediction(double delta_t) {
   */
 
   PredictSigmaPoints(delta_t);
-  PredictMeanAndCovariance(&x_, &P_);
+  PredictMeanAndCovariance();
 
 
 }
@@ -435,7 +449,6 @@ void UKF::PredictLidarMeasurement() {
   // predicted measurement covariance
   S_ = MatrixXd(n_z, n_z);
 
-
   //transform sigma points into measurement space
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //2n+1 simga points
 
@@ -449,9 +462,9 @@ void UKF::PredictLidarMeasurement() {
     // double v2 = sin(yaw)*v;
 
     // TODO: sync small px, py handling across fns
-    if (fabs(px) < 0.00001 || fabs(py)<0.00001) {
-      px = 0.0001;
-      py = 0.0001;
+    if (fabs(p_x) < 0.00001 || fabs(p_y)<0.00001) {
+      p_x = 0.0001;
+      p_y = 0.0001;
     }
 
     // measurement model
@@ -466,7 +479,7 @@ void UKF::PredictLidarMeasurement() {
   //mean predicted measurement
   z_pred_.fill(0.0);
   for (int i=0; i < 2*n_aug_+1; i++) {
-      z_pred_ = z_pred_ + weights(i) * Zsig_.col(i);
+      z_pred_ = z_pred_ + weights_(i) * Zsig_.col(i);
   }
 
   std::cout << "z_pred_: " << z_pred_ << std::endl;
@@ -482,7 +495,7 @@ void UKF::PredictLidarMeasurement() {
     //residual
     VectorXd z_diff = Zsig_.col(i) - z_pred_;
 
-    S_ = S_ + weights(i) * z_diff * z_diff.transpose();
+    S_ = S_ + weights_(i) * z_diff * z_diff.transpose();
   }
 
   std::cout << "S_: " << S_ << std::endl;
@@ -503,15 +516,6 @@ void UKF::PredictLidarMeasurement() {
 void UKF::UpdateState(int n_z, bool is_radar) {
   // n_z: set measurement dimension (radar = 3, lidar = 2)
 
-  //set vector for weights
-  VectorXd weights = VectorXd(2*n_aug_+1);
-   double weight_0 = lambda_/(lambda_+n_aug_);
-  weights(0) = weight_0;
-  for (int i=1; i<2*n_aug_+1; i++) {  //2n+1 weights
-    double weight = 0.5/(n_aug_+lambda_);
-    weights(i) = weight;
-  }
-
   //create matrix for cross correlation Tc
   MatrixXd Tc = MatrixXd(n_x_, n_z);
 
@@ -524,6 +528,7 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
     if (is_radar == true) {
       //angle normalization
+      // TODO: do we need to do this for laser?
       while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
       while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
     }
@@ -533,11 +538,12 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
     if (is_radar == true) {
       //angle normalization
+      // TODO: do we need to do this for laser?
       while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;
       while (x_diff(3)<-M_PI) x_diff(3)+=2.*M_PI;
     }
 
-    Tc = Tc + weights(i) * x_diff * z_diff.transpose();
+    Tc = Tc + weights_(i) * x_diff * z_diff.transpose();
   }
 
   //Kalman gain K;
@@ -549,6 +555,7 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
   if (is_radar == true) {
     //angle normalization
+    // TODO: do we need to do this for laser?
     while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
     while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
   }
@@ -558,7 +565,12 @@ void UKF::UpdateState(int n_z, bool is_radar) {
   P_ = P_ - K*S_*K.transpose();
 
   // Calculate NIS
-  NIS_laser_ = z_diff.transpose() * S_.inverse() * z_diff;
+  if (is_radar == true) {
+
+  }
+  else {
+    NIS_laser_ = z_diff.transpose() * S_.inverse() * z_diff;
+  }
 
   //print result
   std::cout << "Updated state x: " << std::endl << x_ << std::endl;
