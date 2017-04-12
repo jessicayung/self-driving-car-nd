@@ -25,13 +25,18 @@ UKF::UKF() {
 
   // initial covariance matrix
   P_ = MatrixXd(5, 5);
-  // also tried identity matrix
+  P_ << 1, 0, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 0, 0, 1;
+  /* Also tried this but overall identity matrix works slightly better
   P_ << 0.0043,   -0.0013,    0.0030,   -0.0022,   -0.0020,
           -0.0013,    0.0077,    0.0011,    0.0071,    0.0060,
            0.0030,    0.0011,    0.0054,    0.0007,    0.0008,
           -0.0022,    0.0071,    0.0007,    0.0098,    0.0100,
           -0.0020,    0.0060,    0.0008,    0.0100,    0.0123;
-
+  */
   // State dimension
   n_x_ = 5;
 
@@ -56,7 +61,7 @@ UKF::UKF() {
   std_a_ = 0.2;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.2;
+  std_yawdd_ = 0.4;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -68,7 +73,7 @@ UKF::UKF() {
   std_radr_ = 0.05;
 
   // Radar measurement noise standard deviation angle in rad
-  std_radphi_ = 0.03;
+  std_radphi_ = 0.0025;
   // in quiz: 0.0175
 
   // Radar measurement noise standard deviation radius change in m/s
@@ -84,15 +89,6 @@ UKF::UKF() {
     weights_(i) = weight;
   }
 
-  /**
-  TODO:
-
-  Complete the initialization. See ukf.h for other member properties.
-
-  Hint: one or more values initialized above might be wildly off...
-  */
-
-
 }
 
 UKF::~UKF() {}
@@ -102,12 +98,6 @@ UKF::~UKF() {}
  * either radar or laser.
  */
 void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
-  /**
-  TODO:
-
-  Complete this function! Make sure you switch between lidar and radar
-  measurements.
-  */
     
   /*****************************************************************************
    *  Initialization
@@ -123,9 +113,6 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     // first measurement
     cout << "UKF: " << endl;
       
-    // Create process covariance matrix
-    // TODO: Unsure about dimensions of Q.
-
     double px;
     double py;
 
@@ -154,13 +141,13 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     }
 
     // Handle small px, py
-    if(fabs(px) < 0.0001){
-        px = 0.1;
+    if(fabs(px) < 0.001){
+        px = 0.001;
         cout << "init px too small" << endl;
     }
 
-    if(fabs(py) < 0.0001){
-        py = 0.1;
+    if(fabs(py) < 0.001){
+        py = 0.001;
         cout << "init py too small" << endl;
     }
 
@@ -207,12 +194,10 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
       UpdateLidar(measurement_pack);
   }
   
-  /*
-  TODO: Activate when NIS values calculated
   // print NIS
   cout << "NIS_radar_ = " << NIS_radar_  << endl;
   cout << "NIS_laser_ = " << NIS_laser_  << endl; 
-  */ 
+
 }
 
 void UKF::AugmentedSigmaPoints() {
@@ -314,14 +299,12 @@ void UKF::PredictMeanAndCovariance() {
   MatrixXd P = MatrixXd(n_x_, n_x_);
 
   //predicted state mean
-  // TODO:  check if still fill with zeroes?
   x.fill(0.0);
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
     x = x + weights_(i) * Xsig_pred_.col(i);
   }
 
   //predicted state covariance matrix
-  // TODO:  check if still fill with zeroes?
   P.fill(0.0);
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
 
@@ -351,16 +334,9 @@ void UKF::PredictMeanAndCovariance() {
  * measurement and this one.
  */
 void UKF::Prediction(double delta_t) {
-  /**
-  TODO:
-
-  Complete this function! Estimate the object's location. Modify the state
-  vector, x_. Predict sigma points, the state, and the state covariance matrix.
-  */
 
   PredictSigmaPoints(delta_t);
   PredictMeanAndCovariance();
-
 
 }
 
@@ -386,6 +362,7 @@ void UKF::PredictRadarMeasurement() {
     // measurement model
     Zsig_(0,i) = sqrt(p_x*p_x + p_y*p_y);                        //r
     Zsig_(1,i) = atan2(p_y,p_x);                                 //phi
+    // handle small denominators
     if(fabs(sqrt(p_x*p_x + p_y*p_y)) > 0.001) {                  //r_dot
       Zsig_(2,i) = (p_x*v1 + p_y*v2 ) / sqrt(p_x*p_x + p_y*p_y);
     }
@@ -455,10 +432,9 @@ void UKF::PredictLidarMeasurement() {
     // double v1 = cos(yaw)*v;
     // double v2 = sin(yaw)*v;
 
-    // TODO: sync small px, py handling across fns
-    if (fabs(p_x) < 0.00001 || fabs(p_y)<0.00001) {
-      p_x = 0.0001;
-      p_y = 0.0001;
+    if (fabs(p_x) < 0.001 || fabs(p_y)<0.001) {
+      p_x = 0.001;
+      p_y = 0.001;
     }
 
     // measurement model
@@ -480,11 +456,6 @@ void UKF::PredictLidarMeasurement() {
 
   //measurement covariance matrix S
   S_.fill(0.0);
-  /* TODO: check
-  some have ... wait this is my R.
-  S << pow(std_laspx_, 2), 0                 ,
-       0                 , pow(std_laspy_, 2);
-  */
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //2n+1 simga points
     //residual
     VectorXd z_diff = Zsig_.col(i) - z_pred_;
@@ -522,7 +493,7 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
     if (is_radar == true) {
       //angle normalization
-      // TODO: do we need to do this for laser?
+      // TODO: Don't think we need to do this for laser, check?
       while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
       while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
     }
@@ -532,7 +503,6 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
     if (is_radar == true) {
       //angle normalization
-      // TODO: do we need to do this for laser?
       while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;
       while (x_diff(3)<-M_PI) x_diff(3)+=2.*M_PI;
     }
@@ -549,7 +519,6 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
   if (is_radar == true) {
     //angle normalization
-    // TODO: do we need to do this for laser?
     while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
     while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
   }
@@ -559,11 +528,13 @@ void UKF::UpdateState(int n_z, bool is_radar) {
   P_ = P_ - K*S_*K.transpose();
 
   // Calculate NIS
-  if (is_radar == true) {
 
+  double NIS = z_diff.transpose() * S_.inverse() * z_diff;
+  if (is_radar == true) {
+    NIS_radar_ = NIS;
   }
   else {
-    NIS_laser_ = z_diff.transpose() * S_.inverse() * z_diff;
+    NIS_laser_ = NIS;
   }
 
   //print result
