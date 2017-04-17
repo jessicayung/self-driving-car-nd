@@ -59,6 +59,10 @@ public:
   // predicted measurement covariance
   MatrixXd S_;
 
+  MatrixXd R_laser_;
+
+  MatrixXd R_radar_;
+
   ///* time when the state is true, in us
   long long time_us_;
 
@@ -91,6 +95,9 @@ public:
 
   ///* Augmented state dimension
   int n_aug_;
+
+  // Number of sigma points
+  int n_sig_;
 
   ///* Sigma point spreading parameter
   double lambda_;
