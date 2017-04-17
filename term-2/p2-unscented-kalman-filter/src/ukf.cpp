@@ -30,13 +30,7 @@ UKF::UKF() {
         0, 0, 1, 0, 0,
         0, 0, 0, 1, 0,
         0, 0, 0, 0, 1;
-  /* Also tried this but overall identity matrix works slightly better
-  P_ << 0.0043,   -0.0013,    0.0030,   -0.0022,   -0.0020,
-          -0.0013,    0.0077,    0.0011,    0.0071,    0.0060,
-           0.0030,    0.0011,    0.0054,    0.0007,    0.0008,
-          -0.0022,    0.0071,    0.0007,    0.0098,    0.0100,
-          -0.0020,    0.0060,    0.0008,    0.0100,    0.0123;
-  */
+ 
   // State dimension
   n_x_ = 5;
 
@@ -70,15 +64,13 @@ UKF::UKF() {
   std_laspy_ = 0.15;
 
   // Radar measurement noise standard deviation radius in m
-  std_radr_ = 0.05;
+  std_radr_ = 0.3;
 
   // Radar measurement noise standard deviation angle in rad
-  std_radphi_ = 0.0025;
-  // in quiz: 0.0175
+  std_radphi_ = 0.003;
 
   // Radar measurement noise standard deviation radius change in m/s
   std_radrd_ = 0.3;
-  // in quiz: 0.1
 
   // Weights of sigma points
   weights_ = VectorXd(2*n_aug_+1);
