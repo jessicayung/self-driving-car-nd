@@ -102,6 +102,12 @@ UKF::~UKF() {}
  * either radar or laser.
  */
 
+static double SNormalizeAngle2(double phi)
+{
+  cout << "Normalising Angle" << endl;
+  return atan2(sin(phi), cos(phi));
+}
+
 void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     
   /*****************************************************************************
@@ -174,11 +180,18 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
   cout << "dt: " << dt << endl;
   previous_timestamp_ = measurement_pack.timestamp_;
-  
+
   // Generate Augmented sigma points
   AugmentedSigmaPoints();
 
-  // Predict
+  // Predict 
+  while (dt > 0.1)
+  {
+  const double dt2 = 0.05;
+  Prediction(dt2);
+  dt -= dt2;
+  }
+
   Prediction(dt);
 
   /*****************************************************************************
@@ -322,8 +335,7 @@ void UKF::PredictMeanAndCovariance() {
     VectorXd x_diff = Xsig_pred_.col(i) - x_;
 
     //angle normalization
-    while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;
-    while (x_diff(3)<-M_PI) x_diff(3)+=2.*M_PI;
+    x_diff(3) = SNormalizeAngle2(x_diff(3));
 
     P = P + weights_(i) * x_diff * x_diff.transpose() ;
   }
@@ -398,8 +410,7 @@ void UKF::PredictRadarMeasurement() {
     VectorXd z_diff = Zsig_.col(i) - z_pred_;
 
     //angle normalization
-    while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
-    while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
+    z_diff(1) = SNormalizeAngle2(z_diff(1));
 
     S_ = S_ + weights_(i) * z_diff * z_diff.transpose();
   }
@@ -498,8 +509,7 @@ void UKF::UpdateState(int n_z, bool is_radar) {
     if (is_radar == true) {
       //angle normalization
       // TODO: Don't think we need to do this for laser, check?
-      while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
-      while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
+      z_diff(1) = SNormalizeAngle2(z_diff(1));
     }
 
     // state difference
@@ -507,8 +517,7 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
     if (is_radar == true) {
       //angle normalization
-      while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;
-      while (x_diff(3)<-M_PI) x_diff(3)+=2.*M_PI;
+      x_diff(3) = SNormalizeAngle2(x_diff(3));
     }
 
     Tc = Tc + weights_(i) * x_diff * z_diff.transpose();
@@ -523,8 +532,7 @@ void UKF::UpdateState(int n_z, bool is_radar) {
 
   if (is_radar == true) {
     //angle normalization
-    while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
-    while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
+    z_diff(1) = SNormalizeAngle2(z_diff(1));
   }
 
   //update state mean and covariance matrix
