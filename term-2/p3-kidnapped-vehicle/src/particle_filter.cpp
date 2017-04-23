@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <math.h> /* for sin, cos */
 
 #include "particle_filter.h"
 
@@ -66,7 +67,40 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
 
-	// Update each particle's estimate.
+	// Set up Gaussian noise, as in `ParticleFilter::init`
+	default_random_engine gen;
+	normal_distribution<double> dist_x(0.0, std_pos[0]);
+	normal_distribution<double> dist_y(0.0, std_pos[1]);
+	normal_distribution<double> dist_theta(0.0, std_pos[2]);
+
+	for (int i = 0; i < num_particles; i++) {
+		
+		double x_est, y_est, theta_est;		
+
+		// pointer to each particle
+		Particle& particle = particles[i];
+		// Extract values from particle for easier reading
+		double x = particle.x;
+		double y = particle.y;
+		double theta = particle.theta; 
+
+		// Calculate estimates of x, y, theta
+		theta_est = theta + yaw_rate * delta_t;
+
+		if (yaw_rate > 0.0001) {
+			x_est = x + velocity/yaw_rate * (sin(theta + yaw_rate * delta_t) - sin(theta));
+			y_est = y + velocity/yaw_rate * (cos(theta) - cos(theta + yaw_rate * delta_t));
+		}
+		else {
+			x_est += velocity * delta_t * cos(theta);
+			y_est += velocity * delta_t * sin(theta);
+		}
+
+		// Update each particle's estimate.
+		particle.x = x_est + dist_x(gen);
+		particle.y = y_est + dist_y(gen);
+		particle.theta = theta_est + dist_theta(gen);
+	}
 
 
 }
