@@ -12,14 +12,50 @@
 
 #include "particle_filter.h"
 
+using namespace std;
+
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	// TODO: Set the number of particles. Initialize all particles to first position (based on estimates of 
 	//   x, y, theta and their uncertainties from GPS) and all weights to 1. 
 	// Add random Gaussian noise to each particle.
 	// NOTE: Consult particle_filter.h for more information about this method (and others in this file).
-	int M = 1000;
+	
+	cout << "ParticleFilter::init" << endl;
+
+	// TODO: tweak number of particles
+	num_particles = 10;
+	default_random_engine gen;
+	 
+	// Create normal (Gaussian) distributions for x, y, theta
+	normal_distribution<double> dist_x(x, std[0]);
+	normal_distribution<double> dist_y(y, std[1]);
+	normal_distribution<double> dist_theta(theta, std[2]);
+
+	
+	for (int i = 0; i < num_particles; ++i) {
+		double particle_x, particle_y, particle_theta;
+				
+	 	particle_x = dist_x(gen);
+	 	particle_y = dist_y(gen);
+	 	particle_theta = dist_theta(gen);	 
+		
+		// Assemble particle
+		// i is index, 1.0 is weight.
+		// See struct of Particle in `particle_filter.h` for full key.
+		Particle temp = {i, particle_x, particle_y, particle_theta, 1.0};
+        
+        // Add particle to list of particles
+        particles.push_back(temp);
+        
+        // Add weight to list of weights (see class `ParticleFilter`)
+        weights.push_back(1.0f);
+
+	}
+
+	cout << "Number of Weights: " << weights.size() << endl;
 
 	// Function does not return anything
+	is_initialized = true;
 
 }
 
