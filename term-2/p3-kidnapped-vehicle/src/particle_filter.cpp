@@ -105,7 +105,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
 }
 
-void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
+vector<LandmarkObs> ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
 	// TODO: Find the predicted measurement that is closest to each observed measurement and assign the 
 	//   observed measurement to this particular landmark.
 	// NOTE: this method will NOT be called by the grading code. But you will probably find it useful to 
@@ -114,8 +114,38 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 	// second arg: observations: actual measurements from radar
 	// Fn does NN association
 
+	// initialise associations vector
+	vector<LandmarkObs> associations;
 
+	// for each observed measurement
+	for (int i=0; i < observations.size(); i++) {
 
+		// make code easier to read
+		LandmarkObs obs = observations[i];
+
+		// find predicted measurement closest to observation
+
+		// initialise minimum distance prediction (pred closest to obs)
+		LandmarkObs min = predicted[0];
+		double min_distance_squared = pow(min.x - obs.x, 2) + pow(min.y - obs.y, 2);
+		
+		// for each prediction
+		for (int j=0; j < predicted.size(); j++) {
+			// calculate distance between predicted measurement and obs
+			double distance_squared = pow(predicted[j].x - obs.x, 2) + pow(predicted[j].y - obs.y, 2);
+			if (distance_squared < min_distance_squared) {
+				min = predicted[j];
+			}
+
+		}
+
+		// assign said predicted measurement to landmark
+		associations.push_back(min);
+		
+
+	}
+
+	return associations;
 
 }
 
@@ -142,19 +172,20 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		vector<LandmarkObs> predicted;
 		
 		for (int j=0; j < observations.size(); j++) {
-			LandMarkObs landmark_pred;
+			LandmarkObs landmark_pred;
 			LandmarkObs obs = observations[j];
 			landmark_pred.id = obs.id;
-			// predict landmark x, y
+			// predict landmark x, y. Equations from trigonometry.
 			landmark_pred.x = obs.x * cos(particle.theta) - obs.y * sin(particle.theta) + particle.x;
 			landmark_pred.y = obs.x * sin(particle.theta) + obs.y * cos(particle.theta) + particle.y;
 			predicted.push_back(landmark_pred);
 		}
 
 		// use dataAssociation function to associate sensor measurements to map landmarks 
-
+		vector<LandmarkObs> associations = dataAssociation(predicted, observations);		
 
 		// then calculate new weight of each particle using multi-variate Gaussian (& associations)
+		
 
 		// then normalise weights
 
