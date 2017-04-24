@@ -166,6 +166,10 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	// `observations` is an array of LandmarkObs, each el of which
 	// has id, x and y properties (see helper_functions.h)
 
+	// make code easier to read. used to calculate new weights.
+	double covariance = pow(std_landmark[0], 2);
+	double weights_sum = 0;
+
 	for (int i=0; i < num_particles; i++) {
 		// predict measurements to all map landmarks
 		Particle& particle = particles[i];
@@ -185,10 +189,40 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		vector<LandmarkObs> associations = dataAssociation(predicted, observations);		
 
 		// then calculate new weight of each particle using multi-variate Gaussian (& associations)
-		
+		// equation in L14.11 Update Step video
 
-		// then normalise weights
+		// initialise unnormalised weight for particle
+		// weight is a product so init to 1.0
+		double weight = 1.0;
 
+		// weight is a product so use a loop
+		for (int j = 0; j < observations.size(); j++) {
+			double x_minus_mu = pow(predicted[j].x - associations[j].x, 2) + pow(predicted[j].y - associations[j].y, 2);
+			double distance = sqrt(x_minus_mu);
+			// TODO: check this + it's inefficient, init at start of fn
+			double covar_x_minus_mu = covariance;
+			double num = exp(-0.5*x_minus_mu/covar_x_minus_mu);
+			double denom = sqrt(abs(2*M_PI*covariance));
+			// mutliply particle weight by this obs-weight pair stat
+			weight *= num/denom;
+
+		}
+
+		// update particle weight 
+		particle.weight = weight;
+		// update weight in PF array
+		weights[i] = weight;
+		// add weight to weights_sum for normalising weights later
+		weights_sum += weight;
+
+	}
+
+	// then normalise weights
+	for (int i = 0; i < num_particles; i++) {
+		// update particle weight
+		particles[i].weight /= weights_sum;
+		// update weight in PF array
+		weights[i] /= weights_sum;
 	}
 
 }
@@ -197,6 +231,7 @@ void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight. 
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
+
 
 }
 
