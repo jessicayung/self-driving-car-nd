@@ -114,6 +114,9 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 	// second arg: observations: actual measurements from radar
 	// Fn does NN association
 
+
+
+
 }
 
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], 
@@ -130,13 +133,33 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   for the fact that the map's y-axis actually points downwards.)
 	//   http://planning.cs.uiuc.edu/node99.html
 
-	// predict measurements to all map landmarks
+	// `observations` is an array of LandmarkObs, each el of which
+	// has id, x and y properties (see helper_functions.h)
 
-	// use dataAssociation function to associate sensor measurements to map landmarks 
+	for (int i=0; i < num_particles; i++) {
+		// predict measurements to all map landmarks
+		Particle& particle = particles[i];
+		vector<LandmarkObs> predicted;
+		
+		for (int j=0; j < observations.size(); j++) {
+			LandMarkObs landmark_pred;
+			LandmarkObs obs = observations[j];
+			landmark_pred.id = obs.id;
+			// predict landmark x, y
+			landmark_pred.x = obs.x * cos(particle.theta) - obs.y * sin(particle.theta) + particle.x;
+			landmark_pred.y = obs.x * sin(particle.theta) + obs.y * cos(particle.theta) + particle.y;
+			predicted.push_back(landmark_pred);
+		}
 
-	// then calculate new weight of each particle using multi-variate Gaussian (& associations)
+		// use dataAssociation function to associate sensor measurements to map landmarks 
 
-	// then normalise weights
+
+		// then calculate new weight of each particle using multi-variate Gaussian (& associations)
+
+		// then normalise weights
+
+	}
+
 }
 
 void ParticleFilter::resample() {
