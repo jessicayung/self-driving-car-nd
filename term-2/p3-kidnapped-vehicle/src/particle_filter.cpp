@@ -167,7 +167,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	// has id, x and y properties (see helper_functions.h)
 
 	// make code easier to read. used to calculate new weights.
-	double covariance = pow(std_landmark[0], 2);
+	double var_x = pow(std_landmark[0], 2);
+	double var_y = pow(std_landmark[1], 2);
+	double covar_xy = std_landmark[0] * std_landmark[1];
 	double weights_sum = 0;
 
 	for (int i=0; i < num_particles; i++) {
@@ -197,12 +199,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 		// weight is a product so use a loop
 		for (int j = 0; j < observations.size(); j++) {
-			double x_minus_mu = pow(predicted[j].x - associations[j].x, 2) + pow(predicted[j].y - associations[j].y, 2);
-			double distance = sqrt(x_minus_mu);
-			// TODO: check this + it's inefficient, init at start of fn
-			double covar_x_minus_mu = covariance;
-			double num = exp(-0.5*x_minus_mu/covar_x_minus_mu);
-			double denom = sqrt(abs(2*M_PI*covariance));
+			double num = exp(-0.5*pow(predicted[j].x - associations[j].x, 2)/var_x + pow(predicted[j].y - associations[j].y, 2)/var_y);
+			// TODO: check denom
+			double denom = sqrt(abs(2*M_PI*(var_x + var_y)));
 			// mutliply particle weight by this obs-weight pair stat
 			weight *= num/denom;
 
@@ -231,7 +230,7 @@ void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight. 
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
-	
+
 	default_random_engine gen;
 
 	// TODO: check
