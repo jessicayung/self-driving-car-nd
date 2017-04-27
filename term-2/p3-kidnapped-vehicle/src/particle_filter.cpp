@@ -190,42 +190,64 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		// predict measurements to all map landmarks
 		Particle& particle = particles[i];
 		vector<LandmarkObs> predicted;
-		
-		for (int j=0; j < observations.size(); j++) {
-			LandmarkObs landmark_pred;
-			LandmarkObs obs = observations[j];
-			landmark_pred.id = obs.id;
-			// predict landmark x, y. Equations from trigonometry.
-			landmark_pred.x = obs.x * cos(particle.theta) - obs.y * sin(particle.theta) + particle.x;
-			landmark_pred.y = obs.x * sin(particle.theta) + obs.y * cos(particle.theta) + particle.y;
-			predicted.push_back(landmark_pred);
-		}
-
-		// use dataAssociation function to associate sensor measurements to map landmarks 
-		vector<LandmarkObs> associations = dataAssociation(predicted, observations);		
-
-		// then calculate new weight of each particle using multi-variate Gaussian (& associations)
-		// equation in L14.11 Update Step video
 
 		// initialise unnormalised weight for particle
 		// weight is a product so init to 1.0
 		double weight = 1.0;
+		
+		for (int j=0; j < observations.size(); j++) {
+			// transform vehicle's observation to global coordinates
+			LandmarkObs obs = observations[j];
+			int global_obs_id = obs.id;
+			// predict landmark x, y. Equations from trigonometry.
+			double predicted_x = obs.x * cos(particle.theta) - obs.y * sin(particle.theta) + particle.x;
+			double predicted_y = obs.x * sin(particle.theta) + obs.y * cos(particle.theta) + particle.y;
+			
+			// TODO: delete
+			// predicted.push_back(landmark_pred);
 
-		// weight is a product so use a loop
-		for (int j = 0; j < observations.size(); j++) {
-			double x_diff = predicted[j].x - associations[j].x;
-			double y_diff = predicted[j].y - associations[j].y;
+
+			// initialise terms
+			Map::single_landmark_s nearest_landmark;
+			double min_distance = sensor_range;
+			double distance = 0;
+
+			// associate sensor measurements to map landmarks 
+			for (int k = 0; k < map_landmarks.landmark_list.size(); k++) {
+
+				Map::single_landmark_s landmark = map_landmarks.landmark_list[k];
+
+				// calculate distance between landmark and transformed observations
+				// approximation (Manhattan distance)
+				distance = fabs(predicted_x - landmark.x_f) + fabs(predicted_y - landmark.y_f);
+
+				// update nearest landmark to obs
+				if (distance < min_distance) {
+					min_distance = distance;
+					nearest_landmark = landmark;
+				}
+
+
+			} // associate nearest landmark
+
+			// then calculate new weight of each particle using multi-variate Gaussian (& associations)
+			// equation in L14.11 Update Step video
+			double x_diff = predicted_x - nearest_landmark.x_f;
+			double y_diff = predicted_y - nearest_landmark.y_f;
 			cout << "x_diff: " << x_diff << endl;
 			cout << "y_diff: " << y_diff << endl;
-			double num = exp(-0.5*(pow(predicted[j].x - associations[j].x, 2)/var_x + pow(predicted[j].y - associations[j].y, 2)/var_y));
-			// TODO: check denom
-			double denom = sqrt(abs(2*M_PI*(var_x + var_y)));
-			// mutliply particle weight by this obs-weight pair stat
+			double num_before_exp = -0.5*(pow(x_diff, 2)/var_x + pow(y_diff, 2)/var_y);
+			double num = exp(num_before_exp);
+			double denom = 2*M_PI*covar_xy;
+			// multiply particle weight by this obs-weight pair stat
+			cout << "num_before_exp: " << num_before_exp << endl;
 			cout << "num: " << num << endl;
 			cout << "denom: " << denom << endl;
-			weight *= num/denom;
+			double prod = num/denom;
+			cout << "prod: " << prod << endl;
+			weight *= prod;
 
-		}
+		} // end observations loop
 
 		cout << "weight: " << weight << endl;
 
@@ -238,6 +260,10 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 	}
 
+	cout << "unnormed weights: " << endl;
+	copy(weights.begin(), weights.end(), ostream_iterator<char>(cout, " "));
+
+	cout << "weights_sum: " << weights_sum << endl;
 	// then normalise weights
 	for (int i = 0; i < num_particles; i++) {
 		// update particle weight
@@ -245,6 +271,10 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		// update weight in PF array
 		weights[i] /= weights_sum;
 	}
+
+	cout << "normed weights: " << endl;
+	copy(weights.begin(), weights.end(), ostream_iterator<char>(cout, " "));
+	
 
 }
 
