@@ -33,23 +33,22 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	normal_distribution<double> dist_theta(theta, std[2]);
 
 	
-	for (int i = 0; i < num_particles; ++i) {
-		double particle_x, particle_y, particle_theta;
-				
-	 	particle_x = dist_x(gen);
-	 	particle_y = dist_y(gen);
-	 	particle_theta = dist_theta(gen);	 
-		
-		// Assemble particle
-		// i is index, 1.0 is weight.
-		// See struct of Particle in `particle_filter.h` for full key.
-		Particle temp = {i, particle_x, particle_y, particle_theta, 1.0};
+	for (int i = 0; i < num_particles; i++) {
+		Particle new_particle;
+
+		new_particle.id = i;
+		new_particle.x = dist_x(gen);
+		new_particle.y = dist_y(gen);
+		new_particle.theta = dist_theta(gen);
+		new_particle.weight = 1.0;
         
         // Add particle to list of particles
-        particles.push_back(temp);
+        particles.push_back(new_particle);
         
         // Add weight to list of weights (see class `ParticleFilter`)
         weights.push_back(1.0f);
+
+        cout << weights[i] << endl;
 
 	}
 
@@ -69,9 +68,9 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
 	// Set up Gaussian noise, as in `ParticleFilter::init`
 	default_random_engine gen;
-	normal_distribution<double> dist_x(0.0, std_pos[0]);
-	normal_distribution<double> dist_y(0.0, std_pos[1]);
-	normal_distribution<double> dist_theta(0.0, std_pos[2]);
+	normal_distribution<double> noise_x(0.0, std_pos[0]);
+	normal_distribution<double> noise_y(0.0, std_pos[1]);
+	normal_distribution<double> noise_theta(0.0, std_pos[2]);
 
 	for (int i = 0; i < num_particles; i++) {
 		
@@ -83,6 +82,11 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 		double x = particle.x;
 		double y = particle.y;
 		double theta = particle.theta; 
+
+		cout << "Original particle values" << endl;
+		cout << "particle.x: " << particle.x << endl;
+		cout << "particle.y: " << particle.y << endl;
+		cout << "particle.theta: " << particle.theta << endl;
 
 		// Calculate estimates of x, y, theta
 		theta_est = theta + yaw_rate * delta_t;
@@ -97,9 +101,14 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 		}
 
 		// Update each particle's estimate.
-		particle.x = x_est + dist_x(gen);
-		particle.y = y_est + dist_y(gen);
-		particle.theta = theta_est + dist_theta(gen);
+		particle.x = x_est + noise_x(gen);
+		particle.y = y_est + noise_y(gen);
+		particle.theta = theta_est + noise_theta(gen);
+
+		cout << "Particle values after adding noise and dt movement" << endl;
+		cout << "particle.x: " << particle.x << endl;
+		cout << "particle.y: " << particle.y << endl;
+		cout << "particle.theta: " << particle.theta << endl;
 	}
 
 
@@ -172,6 +181,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	double covar_xy = std_landmark[0] * std_landmark[1];
 	double weights_sum = 0;
 
+	cout << "var_x: " << var_x << endl;
+	cout << "var_y: " << var_y << endl;
+	cout << "covar_xy: " << covar_xy << endl;
+
+
 	for (int i=0; i < num_particles; i++) {
 		// predict measurements to all map landmarks
 		Particle& particle = particles[i];
@@ -199,13 +213,21 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 		// weight is a product so use a loop
 		for (int j = 0; j < observations.size(); j++) {
-			double num = exp(-0.5*pow(predicted[j].x - associations[j].x, 2)/var_x + pow(predicted[j].y - associations[j].y, 2)/var_y);
+			double x_diff = predicted[j].x - associations[j].x;
+			double y_diff = predicted[j].y - associations[j].y;
+			cout << "x_diff: " << x_diff << endl;
+			cout << "y_diff: " << y_diff << endl;
+			double num = exp(-0.5*(pow(predicted[j].x - associations[j].x, 2)/var_x + pow(predicted[j].y - associations[j].y, 2)/var_y));
 			// TODO: check denom
 			double denom = sqrt(abs(2*M_PI*(var_x + var_y)));
 			// mutliply particle weight by this obs-weight pair stat
+			cout << "num: " << num << endl;
+			cout << "denom: " << denom << endl;
 			weight *= num/denom;
 
 		}
+
+		cout << "weight: " << weight << endl;
 
 		// update particle weight 
 		particle.weight = weight;
