@@ -22,7 +22,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	// NOTE: Consult particle_filter.h for more information about this method (and others in this file).
 	
 	// TODO: tweak number of particles
-	num_particles = 50;
+	num_particles = 10;
 	// TODO: necessary?
 	weights.resize(num_particles);
 	default_random_engine gen;
