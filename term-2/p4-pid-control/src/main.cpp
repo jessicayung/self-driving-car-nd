@@ -35,7 +35,7 @@ int main()
   PID pid;
   // TODO: Initialize the pid variable.
   // TODO: Tweak initial Kp, Ki, Kd values.
-  pid.Init(0, 0, 0);
+  pid.Init(0.2, 3.0, 0.04);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -61,10 +61,11 @@ int main()
           */
           pid.UpdateError(cte);
           steer_value = pid.TotalError();
+          std::cout << "Steer: " << steer_value << std::endl;
           if (steer_value > 1) {
             steer_value = 1;
           }
-          elif (steer_value < -1) {
+          else if (steer_value < -1) {
             steer_value = -1;
           }
           

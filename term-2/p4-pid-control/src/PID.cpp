@@ -32,6 +32,11 @@ void PID::UpdateError(double cte) {
     i_error = - Kd * (cte - prev_cte);
     d_error = - Ki * sum_cte;
     prev_cte = cte;
+  /*
+  if (num_measurements % 20 == 0) {
+    // TODO: twiddle
+  }
+   */
 }
 
 double PID::TotalError() {
