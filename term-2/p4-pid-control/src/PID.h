@@ -18,11 +18,11 @@ public:
   double Kd;
 
   /*
-  * Coefficients
+  * Custom
   */
   double sum_cte;
   double prev_cte;
-    
+  
   /*
   * Constructor
   */

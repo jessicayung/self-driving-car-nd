@@ -29,14 +29,10 @@ void PID::Init(double Kp, double Ki, double Kd) {
 void PID::UpdateError(double cte) {
     sum_cte += cte;
     p_error = - Kp * cte;
-    i_error = - Kd * (cte - prev_cte);
-    d_error = - Ki * sum_cte;
+    i_error = - Ki * sum_cte;
+    d_error = - Kd * (cte - prev_cte);
     prev_cte = cte;
-  /*
-  if (num_measurements % 20 == 0) {
-    // TODO: twiddle
-  }
-   */
+    //std::cout << "updated error" << std::endl;
 }
 
 double PID::TotalError() {
