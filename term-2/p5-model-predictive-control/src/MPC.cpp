@@ -9,6 +9,10 @@ using CppAD::AD;
 size_t N = 0;
 double dt = 0;
 
+// TODO: Define vehicle dynamics and actuator limitations
+x = x + v*cos(psi)*dt
+y = y + v*sin(psi)*dt
+
 // This value assumes the model presented in the classroom is used.
 //
 // It was obtained by measuring the radius formed by running the vehicle in the
@@ -52,7 +56,9 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // element vector and there are 10 timesteps. The number of variables is:
   //
   // 4 * 10 + 2 * 9
-  size_t n_vars = 0;
+  // State: [x,y,ψ,v,cte,eψ]
+  // Actuators: [δ,a]
+  size_t n_vars = 6*N + 2*(N-1);
   // TODO: Set the number of constraints
   size_t n_constraints = 0;
 
@@ -66,6 +72,25 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
   // TODO: Set lower and upper limits for variables.
+  for (int i = 0; i < 6*N; i++) {
+    vars_upperbound = 1.0e18;
+    vars_lowerbound = -1.0e18;
+  }
+
+  // Steering angle (deltas)
+  for (int i = 6*N; i < n_vars-(N-1); ++i)
+  {
+    vars_upperbound = PI/2;
+    vars_lowerbound = -PI/2;
+  }
+
+  // Acceleration
+  for (int i = n_vars-(N-1); i < n_vars; ++i)
+  {
+    vars_upperbound = 1.0;
+    vars_lowerbound = -1.0;
+  }
+
 
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
