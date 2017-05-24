@@ -98,8 +98,30 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          double steer_value;
-          double throttle_value;
+          
+          // TODO: Map ptsx, ptsy to car coords or sth
+          // Put ptsx and ptsy data into vectors
+          Eigen::VectorXd ptsxvec = Eigen::VectorXd::Map(ptsx.data(), ptsx.size());
+          Eigen::VectorXd ptsyvec = Eigen::VectorXd::Map(ptsy.data(), ptsy.size());
+          
+          // Fit polynomial to x and y coordinates
+          auto coeffs = polyfit(ptsxvec, ptsyvec, 3);
+          
+          // Calculate cross-track error
+          // TODO: set x to 0 or x? quiz set it to 0
+          double cte = polyeval(coeffs, px) - py;
+          // Calculate orientation error
+          // TODO: check derivation is correct
+          double epsi = -atan(coeffs[1]);
+          
+          Eigen::VectorXd state(6);
+          state << px, py, psi, v, cte, epsi;
+          
+          // Solve using MPC
+          auto result = mpc.Solve(state, coeffs);
+          
+          double steer_value = result[0];
+          double throttle_value = result[1];
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
