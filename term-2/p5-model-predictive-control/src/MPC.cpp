@@ -230,8 +230,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   constraints_upperbound[v_start] = v;
   constraints_upperbound[cte_start] = cte;
   constraints_upperbound[epsi_start] = epsi;
-
-  cout << "MPC Line 232" << endl;
   
   // object that computes objective and constraints
   FG_eval fg_eval(coeffs);
@@ -254,7 +252,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Change this as you see fit.
   options += "Numeric max_cpu_time          0.5\n";
 
-  cout << "MPC Line 255" << endl;
   
   // place to return solution
   CppAD::ipopt::solve_result<Dvector> solution;
@@ -267,7 +264,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Check some of the solution values
   ok &= solution.status == CppAD::ipopt::solve_result<Dvector>::success;
 
-  cout << "MPC Line 268" << endl;
   
   // Cost
   auto cost = solution.obj_value;
