@@ -99,7 +99,17 @@ int main() {
           *
           */
           
-          // TODO: Map ptsx, ptsy to car coords or sth
+          // Transform ptsx, ptsy to car coords
+          for (int i = 0; i < ptsx.size(); i++) {
+            double dtx = ptsx[i] - px;
+            double dty = ptsy[i] - py;
+            
+            ptsx[i] = dtx * cos(psi) + dty * sin(psi);
+            ptsy[i] = dty * cos(psi) - dtx * sin(psi);
+            
+          }
+          
+          
           // Put ptsx and ptsy data into vectors
           Eigen::VectorXd ptsxvec = Eigen::VectorXd::Map(ptsx.data(), ptsx.size());
           Eigen::VectorXd ptsyvec = Eigen::VectorXd::Map(ptsy.data(), ptsy.size());
@@ -111,15 +121,15 @@ int main() {
           
           // Calculate cross-track error
           // TODO: set x to 0 or x? quiz set it to 0
-          double cte = polyeval(coeffs, px) - py;
+          double cte = polyeval(coeffs, 0);
           // Calculate orientation error
           // TODO: check derivation is correct
           double epsi = -atan(coeffs[1]);
           
           
           Eigen::VectorXd state(6);
-          state << px, py, psi, v, cte, epsi;
-          cout << "Line 126" << endl;
+          state << 0, 0, 0, v, cte, epsi;
+          //state << px, py, psi, v, cte, epsi;
           
           // Solve using MPC
           auto result = mpc.Solve(state, coeffs);
@@ -139,16 +149,33 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
-
+          for (int i = 2; i < result.size(); i++) {
+            if(i%2 == 0){
+              mpc_x_vals.push_back(result[i]);
+            } else {
+              mpc_y_vals.push_back(result[i]);
+            }
+          }
+          
+          
           msgJson["mpc_x"] = mpc_x_vals;
           msgJson["mpc_y"] = mpc_y_vals;
 
           //Display the waypoints/reference line
           vector<double> next_x_vals;
           vector<double> next_y_vals;
+          
+          next_x_vals.resize(ptsxvec.size());
+          next_y_vals.resize(ptsyvec.size());
+          
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
+          for (int i = 0; i < ptsxvec.size(); i++) {
+            next_x_vals[i] = ptsxvec[i];
+            next_y_vals[i] = ptsyvec[i];
+          }
+          
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
