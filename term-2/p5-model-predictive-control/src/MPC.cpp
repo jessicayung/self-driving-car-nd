@@ -146,10 +146,11 @@ MPC::MPC() {}
 MPC::~MPC() {}
 
 vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
+  
   bool ok = true;
   size_t i;
   typedef CPPAD_TESTVECTOR(double) Dvector;
-
+  
   // TODO: Set the number of model variables (includes both states and inputs).
   // For example: If the state is a 4 element vector, the actuators is a 2
   // element vector and there are 10 timesteps. The number of variables is:
@@ -161,6 +162,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // TODO: Set the number of constraints
   size_t n_constraints = N*6;
 
+  
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
   Dvector vars(n_vars);
@@ -182,30 +184,30 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   vars[v_start] = v;
   vars[cte_start] = cte;
   vars[epsi_start] = epsi;
-
+  
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
   // TODO: Set lower and upper limits for variables.
   for (int i = 0; i < 6*N; i++) {
-    vars_upperbound = 1.0e18;
-    vars_lowerbound = -1.0e18;
+    vars_upperbound[i] = 1.0e18;
+    vars_lowerbound[i] = -1.0e18;
   }
 
+  
   // Steering angle (deltas)
-  for (int i = 6*N; i < n_vars-(N-1); ++i)
+  for (int i = 6*N; i < n_vars-(N-1); i++)
   {
-    vars_upperbound = M_PI/4;
-    vars_lowerbound = -M_PI/4;
+    vars_upperbound[i] = M_PI/4;
+    vars_lowerbound[i] = -M_PI/4;
   }
-
+  
   // Acceleration
-  for (int i = n_vars-(N-1); i < n_vars; ++i)
+  for (int i = n_vars-(N-1); i < n_vars; i++)
   {
-    vars_upperbound = 1.0;
-    vars_lowerbound = -1.0;
+    vars_upperbound[i] = 1.0;
+    vars_lowerbound[i] = -1.0;
   }
-
-
+  
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
   Dvector constraints_lowerbound(n_constraints);
@@ -229,7 +231,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   constraints_upperbound[cte_start] = cte;
   constraints_upperbound[epsi_start] = epsi;
 
-
+  cout << "MPC Line 232" << endl;
+  
   // object that computes objective and constraints
   FG_eval fg_eval(coeffs);
 
@@ -251,6 +254,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Change this as you see fit.
   options += "Numeric max_cpu_time          0.5\n";
 
+  cout << "MPC Line 255" << endl;
+  
   // place to return solution
   CppAD::ipopt::solve_result<Dvector> solution;
 
@@ -262,6 +267,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Check some of the solution values
   ok &= solution.status == CppAD::ipopt::solve_result<Dvector>::success;
 
+  cout << "MPC Line 268" << endl;
+  
   // Cost
   auto cost = solution.obj_value;
   std::cout << "Cost " << cost << std::endl;
