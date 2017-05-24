@@ -90,16 +90,52 @@ class FG_eval {
     // Constraints
     //
     
+    // Set initial state (take from vars)
+    // Add 1 to each of the starting indices since cost is at fg[0]
+    fg[1 + x_start] = vars[x_start];
+    fg[1 + y_start] = vars[y_start];
+    fg[1 + psi_start] = vars[psi_start];
+    fg[1 + v_start] = vars[v_start];
+    fg[1 + cte_start] = vars[cte_start];
+    fg[1 + epsi_start] = vars[epsi_start];
     
-    /**
-    x = x + v*cos(psi)*dt;
-    y = y + v*sin(psi)*dt;
-    psi = psi + (v/Lf)*delta*dt;
-    v = v + a*dt;
-    cte_now = reference_trajectory - y;
-    cte = cte_now + v + sin(epsi)*dt;
-    epsi_now = psi-psi_desired;
-    */
+    // Set predicted states at other timesteps (from eqns)
+    // N - 1 because we're only predicting (N-1) times
+    for (int i = 0; i < N - 1; i++) {
+      // The state at time t+1 .
+      AD<double> x1 = vars[x_start + i + 1];
+      AD<double> y1 = vars[y_start + i + 1];
+      AD<double> psi1 = vars[psi_start + i + 1];
+      AD<double> v1 = vars[v_start + i + 1];
+      AD<double> cte1 = vars[cte_start + i + 1];
+      AD<double> epsi1 = vars[epsi_start + i + 1];
+      
+      // The state at time t.
+      AD<double> x0 = vars[x_start + i];
+      AD<double> y0 = vars[y_start + i];
+      AD<double> psi0 = vars[psi_start + i];
+      AD<double> v0 = vars[v_start + i];
+      AD<double> cte0 = vars[cte_start + i];
+      AD<double> epsi0 = vars[epsi_start + i];
+      
+      // Only consider the actuation at time t.
+      AD<double> delta0 = vars[delta_start + i];
+      AD<double> a0 = vars[a_start + i];
+      
+      AD<double> f0 = coeffs[0] + coeffs[1] * x0;
+      AD<double> psides0 = CppAD::atan(coeffs[1]);
+      
+      // Fill in fg with differences between actual and predicted states
+      // add 2 to indices because (+1) from cost and (+1) because logging error of prediction (next timestep)
+      fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
+      fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
+      fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
+      fg[2 + v_start + i] = v1 - (v0 + a0 * dt);
+      fg[2 + cte_start + i] =
+      cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
+      fg[2 + epsi_start + i] =
+      epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
+    }
   }
 };
 
