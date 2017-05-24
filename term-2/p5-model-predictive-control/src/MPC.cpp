@@ -1,17 +1,19 @@
+/*
+ * Code heavily adapted from Udacity's code, e.g.
+ * CarND-MPC-Quizzes: mpc_to_line
+ */
 #include "MPC.h"
 #include <cppad/cppad.hpp>
 #include <cppad/ipopt/solve.hpp>
 #include "Eigen-3.3/Eigen/Core"
+#include <math.h>
 
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 0;
-double dt = 0;
-
-// TODO: Define vehicle dynamics and actuator limitations
-x = x + v*cos(psi)*dt
-y = y + v*sin(psi)*dt
+// size_t: type returned by sizeof, widely used to represent sizes and counts
+size_t N = 10;
+double dt = 0.1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -25,6 +27,24 @@ y = y + v*sin(psi)*dt
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 
+// Reference cross-track error and orientation error = 0
+double ref_cte = 0;
+double ref_epsi = 0;
+double ref_v = 40;
+
+// Mark when each variable starts for convenience
+// since state and actuator variables are stored in one vector
+// in the format 'x...(N)x y...(N)y...'
+size_t x_start = 0;
+size_t y_start = x_start + N;
+size_t psi_start = y_start + N;
+size_t v_start = psi_start + N;
+size_t cte_start = v_start + N;
+size_t epsi_start = cte_start + N;
+size_t delta_start = epsi_start + N;
+size_t a_start = delta_start + N - 1;
+
+
 class FG_eval {
  public:
   // Fitted polynomial coefficients
@@ -37,6 +57,15 @@ class FG_eval {
     // fg a vector of constraints, x is a vector of constraints.
     // NOTE: You'll probably go back and forth between this function and
     // the Solver function below.
+    /**
+    x = x + v*cos(psi)*dt;
+    y = y + v*sin(psi)*dt;
+    psi = psi + (v/Lf)*delta*dt;
+    v = v + a*dt;
+    cte_now = reference_trajectory - y;
+    cte = cte_now + v + sin(epsi)*dt;
+    epsi_now = psi-psi_desired;
+    */
   }
 };
 
@@ -80,8 +109,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Steering angle (deltas)
   for (int i = 6*N; i < n_vars-(N-1); ++i)
   {
-    vars_upperbound = PI/2;
-    vars_lowerbound = -PI/2;
+    vars_upperbound = M_PI/2;
+    vars_lowerbound = -M_PI/2;
   }
 
   // Acceleration
