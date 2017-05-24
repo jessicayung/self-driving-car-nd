@@ -159,14 +159,29 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Actuators: [δ,a]
   size_t n_vars = 6*N + 2*(N-1);
   // TODO: Set the number of constraints
-  size_t n_constraints = 0;
+  size_t n_constraints = N*6;
 
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
   Dvector vars(n_vars);
   for (int i = 0; i < n_vars; i++) {
-    vars[i] = 0;
+    vars[i] = 0.0;
   }
+  // Get init state
+  double x = state[0];
+  double y = state[1];
+  double psi = state[2];
+  double v = state[3];
+  double cte = state[4];
+  double epsi = state[5];
+  
+  // Set initial variable values to init state
+  vars[x_start] = x;
+  vars[y_start] = y;
+  vars[psi_start] = psi;
+  vars[v_start] = v;
+  vars[cte_start] = cte;
+  vars[epsi_start] = epsi;
 
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
@@ -179,8 +194,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Steering angle (deltas)
   for (int i = 6*N; i < n_vars-(N-1); ++i)
   {
-    vars_upperbound = M_PI/2;
-    vars_lowerbound = -M_PI/2;
+    vars_upperbound = M_PI/4;
+    vars_lowerbound = -M_PI/4;
   }
 
   // Acceleration
@@ -199,6 +214,21 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     constraints_lowerbound[i] = 0;
     constraints_upperbound[i] = 0;
   }
+  // Set init state lower and upper limits
+  constraints_lowerbound[x_start] = x;
+  constraints_lowerbound[y_start] = y;
+  constraints_lowerbound[psi_start] = psi;
+  constraints_lowerbound[v_start] = v;
+  constraints_lowerbound[cte_start] = cte;
+  constraints_lowerbound[epsi_start] = epsi;
+  
+  constraints_upperbound[x_start] = x;
+  constraints_upperbound[y_start] = y;
+  constraints_upperbound[psi_start] = psi;
+  constraints_upperbound[v_start] = v;
+  constraints_upperbound[cte_start] = cte;
+  constraints_upperbound[epsi_start] = epsi;
+
 
   // object that computes objective and constraints
   FG_eval fg_eval(coeffs);
@@ -241,5 +271,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
-  return {};
+  return {solution.x[x_start + 1],   solution.x[y_start + 1],
+    solution.x[psi_start + 1], solution.x[v_start + 1],
+    solution.x[cte_start + 1], solution.x[epsi_start + 1],
+    solution.x[delta_start],   solution.x[a_start]};
 }
