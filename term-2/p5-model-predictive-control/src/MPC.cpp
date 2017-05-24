@@ -54,9 +54,43 @@ class FG_eval {
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
     // TODO: implement MPC
-    // fg a vector of constraints, x is a vector of constraints.
+    // fg a vector of cost and constraints,
+    // vars is a vector containing state and actuator var values and constraints.
     // NOTE: You'll probably go back and forth between this function and
     // the Solver function below.
+    
+    //
+    // Reference state cost
+    //
+    
+    // Initialise cost to zero
+    fg[0] = 0;
+    
+    // (1) Cost increases with distance from reference state
+    for (int i=0; i < N; i++) {
+      fg[0] += pow(vars[cte_start + i] - ref_cte, 2);
+      fg[0] += pow(vars[epsi_start + i] - ref_epsi, 2);
+      fg[0] += pow(vars[v_start + i] - ref_v, 2);
+
+    }
+    
+    // (2) Cost increases with use of actuators
+    for (int i=0; i < N-1; i++) {
+      fg[0] += CppAD::pow(vars[delta_start + i], 2);
+      fg[0] += CppAD::pow(vars[a_start + i], 2);
+    }
+    
+    // (3) Cost increases with value gap between sequential actuators
+    for (int i=0; i < N-2; i++) {
+      fg[0] += CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+    }
+
+    //
+    // Constraints
+    //
+    
+    
     /**
     x = x + v*cos(psi)*dt;
     y = y + v*sin(psi)*dt;
