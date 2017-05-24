@@ -4,7 +4,21 @@ term-2/sensor-fusion-utilities-mercedes/
 
 term-2/p2-unscented-kalman-filter/build/
 
+term-2/uWebSockets-0.13.0/
+
+term-2/p3-kidnapped-vehicle/build/
+
+term-2/p4-pid-control/build/
+term-2/p4-pid-control/uWebSockets/
+term-2/p4-pid-control/*.mov
+term-2/p4-pid-control/install*
+
+term-2/p5-model-predictive-control/build/
+term-2/p5-model-predictive-control/install*
+
 term-2/sensor-fusion-ekf-reference.pdf
+
+term-2/CarND*
 
 p3-behavioural-cloning/data*
 p3-behavioural-cloning/model-*
