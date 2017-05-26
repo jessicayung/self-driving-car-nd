@@ -13,17 +13,17 @@ using CppAD::AD;
 // TODO: Set the timestep length and duration
 // size_t: type returned by sizeof, widely used to represent sizes and counts
 size_t N = 10;
-double dt = 0.1;
+double dt = 0.2;
 
 // Set cost factors
 // TODO: tune cost factors
-int cost_cte_factor = 1;
-int cost_epsi_factor = 1;
+int cost_cte_factor = 2000;
+int cost_epsi_factor = 2000;
 int cost_v_factor = 1;
-int cost_current_delta_factor = 1;
-int cost_current_a_factor = 1;
-int cost_diff_delta_factor = 1;
-int cost_diff_a_factor = 1;
+int cost_current_delta_factor = 100;
+int cost_current_a_factor = 10;
+int cost_diff_delta_factor = 100;
+int cost_diff_a_factor = 10;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -63,6 +63,9 @@ class FG_eval {
 
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
+    /* Calculates cost of current state and predicts future states.
+     
+     */
     // TODO: implement MPC
     // fg a vector of cost and constraints,
     // vars is a vector containing state and actuator var values and constraints.
@@ -132,15 +135,9 @@ class FG_eval {
       // Only consider the actuation at time t.
       AD<double> delta0 = vars[delta_start + i];
       AD<double> a0 = vars[a_start + i];
-     
-      // TODO: different
-      
+           
       AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * pow(x0,2) + coeffs[3] * pow(x0,3);
       AD<double> psides0 = CppAD::atan(coeffs[1] + (2 * coeffs[2] * x0) + (3 * coeffs[3]* pow(x0,2) ));
-      
-      
-      //      AD<double> f0 = coeffs[0] + coeffs[1] * x0;
-      //      AD<double> psides0 = CppAD::atan(coeffs[1]);
       
       // Fill in fg with differences between actual and predicted states
       // add 2 to indices because (+1) from cost and (+1) because logging error of prediction (next timestep)
@@ -164,6 +161,7 @@ MPC::MPC() {}
 MPC::~MPC() {}
 
 vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
+  /* Minimises cost. */
   
   bool ok = true;
   size_t i;
