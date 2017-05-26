@@ -111,7 +111,7 @@ public:
   // previous timestamp (Added)
   long previous_timestamp_;
 
-
+  int step_;
 
   /**
    * Constructor
