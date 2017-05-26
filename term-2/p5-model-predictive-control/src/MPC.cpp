@@ -15,6 +15,16 @@ using CppAD::AD;
 size_t N = 10;
 double dt = 0.1;
 
+// Set cost factors
+// TODO: tune cost factors
+int cost_cte_factor = 1;
+int cost_epsi_factor = 1;
+int cost_v_factor = 1;
+int cost_current_delta_factor = 1;
+int cost_current_a_factor = 1;
+int cost_diff_delta_factor = 1;
+int cost_diff_a_factor = 1;
+
 // This value assumes the model presented in the classroom is used.
 //
 // It was obtained by measuring the radius formed by running the vehicle in the
@@ -67,23 +77,24 @@ class FG_eval {
     fg[0] = 0;
     
     // (1) Cost increases with distance from reference state
-    for (int i=0; i < N; i++) {
-      fg[0] += pow(vars[cte_start + i] - ref_cte, 2);
-      fg[0] += pow(vars[epsi_start + i] - ref_epsi, 2);
-      fg[0] += pow(vars[v_start + i] - ref_v, 2);
-
+    // Multiply squared devation by 'cost factors' to adjust contribution of each deviation to cost
+    for (int i = 0; i < N; i++) {
+      fg[0] += cost_cte_factor*pow(vars[cte_start + i] - ref_cte, 2);
+      fg[0] += cost_epsi_factor*pow(vars[epsi_start + i] - ref_epsi, 2);
+      fg[0] += cost_v_factor*pow(vars[v_start + i] - ref_v, 2);
+      
     }
     
     // (2) Cost increases with use of actuators
-    for (int i=0; i < N-1; i++) {
-      fg[0] += CppAD::pow(vars[delta_start + i], 2);
-      fg[0] += CppAD::pow(vars[a_start + i], 2);
+    for (int i = 0; i < N - 1; i++) {
+      fg[0] += cost_current_delta_factor*pow(vars[delta_start + i], 2);
+      fg[0] += cost_current_a_factor*pow(vars[a_start + i], 2);
     }
     
     // (3) Cost increases with value gap between sequential actuators
     for (int i=0; i < N-2; i++) {
-      fg[0] += CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-      fg[0] += CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+      fg[0] += cost_diff_delta_factor*pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += cost_diff_a_factor*pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
 
     //
@@ -121,9 +132,15 @@ class FG_eval {
       // Only consider the actuation at time t.
       AD<double> delta0 = vars[delta_start + i];
       AD<double> a0 = vars[a_start + i];
+     
+      // TODO: different
       
-      AD<double> f0 = coeffs[0] + coeffs[1] * x0;
-      AD<double> psides0 = CppAD::atan(coeffs[1]);
+      AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * pow(x0,2) + coeffs[3] * pow(x0,3);
+      AD<double> psides0 = CppAD::atan(coeffs[1] + (2 * coeffs[2] * x0) + (3 * coeffs[3]* pow(x0,2) ));
+      
+      
+      //      AD<double> f0 = coeffs[0] + coeffs[1] * x0;
+      //      AD<double> psides0 = CppAD::atan(coeffs[1]);
       
       // Fill in fg with differences between actual and predicted states
       // add 2 to indices because (+1) from cost and (+1) because logging error of prediction (next timestep)
@@ -136,6 +153,7 @@ class FG_eval {
       fg[2 + epsi_start + i] =
       epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
     }
+    
   }
 };
 
@@ -161,7 +179,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   size_t n_vars = 6*N + 2*(N-1);
   // TODO: Set the number of constraints
   size_t n_constraints = N*6;
-
+  
   
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
@@ -188,21 +206,21 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
   // TODO: Set lower and upper limits for variables.
-  for (int i = 0; i < 6*N; i++) {
-    vars_upperbound[i] = 1.0e18;
-    vars_lowerbound[i] = -1.0e18;
+  for (int i = 0; i < delta_start; i++) {
+    vars_upperbound[i] = 1.0e19;
+    vars_lowerbound[i] = -1.0e19;
   }
-
+  
   
   // Steering angle (deltas)
-  for (int i = 6*N; i < n_vars-(N-1); i++)
+  for (int i = delta_start; i < a_start; i++)
   {
     vars_upperbound[i] = M_PI/4;
     vars_lowerbound[i] = -M_PI/4;
   }
   
   // Acceleration
-  for (int i = n_vars-(N-1); i < n_vars; i++)
+  for (int i = a_start; i < n_vars; i++)
   {
     vars_upperbound[i] = 1.0;
     vars_lowerbound[i] = -1.0;
@@ -233,7 +251,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   
   // object that computes objective and constraints
   FG_eval fg_eval(coeffs);
-
+  
   //
   // NOTE: You don't have to worry about these options
   //
@@ -251,24 +269,24 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // NOTE: Currently the solver has a maximum time limit of 0.5 seconds.
   // Change this as you see fit.
   options += "Numeric max_cpu_time          0.5\n";
-
+  
   
   // place to return solution
   CppAD::ipopt::solve_result<Dvector> solution;
-
+  
   // solve the problem
   CppAD::ipopt::solve<Dvector, FG_eval>(
-      options, vars, vars_lowerbound, vars_upperbound, constraints_lowerbound,
-      constraints_upperbound, fg_eval, solution);
-
+                                        options, vars, vars_lowerbound, vars_upperbound, constraints_lowerbound,
+                                        constraints_upperbound, fg_eval, solution);
+  
   // Check some of the solution values
   ok &= solution.status == CppAD::ipopt::solve_result<Dvector>::success;
-
+  
   
   // Cost
   auto cost = solution.obj_value;
   std::cout << "Cost " << cost << std::endl;
-
+  
   // TODO: Return the first actuator values. The variables can be accessed with
   // `solution.x[i]`.
   //
