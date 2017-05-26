@@ -196,6 +196,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   double epsi = state[5];
   
   // Set initial variable values to init state
+  // but will be implicitly set by upper and lower bounds later so can remove this
   vars[x_start] = x;
   vars[y_start] = y;
   vars[psi_start] = psi;

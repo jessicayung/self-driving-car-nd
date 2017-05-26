@@ -93,6 +93,8 @@ int main() {
           double v = j[1]["speed"];
 
           /*
+           * Implementation start
+           *
           * TODO: Calculate steeering angle and throttle using MPC.
           *
           * Both are in between [-1, 1].
@@ -179,7 +181,12 @@ int main() {
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
-
+          
+          /*
+           *
+           * End implementation
+           *
+           */
 
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
