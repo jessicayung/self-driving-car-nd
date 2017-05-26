@@ -146,7 +146,7 @@ class FG_eval {
       // add 2 to indices because (+1) from cost and (+1) because logging error of prediction (next timestep)
       fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
       fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-      fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
+      fg[2 + psi_start + i] = psi1 - (psi0 - v0 * delta0 / Lf * dt);
       fg[2 + v_start + i] = v1 - (v0 + a0 * dt);
       fg[2 + cte_start + i] =
       cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
