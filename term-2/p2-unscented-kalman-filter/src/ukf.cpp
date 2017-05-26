@@ -128,6 +128,8 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
       
     double px;
     double py;
+    double vx;
+    double vy;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
@@ -137,9 +139,11 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
 
         double rho = measurement_pack.raw_measurements_[0];
         double phi = measurement_pack.raw_measurements_[1];
-        
+        double rhodot = measurement_pack.raw_measurements_[2];
         px = rho*cos(phi);
         py = rho*sin(phi);
+        vx = rhodot*cos(phi);
+        vy = rhodot*sin(phi);
 
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
@@ -150,6 +154,8 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
 
         px = measurement_pack.raw_measurements_[0];
         py = measurement_pack.raw_measurements_[1];
+        vx = 0;
+        vy = 0;
 
     }
 
@@ -165,7 +171,7 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
     }
 
 
-    x_ << px, py, 0, 0, 0;
+    x_ << px, py, sqrt(pow(vx, 2) + pow(vy, 2)), 0, 0;
     cout << "init x_: " << x_ << endl;
 
     previous_timestamp_ = measurement_pack.timestamp_;
