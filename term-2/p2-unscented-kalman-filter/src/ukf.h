@@ -112,6 +112,10 @@ public:
   long previous_timestamp_;
 
   int step_;
+  
+  // small value handling
+  double p_x_min_;
+  double p_y_min_;
 
   /**
    * Constructor

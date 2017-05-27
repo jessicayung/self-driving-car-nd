@@ -94,6 +94,10 @@ UKF::UKF() {
   }
 
   step_ = 1;
+  
+  // set small value handling
+  p_x_min_ = 0.0001;
+  p_y_min_ = 0.0001;
 
 }
 
@@ -106,8 +110,19 @@ UKF::~UKF() {}
 
 static double SNormalizeAngle2(double phi)
 {
+  // Method 2:
   // cout << "Normalising Angle" << endl;
-  return atan2(sin(phi), cos(phi));
+  //return atan2(sin(phi), cos(phi));
+  
+  // Method 1:
+  while (phi > M_PI) {
+    phi -= 2.*M_PI;
+  };
+  while (phi < -M_PI) {
+    phi += 2.*M_PI;
+  };
+  
+  return phi;
 }
 
 void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
@@ -156,17 +171,16 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
         py = measurement_pack.raw_measurements_[1];
         vx = 0;
         vy = 0;
-
     }
 
     // Handle small px, py
-    if(fabs(px) < 0.001){
-        px = 0.001;
+    if(fabs(px) < p_x_min_){
+        px = p_x_min_;
         cout << "init px too small" << endl;
     }
 
-    if(fabs(py) < 0.001){
-        py = 0.001;
+    if(fabs(py) < p_y_min_){
+        py = p_x_min_;
         cout << "init py too small" << endl;
     }
 
@@ -195,12 +209,15 @@ void UKF::ProcessMeasurement(MeasurementPackage measurement_pack) {
   AugmentedSigmaPoints();
 
   // Predict 
+  /*
   while (dt > 0.1)
   {
-  const double dt2 = 0.05;
-  Prediction(dt2);
-  dt -= dt2;
+    cout << "split dt" << endl;
+    const double dt2 = 0.05;
+    Prediction(dt2);
+    dt -= dt2;
   }
+   */
 
   Prediction(dt);
 
@@ -330,14 +347,15 @@ void UKF::PredictMeanAndCovariance() {
 
   //predicted state mean
   x.fill(0.0);
-  x = Xsig_pred_ * weights_;
+  // x = Xsig_pred_ * weights_;
   /* Line above does this:
+   */
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
     x = x + weights_(i) * Xsig_pred_.col(i);
   }
   // included because array programming is not native to C++
   // but Eigen provides these operations for matrix and vector calcs
-  */
+  
 
   //predicted state covariance matrix
   P.fill(0.0);
@@ -396,7 +414,7 @@ void UKF::PredictRadarMeasurement() {
     double v2 = sin(yaw)*v;
 
     // measurement model
-    if (fabs(p_x) > 0.001 || fabs(p_y) > 0.001) {
+    if (fabs(p_x) > p_x_min_ || fabs(p_y) > p_y_min_) {
       Zsig_(0,i) = sqrt(p_x*p_x + p_y*p_y);                        //r
       Zsig_(1,i) = atan2(p_y,p_x);                                 //phi
       Zsig_(2,i) = (p_x*v1 + p_y*v2 ) / sqrt(p_x*p_x + p_y*p_y);
@@ -467,9 +485,9 @@ void UKF::PredictLidarMeasurement() {
     // double v1 = cos(yaw)*v;
     // double v2 = sin(yaw)*v;
 
-    if (fabs(p_x) < 0.001 || fabs(p_y)<0.001) {
-      p_x = 0.001;
-      p_y = 0.001;
+    if (fabs(p_x) < p_x_min_ || fabs(p_y)< p_y_min_) {
+      p_x = p_x_min_;
+      p_y = p_y_min_;
     }
 
     // measurement model
