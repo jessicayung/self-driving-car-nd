@@ -31,15 +31,6 @@ UKF::UKF() {
         0, 0, 0, 1, 0,
         0, 0, 0, 0, 1;
 
-  R_radar_ = MatrixXd(3,3);
-  R_radar_ << std_radr_*std_radr_, 0, 0,
-              0, std_radphi_*std_radphi_, 0,
-              0, 0, std_radrd_*std_radrd_;
-
-  R_laser_ = MatrixXd(2,2);
-  R_laser_ << std_laspx_*std_laspx_, 0,
-              0, std_laspy_*std_laspy_;           
-
   // State dimension
   n_x_ = 5;
 
@@ -84,6 +75,16 @@ UKF::UKF() {
   // Radar measurement noise standard deviation radius change in m/s
   std_radrd_ = 0.3;
 
+  // R matrices
+  R_radar_ = MatrixXd(3,3);
+  R_radar_ << std_radr_*std_radr_, 0, 0,
+  0, std_radphi_*std_radphi_, 0,
+  0, 0, std_radrd_*std_radrd_;
+  
+  R_laser_ = MatrixXd(2,2);
+  R_laser_ << std_laspx_*std_laspx_, 0,
+  0, std_laspy_*std_laspy_;
+  
   // Weights of sigma points
   weights_ = VectorXd(n_sig_);
   double weight_0 = lambda_/(lambda_+n_aug_);
