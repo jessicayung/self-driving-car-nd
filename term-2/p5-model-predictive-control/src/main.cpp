@@ -102,6 +102,7 @@ int main() {
           */
           
           // Transform ptsx, ptsy to car coords
+          // TODO: implement in separate function
           for (int i = 0; i < ptsx.size(); i++) {
             double dtx = ptsx[i] - px;
             double dty = ptsy[i] - py;
@@ -128,16 +129,18 @@ int main() {
           // TODO: check derivation is correct
           double epsi = -atan(coeffs[1]);
           
-          
           Eigen::VectorXd state(6);
           state << 0, 0, 0, v, cte, epsi;
           //state << px, py, psi, v, cte, epsi;
           
+          // predict the state 100ms into the future before you send it to the solver in order to compensate for the latency.
+            
           // Solve using MPC
           auto result = mpc.Solve(state, coeffs);
           
-          
-          double steer_value = result[0];
+          // ? Review said to convert to rad but it seems fine in the simulator
+          double steer_value = result[0]; // / deg2rad(25);
+          std::cout << "steer_value: " << steer_value << endl;
           double throttle_value = result[1];
           
 

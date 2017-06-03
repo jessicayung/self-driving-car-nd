@@ -13,7 +13,7 @@ using CppAD::AD;
 // TODO: Set the timestep length and duration
 // size_t: type returned by sizeof, widely used to represent sizes and counts
 size_t N = 10;
-double dt = 0.2;
+double dt = 0.1;
 
 // Set cost factors
 // TODO: tune cost factors
@@ -214,8 +214,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Steering angle (deltas)
   for (int i = delta_start; i < a_start; i++)
   {
-    vars_upperbound[i] = M_PI/4;
-    vars_lowerbound[i] = -M_PI/4;
+    vars_upperbound[i] = M_PI/8;
+    vars_lowerbound[i] = -M_PI/8;
   }
   
   // Acceleration
