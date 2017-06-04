@@ -43,10 +43,6 @@ p1-lane-lines/annotated-videos/
 
 *.mp4
 
-computer-vision-notes-and-labs/vehicles_smallset
-
-computer-vision-notes-and-labs/non-vehicles_smallset
-
 p5-vehicle-detection/vehicles/
 p5-vehicle-detection/non-vehicles/
 p5-vehicle-detection/hogviz/
