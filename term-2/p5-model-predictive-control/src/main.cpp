@@ -4,6 +4,8 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <cppad/cppad.hpp>
+#include <cppad/ipopt/solve.hpp>
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
 #include "MPC.h"
@@ -70,7 +72,7 @@ int main() {
 
   // MPC is initialized here!
   MPC mpc;
-
+  
   h.onMessage([&mpc](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -130,11 +132,27 @@ int main() {
           double epsi = -atan(coeffs[1]);
           
           Eigen::VectorXd state(6);
+
           state << 0, 0, 0, v, cte, epsi;
-          //state << px, py, psi, v, cte, epsi;
           
+          /*
           // predict the state 100ms into the future before you send it to the solver in order to compensate for the latency.
-            
+
+          double dt = 0.1; // 100ms
+          const double Lf = 2.67;
+          double prev_delta = mpc.prev_delta;
+          double prev_a = mpc.prev_a;
+          
+          double predicted_x = v * CppAD::cos(psi) * dt;
+          double predicted_y = v * CppAD::sin(psi) * dt;
+          double predicted_psi = - v * prev_delta / Lf * dt;
+          double predicted_v = v + prev_a * dt;
+          double predicted_cte = cte + v * CppAD::sin(epsi) * dt;
+          double predicted_epsi = epsi + v* prev_delta / Lf * dt;
+          
+          state << predicted_x, predicted_y, predicted_psi, predicted_v, predicted_cte, predicted_epsi;
+          */
+          
           // Solve using MPC
           auto result = mpc.Solve(state, coeffs);
           
@@ -143,6 +161,8 @@ int main() {
           std::cout << "steer_value: " << steer_value << endl;
           double throttle_value = result[1];
           
+          mpc.prev_delta = steer_value;
+          mpc.prev_a = throttle_value;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
