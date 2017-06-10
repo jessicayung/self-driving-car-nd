@@ -67,13 +67,18 @@ Our state can be described using four components:
 * dt is the length of each timestep. As dt decreases, the model re-evaluates its actuators more frequently. This may give more accurate predictions, but will use more computational power. If we keep N constant, the time horizon over which we predict ahead also decreases as dt decreases.
 
 #### Tuning N and dt
-* I started with (N, dt) = (10, 0.1) and decided to stick with it after some experimentation. 
+* I started with (N, dt) = (10, 0.1) (arbitrary starting point). The green panth would often curve to the right or left near the end, so I tried increasing N so the model would try to fit more of the upcoming path and would be penalised more if it curved off erratically after 10 steps.
+* Increasing N to 15 improved the fit and made the vehicle drive smoother. Would increasing N further improve performance?
 * Increasing N to 20 (dt = 0.1) made the vehicle weave more (drive less steadily) especially after the first turn. 
     * The weaving was exacerbated with N = 50 - the vehicle couldn't even stay on the track for five seconds. 
 * Increasing dt to 0.2 (N = 10) made the vehicle too slow to respond to changes in lane curvature. E.g. when it reached the first turn, it only started steering left when it was nearly off the track. This delayed response is expected because it re-evaluates the model less frequently. 
+* Decreasing dt to 0.05 made the vehicle drive in a really jerky way.
+* So I chose N = 15, dt = 0.1.
 * It would be better to test variations in N and dt more rigorously and test different combinations of N, dt and the contributions of e.g. cross-track error to cost. 
 * It would also be good to discuss variations in N and dt without holding N or dt fixed at 10 and 0.1 respectively.
 
+### Other comments
+* Strangely, when tackling the case where there is 100ms latency, predicting the state 100ms ahead gave a worse outcome than not predicting the state.
 
 ## 2. Files in this repo
 
@@ -85,7 +90,6 @@ Key files:
 
 ## 3. Dependencies
 
-* cmake >= 3.5
  * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1
   * Linux: make is installed by default on most Linux distros
