@@ -17,13 +17,13 @@ double dt = 0.1;
 
 // Set cost factors
 // TODO: tune cost factors
-int cost_cte_factor = 2000;
-int cost_epsi_factor = 2000;
+int cost_cte_factor = 3000;
+int cost_epsi_factor = 000;
 int cost_v_factor = 1;
-int cost_current_delta_factor = 100;
-int cost_current_a_factor = 10;
-int cost_diff_delta_factor = 100;
-int cost_diff_a_factor = 10;
+int cost_current_delta_factor = 0;
+int cost_current_a_factor = 0;
+int cost_diff_delta_factor = 0;
+int cost_diff_a_factor = 0;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -214,8 +214,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Steering angle (deltas)
   for (int i = delta_start; i < a_start; i++)
   {
-    vars_upperbound[i] = M_PI/8;
-    vars_lowerbound[i] = -M_PI/8;
+    vars_upperbound[i] = M_PI/4;
+    vars_lowerbound[i] = -M_PI/4;
   }
   
   // Acceleration
@@ -291,9 +291,24 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
+  
+  vector<double> result;
+  
+  result.push_back(solution.x[delta_start]);
+  result.push_back(solution.x[a_start]);
+  
+  for (int i = 0; i < N-1; i++)
+  {
+    result.push_back(solution.x[x_start + i + 1]);
+    result.push_back(solution.x[y_start + i + 1]);
+  }
+  return result;
+  
+  /*
   return {solution.x[delta_start],   solution.x[a_start],
     solution.x[x_start + 1],   solution.x[y_start + 1],
     solution.x[psi_start + 1], solution.x[v_start + 1],
     solution.x[cte_start + 1], solution.x[epsi_start + 1],
     };
+  */
 }

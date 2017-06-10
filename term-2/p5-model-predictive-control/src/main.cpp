@@ -133,25 +133,28 @@ int main() {
           
           Eigen::VectorXd state(6);
 
-          state << 0, 0, 0, v, cte, epsi;
+          //state << 0, 0, 0, v, cte, epsi;
           
-          /*
+          
           // predict the state 100ms into the future before you send it to the solver in order to compensate for the latency.
 
-          double dt = 0.1; // 100ms
+          // Latency of 100ms, so predict 100ms (0.1s) ahead
+          double dt = 0.1;
           const double Lf = 2.67;
+          // Previous steering angle and throttle
           double prev_delta = mpc.prev_delta;
           double prev_a = mpc.prev_a;
           
-          double predicted_x = v * CppAD::cos(psi) * dt;
-          double predicted_y = v * CppAD::sin(psi) * dt;
+          // Predict (x = y = psi = 0)
+          double predicted_x = v * dt;
+          double predicted_y = 0;
           double predicted_psi = - v * prev_delta / Lf * dt;
           double predicted_v = v + prev_a * dt;
           double predicted_cte = cte + v * CppAD::sin(epsi) * dt;
           double predicted_epsi = epsi + v* prev_delta / Lf * dt;
           
           state << predicted_x, predicted_y, predicted_psi, predicted_v, predicted_cte, predicted_epsi;
-          */
+          
           
           // Solve using MPC
           auto result = mpc.Solve(state, coeffs);
@@ -163,7 +166,7 @@ int main() {
           
           mpc.prev_delta = steer_value;
           mpc.prev_a = throttle_value;
-
+          
           json msgJson;
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = throttle_value;
@@ -174,12 +177,15 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
+          std::cout << "result size: " << result.size() << endl;
           for (int i = 2; i < result.size(); i++) {
             if(i%2 == 0){
               mpc_x_vals.push_back(result[i]);
             } else {
               mpc_y_vals.push_back(result[i]);
             }
+            std::cout << result[i] << endl;
+            std::cout << "i: " << i << endl;
           }
           
           
