@@ -304,12 +304,4 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     result.push_back(solution.x[y_start + i + 1]);
   }
   return result;
-  
-  /*
-  return {solution.x[delta_start],   solution.x[a_start],
-    solution.x[x_start + 1],   solution.x[y_start + 1],
-    solution.x[psi_start + 1], solution.x[v_start + 1],
-    solution.x[cte_start + 1], solution.x[epsi_start + 1],
-    };
-  */
 }
