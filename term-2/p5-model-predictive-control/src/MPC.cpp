@@ -21,7 +21,7 @@ int cost_cte_factor = 3000;
 int cost_epsi_factor = 500; // made initial portion etc much less snaky
 int cost_v_factor = 1;
 int cost_current_delta_factor = 1;
-int cost_diff_delta_factor = 100;
+int cost_diff_delta_factor = 200;
 int cost_current_a_factor = 1;
 int cost_diff_a_factor = 1;
 
