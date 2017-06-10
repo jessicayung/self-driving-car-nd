@@ -118,29 +118,47 @@ int main() {
           // Put ptsx and ptsy data into vectors
           Eigen::VectorXd ptsxvec = Eigen::VectorXd::Map(ptsx.data(), ptsx.size());
           Eigen::VectorXd ptsyvec = Eigen::VectorXd::Map(ptsy.data(), ptsy.size());
-
+          
+          /* Alt:
+           double* ptrx = &ptsx[0];
+           Eigen::Map<Eigen::VectorXd> ptsx_transform(ptrx, 0);
+           
+           double* ptry = &ptsy[0];
+           Eigen::Map<Eigen::VectorXd> ptsy_transform(ptry, 0);
+           
+           auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
+           */
 
           // Fit polynomial to x and y coordinates
           auto coeffs = polyfit(ptsxvec, ptsyvec, 3);
+
+          // shifted coords so car at 0,0 and angle is 0, so set x to 0
           
-          
-          // Calculate cross-track error
-          // TODO: set x to 0 or x? quiz set it to 0
+          // Estimate cross-track error (horizontal works reasonably well unless there's a lot of warpage
           double cte = polyeval(coeffs, 0);
           // Calculate orientation error
           // TODO: check derivation is correct
           double epsi = -atan(coeffs[1]);
           
           Eigen::VectorXd state(6);
-
-          //state << 0, 0, 0, v, cte, epsi;
+          
+          /* Convert units */
+          std::cout << "cte: " << cte << "m?" << endl;
+          
+          std::cout << "velocity: " << v << "mph" << endl;
+          // the car weaves a lot if I convert from mph to m/s
+          // v = v * 1600 / 3600;
+          // std::cout << "velocity: " << v << "m/s" << endl;
+          
+          
+          const double Lf = 2.67;
           
           
           // predict the state 100ms into the future before you send it to the solver in order to compensate for the latency.
 
           // Latency of 100ms, so predict 100ms (0.1s) ahead
-          double dt = 0.1;
-          const double Lf = 2.67;
+          
+          double dt = 0;
           // Previous steering angle and throttle
           double prev_delta = mpc.prev_delta;
           double prev_a = mpc.prev_a;
@@ -157,10 +175,11 @@ int main() {
           
           
           // Solve using MPC
+          // coeffs to predict future cte and epsi
           auto result = mpc.Solve(state, coeffs);
           
           // ? Review said to convert to rad but it seems fine in the simulator
-          double steer_value = result[0]; // / deg2rad(25);
+          double steer_value = result[0]/ (deg2rad(25)*Lf);
           std::cout << "steer_value: " << steer_value << endl;
           double throttle_value = result[1];
           
@@ -177,15 +196,15 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
-          std::cout << "result size: " << result.size() << endl;
+          // std::cout << "result size: " << result.size() << endl;
           for (int i = 2; i < result.size(); i++) {
             if(i%2 == 0){
               mpc_x_vals.push_back(result[i]);
             } else {
               mpc_y_vals.push_back(result[i]);
             }
-            std::cout << result[i] << endl;
-            std::cout << "i: " << i << endl;
+            // std::cout << result[i] << endl;
+            // std::cout << "i: " << i << endl;
           }
           
           
@@ -196,6 +215,14 @@ int main() {
           vector<double> next_x_vals;
           vector<double> next_y_vals;
           
+          /*
+          double poly_inc = 2.5;
+          int num_points = 25;
+          for (int i = 1; 1 < num_points; i++) {
+            next_x_vals.push_back(poly_inc*i);
+            next_y_vals.push_back(polyeval(coeffs, poly_inc*i))
+          }
+          */
           next_x_vals.resize(ptsxvec.size());
           next_y_vals.resize(ptsyvec.size());
           

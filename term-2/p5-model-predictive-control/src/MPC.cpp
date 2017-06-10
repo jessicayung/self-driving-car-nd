@@ -12,18 +12,18 @@ using CppAD::AD;
 
 // TODO: Set the timestep length and duration
 // size_t: type returned by sizeof, widely used to represent sizes and counts
-size_t N = 10;
+size_t N = 15;
 double dt = 0.1;
 
 // Set cost factors
 // TODO: tune cost factors
 int cost_cte_factor = 3000;
-int cost_epsi_factor = 000;
+int cost_epsi_factor = 500; // made initial portion etc much less snaky
 int cost_v_factor = 1;
-int cost_current_delta_factor = 0;
-int cost_current_a_factor = 0;
-int cost_diff_delta_factor = 0;
-int cost_diff_a_factor = 0;
+int cost_current_delta_factor = 1;
+int cost_diff_delta_factor = 100;
+int cost_current_a_factor = 1;
+int cost_diff_a_factor = 1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -148,7 +148,7 @@ class FG_eval {
       fg[2 + cte_start + i] =
       cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
       fg[2 + epsi_start + i] =
-      epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
+      epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
     }
     
   }
@@ -177,6 +177,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   size_t n_vars = 6*N + 2*(N-1);
   // TODO: Set the number of constraints
   size_t n_constraints = N*6;
+
   
   
   // Initial value of the independent variables.
@@ -214,8 +215,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Steering angle (deltas)
   for (int i = delta_start; i < a_start; i++)
   {
-    vars_upperbound[i] = M_PI/4;
-    vars_lowerbound[i] = -M_PI/4;
+    vars_upperbound[i] = M_PI/8; // max values allowed in simulator
+    vars_lowerbound[i] = -M_PI/8;
   }
   
   // Acceleration
