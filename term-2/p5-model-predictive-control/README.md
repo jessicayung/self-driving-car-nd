@@ -77,6 +77,15 @@ Our state can be described using four components:
 * It would be better to test variations in N and dt more rigorously and test different combinations of N, dt and the contributions of e.g. cross-track error to cost. 
 * It would also be good to discuss variations in N and dt without holding N or dt fixed at 10 and 0.1 respectively.
 
+### Latency
+* If we don't add latency, the car will be steering and accelerating/braking based on what the model thinks it should've done 100ms ago. The car will respond too slowly to changes in its position and thus changes in cost. 
+	* It may not start steering e.g. left when it goes round a curve, leading it to veer off the track. 
+	* Likewise, it may continue steering even when the path stops curving. 
+	* The faster the vehicle speed, the worse the effects of latency that is unaccounted for.
+* **Implementation**: We used the kinematic model to predict the state 100ms ahead of time and then feed that predicted state into the MPC solver.
+	* We chose 100ms because that's the duration of the latency. That is, we try to predict where the car will be when our instructions reach the car so the steering angle and throttle will be appropriate for when our instructions reach the car (100ms later).
+	* The code can be found in `main.cpp`.
+
 ### Other comments
 * Strangely, when tackling the case where there is 100ms latency, predicting the state 100ms ahead gave a worse outcome than not predicting the state.
 
