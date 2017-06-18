@@ -150,16 +150,16 @@ int main() {
           
           double dt = 0.1;
           // Previous steering angle and throttle
-          double prev_delta = mpc.prev_delta;
+          double delta = j[1]["steering_angle"];
           double prev_a = mpc.prev_a;
           
           // Predict (x = y = psi = 0)
           double predicted_x = v * dt;
           double predicted_y = 0;
-          double predicted_psi = - v * prev_delta / Lf * dt;
+          double predicted_psi = - v * delta / Lf * dt;
           double predicted_v = v + prev_a * dt;
           double predicted_cte = cte + v * CppAD::sin(epsi) * dt;
-          double predicted_epsi = epsi + v* prev_delta / Lf * dt;
+          double predicted_epsi = epsi + predicted_psi;
           
           state << predicted_x, predicted_y, predicted_psi, predicted_v, predicted_cte, predicted_epsi;
           
@@ -172,7 +172,8 @@ int main() {
           std::cout << "steer_value: " << steer_value << endl;
           double throttle_value = result[1];
           
-          mpc.prev_delta = steer_value;
+          // Discarded. TODO: Delete attribute
+          // mpc.prev_delta = steer_value;
           mpc.prev_a = throttle_value;
           
           json msgJson;
