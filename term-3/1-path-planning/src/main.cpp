@@ -249,11 +249,17 @@ int main() {
 
                     double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
                     double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
+                    double next_waypoint_s = map_waypoints_s[closest_waypoint_index];
 
+                    /*
+                     * Add points from previous path
+                     */
 
                     // form the path and add to path
                     double pos_x;
                     double pos_y;
+                    double pos_s;
+                    double pos_d;
                     double angle;
                     int path_size = previous_path_x.size();
 
@@ -271,6 +277,8 @@ int main() {
                     {
                         pos_x = car_x;
                         pos_y = car_y;
+                        pos_s = car_s;
+                        pos_d = car_d;
                         angle = deg2rad(car_yaw);
                     }
                     else
@@ -281,31 +289,57 @@ int main() {
                         double pos_x2 = previous_path_x[path_size-2];
                         double pos_y2 = previous_path_y[path_size-2];
                         angle = atan2(pos_y-pos_y2,pos_x-pos_x2);
+                        // TODO: check if maps_x arg should be map_waypoints_x or something else. Same for maps_y arg.
+                        // TODO: run fn only once
+                        pos_s = getFrenet(pos_x, pos_y, angle, map_waypoints_x, map_waypoints_y)[0];
+                        pos_d = getFrenet(pos_x, pos_y, angle, map_waypoints_x, map_waypoints_y)[1];
                     }
 
+
+                    /*
+                     * Form path to next waypoint
+                     */
+
+
+                    double s_dist_to_next_waypoint = next_waypoint_s - pos_s;
+
+                    int s_num_steps = ceil(s_dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
+                    double s_dist_per_step = s_dist_to_next_waypoint / s_num_steps;
 
                     // Calculate direct distance to next waypoint
                     double dist_to_next_waypoint = sqrt(pow(next_waypoint_x - pos_x, 2) + pow(next_waypoint_y - pos_y, 2));
                     double yaw_to_next_waypoint = atan((next_waypoint_y - pos_y)/(next_waypoint_x - pos_x));
 
+                    // Calculate number of points needed to reach waypoint and stay within the speed limit
                     int num_steps = ceil(dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
 
                     double dist_per_step = dist_to_next_waypoint / num_steps;
 
 
-                    // Calculate number of points needed to reach waypoint and stay within the speed limit
+                    /*
+                     * Add points to path
+                     */
 
                     // we'll use these in the for loop
                     double delta_x;
                     double delta_y;
+                    vector<double> delta_x_y;
+                    double delta_s = s_dist_per_step;
 
-                    for(int i = 0; i < num_steps; i++) {
+                    for(int i = 0; i < s_num_steps; i++) {
+
+                        delta_x_y = getXY(delta_s, 0, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+                        delta_x = delta_x_y[0];
+                        delta_y = delta_x_y[1];
+                        /* when using x-y coords
                         delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
                         delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
+                        */
                         next_x_vals.push_back(pos_x + delta_x);
                         next_y_vals.push_back(pos_y + delta_y);
                         pos_x += delta_x;
                         pos_y += delta_y;
+                        pos_s += delta_s;
                     };
 
                     msgJson["next_x"] = next_x_vals;
