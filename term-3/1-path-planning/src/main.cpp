@@ -250,9 +250,6 @@ int main() {
                     double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
                     double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
 
-                    // Calculate direct distance to next waypoint
-
-                    // Calculate number of points needed to reach waypoint and stay within the speed limit
 
                     // form the path and add to path
                     double pos_x;
@@ -286,12 +283,29 @@ int main() {
                         angle = atan2(pos_y-pos_y2,pos_x-pos_x2);
                     }
 
-                    double dist_inc = 0.5;
-                    for(int i = 0; i < 50-path_size; i++) {
-                        next_x_vals.push_back(pos_x + (dist_inc) * cos(angle + (i + 1) * (pi() / 100)));
-                        next_y_vals.push_back(pos_y + (dist_inc) * sin(angle + (i + 1) * (pi() / 100)));
-                        pos_x += (dist_inc) * cos(angle + (i + 1) * (pi() / 100));
-                        pos_y += (dist_inc) * sin(angle + (i + 1) * (pi() / 100));
+
+                    // Calculate direct distance to next waypoint
+                    double dist_to_next_waypoint = sqrt(pow(next_waypoint_x - pos_x, 2) + pow(next_waypoint_y - pos_y, 2));
+                    double yaw_to_next_waypoint = atan((next_waypoint_y - pos_y)/(next_waypoint_x - pos_x));
+
+                    int num_steps = ceil(dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
+
+                    double dist_per_step = dist_to_next_waypoint / num_steps;
+
+
+                    // Calculate number of points needed to reach waypoint and stay within the speed limit
+
+                    // we'll use these in the for loop
+                    double delta_x;
+                    double delta_y;
+
+                    for(int i = 0; i < num_steps; i++) {
+                        delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
+                        delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
+                        next_x_vals.push_back(pos_x + delta_x);
+                        next_y_vals.push_back(pos_y + delta_y);
+                        pos_x += delta_x;
+                        pos_y += delta_y;
                     };
 
                     msgJson["next_x"] = next_x_vals;
