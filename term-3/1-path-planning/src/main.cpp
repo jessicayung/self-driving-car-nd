@@ -242,6 +242,17 @@ int main() {
 
                     // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
 
+                    // Move to the next closest waypoint s-value
+                    // and try to orient car such that heading = d-vector at that point.
+
+                    int closest_waypoint_index = NextWaypoint(car_x, car_y, car_yaw, map_waypoints_x, map_waypoints_y);
+
+                    double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
+                    double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
+
+                    // Calculate direct distance to next waypoint
+
+                    // Calculate number of points needed to reach waypoint and stay within the speed limit
 
                     // form the path and add to path
                     double pos_x;
@@ -281,7 +292,7 @@ int main() {
                         next_y_vals.push_back(pos_y + (dist_inc) * sin(angle + (i + 1) * (pi() / 100)));
                         pos_x += (dist_inc) * cos(angle + (i + 1) * (pi() / 100));
                         pos_y += (dist_inc) * sin(angle + (i + 1) * (pi() / 100));
-                    }
+                    };
 
                     msgJson["next_x"] = next_x_vals;
                     msgJson["next_y"] = next_y_vals;
