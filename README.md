@@ -38,5 +38,14 @@ See also: My notes for [Udacity's Machine Learning Nanodegree](https://github.co
 - Build algorithms to steer car and wheels so as to meet an objective.
 
 ### Term 3: Path Planning, Controlling a Self-Driving Car
-- Path Planning: Finding a sequence of steps in a maze (navigating cities, parking lots)
+#### 1. Path Planning
+- Finding a sequence of steps in a maze (navigating cities, parking lots)
+
+#### 2. Advanced Deep Learning: Semantic Segmentation
+- Fully Convolutional Networks
+- Inference Performance (Optimising NNs in TensorFlow for Inference Speed)
+
+#### 3. Functional Safety
+
+#### 4. System Integration
 - Put your code in a self-driving car
