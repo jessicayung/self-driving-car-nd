@@ -153,7 +153,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                                           correct_label: label,
                                           keep_prob: keep_prob_stat,
                                           learning_rate:learning_rate_stat})
-        print("Epoch %d of %d: Training loss: %.4f" %(epoch, epochs, loss))
+        print("Epoch %d of %d: Training loss: %.4f" %(epoch+1, epochs, loss))
 
 tests.test_train_nn(train_nn)
 
