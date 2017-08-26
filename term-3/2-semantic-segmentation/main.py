@@ -167,7 +167,7 @@ def run():
 
     # Set parameters
     epochs = 20
-    batch_size = 32
+    batch_size = 4
     # TODO: set learning rate through params here
 
 
