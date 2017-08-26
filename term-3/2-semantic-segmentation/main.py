@@ -60,7 +60,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     """
     # TODO: Implement function
 
-    # 1. Pre-trained network (VGG) as encoder
+    # 1. Pre-trained network (VGG) as encoder (input to fn)
 
     # 2. 1x1 convolutions
 
@@ -107,7 +107,21 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     :return: Tuple of (logits, train_op, cross_entropy_loss)
     """
     # TODO: Implement function
-    return None, None, None
+    # Reshape predictions and labels
+    logits = tf.reshape(nn_last_layer, (-1, num_classes))
+    labels = tf.reshape(correct_label, (-1, num_classes))
+
+    # Define loss
+    cross_entropy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits))
+
+    # Define optimiser
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+
+    # Define train_op to minimise loss
+    train_op = optimizer.minimize(cross_entropy_loss)
+
+    return logits, train_op, cross_entropy_loss
+
 tests.test_optimize(optimize)
 
 
