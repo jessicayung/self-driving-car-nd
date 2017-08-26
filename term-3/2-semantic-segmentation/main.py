@@ -76,21 +76,21 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # 3. Transposed convolutions
     # TODO: tune kernel, stride, weight initialisations, regularisation
     # Up-sample
-    deconv_1 = tf.layers.conv2d_transpose(conv_out, num_classes, 2,2)
+    deconv_1 = tf.layers.conv2d_transpose(conv_out, num_classes, 4, 2, 'SAME')
 
     # Add skip connection to previous VGG layer
     skip_layer_1 = conv_1x1(vgg_layer4_out, num_classes)
     skip_conn_1 = tf.add(deconv_1, skip_layer_1)
 
     # Up-sample
-    deconv_2 = tf.layers.conv2d_transpose(skip_conn_1, num_classes, 4, 4)
+    deconv_2 = tf.layers.conv2d_transpose(skip_conn_1, num_classes, 4, 2, 'SAME')
 
     # Add skip connection to previous VGG layer
     skip_layer_2 = conv_1x1(vgg_layer3_out, num_classes)
     skip_conn_2 = tf.add(deconv_2, skip_layer_2)
 
     # Up-sample
-    deconv_3 = tf.layers.conv2d_transpose(skip_conn_2, num_classes, 8, 8)
+    deconv_3 = tf.layers.conv2d_transpose(skip_conn_2, num_classes, 16, 8, 'SAME')
 
     return deconv_3
 
