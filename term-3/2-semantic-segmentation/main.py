@@ -165,6 +165,12 @@ def run():
     runs_dir = './runs'
     tests.test_for_kitti_dataset(data_dir)
 
+    # Set parameters
+    epochs = 20
+    batch_size = 32
+    # TODO: set learning rate through params here
+
+
     # Download pretrained vgg model
     helper.maybe_download_pretrained_vgg(data_dir)
 
@@ -182,11 +188,31 @@ def run():
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
 
         # TODO: Build NN using load_vgg, layers, and optimize function
+        image_input, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(sess, vgg_path)
+
+        # Build Fully Convolutional Network
+        last_layer = layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
+
+        correct_label = tf.placeholder(dtype=tf.float32, shape=(None, None, None, num_classes))
+        learning_rate = tf.placeholder(dtype=tf.float32)
+
+        # TODO: where does logits get used?`
+        logits, train_op, cross_entropy_loss = optimize(last_layer, correct_label, learning_rate, num_classes)
 
         # TODO: Train NN using the train_nn function
+        sess.run(tf.global_variables_initializer())
+        train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, image_input,
+                 correct_label, keep_prob, learning_rate)
 
         # TODO: Save inference data using helper.save_inference_samples
-        #  helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
+        # code snippet from ncondo
+        saver = tf.train.Saver()
+        saver.save(sess, 'checkpoints/model1.ckpt')
+        saver.export_meta_graph('checkpoints/model1.meta')
+        tf.train.write_graph(sess.graph_def, './checkpoints/', 'model1.pb', False)
+
+        # Save image outputs
+        helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, image_input)
 
         # OPTIONAL: Apply the trained model to a video
 
