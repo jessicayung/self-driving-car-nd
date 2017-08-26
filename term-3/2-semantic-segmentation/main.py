@@ -141,7 +141,20 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param learning_rate: TF Placeholder for learning rate
     """
     # TODO: Implement function
-    pass
+    # TODO: TypeError when feeding keep_prob & learning_rate into feed_dict:
+    # TypeError: The value of a feed cannot be a tf.Tensor object. Acceptable feed values include Python scalars, strings, lists, or numpy ndarrays.
+
+    keep_prob_stat = 0.8
+    learning_rate_stat = 0.001
+    for epoch in range(epochs):
+        for image, label in get_batches_fn(batch_size):
+            _, loss = sess.run([train_op, cross_entropy_loss],
+                               feed_dict={input_image: image,
+                                          correct_label: label,
+                                          keep_prob: keep_prob_stat,
+                                          learning_rate:learning_rate_stat})
+        print("Epoch %d of %d: Training loss: %.4f" %(epoch, epochs, loss))
+
 tests.test_train_nn(train_nn)
 
 
