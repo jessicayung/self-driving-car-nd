@@ -2,6 +2,15 @@
 ### Introduction
 In this project, you'll label the pixels of a road in images using a Fully Convolutional Network (FCN).
 
+### Results
+Here are examples of the output images from the network at 20 epochs. The pixels classified as part of the road are shown in green.
+![](samples_per_epoch/e20_m_000005.png)
+![](samples_per_epoch/e20_mm_000010.png)
+![](samples_per_epoch/e20_u_000090.png)
+
+Here is a plot of the training loss per epoch:
+![](training_loss.png)
+
 ### Setup
 ##### Frameworks and Packages
 Make sure you have the following is installed:
