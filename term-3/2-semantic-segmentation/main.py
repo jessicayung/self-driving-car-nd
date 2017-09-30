@@ -67,7 +67,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     def conv_1x1(x, num_outputs):
         kernel_size = 1
         stride = 1
-        return tf.layers.conv2d(x, num_outputs, kernel_size, stride)
+        return tf.layers.conv2d(x, num_outputs, kernel_size, stride, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
     # TODO: unsure about num_outputs=num_classes
     conv_out = conv_1x1(vgg_layer7_out, num_classes)
@@ -76,21 +76,21 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # 3. Transposed convolutions
     # TODO: tune kernel, stride, weight initialisations, regularisation
     # Up-sample
-    deconv_1 = tf.layers.conv2d_transpose(conv_out, num_classes, 4, 2, 'SAME')
+    deconv_1 = tf.layers.conv2d_transpose(conv_out, num_classes, 4,2, 'SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
     # Add skip connection to previous VGG layer
     skip_layer_1 = conv_1x1(vgg_layer4_out, num_classes)
     skip_conn_1 = tf.add(deconv_1, skip_layer_1)
 
     # Up-sample
-    deconv_2 = tf.layers.conv2d_transpose(skip_conn_1, num_classes, 4, 2, 'SAME')
+    deconv_2 = tf.layers.conv2d_transpose(skip_conn_1, num_classes, 4, 2, 'SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
     # Add skip connection to previous VGG layer
     skip_layer_2 = conv_1x1(vgg_layer3_out, num_classes)
     skip_conn_2 = tf.add(deconv_2, skip_layer_2)
 
     # Up-sample
-    deconv_3 = tf.layers.conv2d_transpose(skip_conn_2, num_classes, 16, 8, 'SAME')
+    deconv_3 = tf.layers.conv2d_transpose(skip_conn_2, num_classes, 16, 8, 'SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
     return deconv_3
 
@@ -145,7 +145,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     # TypeError: The value of a feed cannot be a tf.Tensor object. Acceptable feed values include Python scalars, strings, lists, or numpy ndarrays.
 
     keep_prob_stat = 0.8
-    learning_rate_stat = 0.001
+    learning_rate_stat = 1e-4
     for epoch in range(epochs):
         for image, label in get_batches_fn(batch_size):
             _, loss = sess.run([train_op, cross_entropy_loss],
@@ -205,14 +205,8 @@ def run():
                  correct_label, keep_prob, learning_rate)
 
         # TODO: Save inference data using helper.save_inference_samples
-        # code snippet from ncondo
-        saver = tf.train.Saver()
-        saver.save(sess, 'checkpoints/model1.ckpt')
-        saver.export_meta_graph('checkpoints/model1.meta')
-        tf.train.write_graph(sess.graph_def, './checkpoints/', 'model1.pb', False)
 
-        # Save image outputs
-        helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, image_input)
+        helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, image_input, epochs)
 
         # OPTIONAL: Apply the trained model to a video
 
