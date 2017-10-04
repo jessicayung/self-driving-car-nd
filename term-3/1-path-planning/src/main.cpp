@@ -84,6 +84,7 @@ int NextWaypoint(double x, double y, double theta, vector<double> maps_x, vector
 }
 
 // Transform from Cartesian x,y coordinates to Frenet s,d coordinates
+// maps_x, maps_y are lists of waypoint x and y coordinates that we calculated at the beginning
 vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x, vector<double> maps_y)
 {
     int next_wp = NextWaypoint(x,y, theta, maps_x,maps_y);
@@ -183,6 +184,7 @@ int main() {
         double x;
         double y;
         float s;
+        // normal components to waypoints
         float d_x;
         float d_y;
         iss >> x;
