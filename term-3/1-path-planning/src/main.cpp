@@ -308,11 +308,15 @@ int main() {
 
                     /* Frenet coordinates */
                     double s_dist_to_next_waypoint = next_waypoint_s - pos_s;
+                    cout << "s_dist_to_next_waypoint: " << s_dist_to_next_waypoint << endl;
+
+                    // TODO: solve this instead of using a hack
+                    s_dist_to_next_waypoint = abs(s_dist_to_next_waypoint);
 
                     int s_num_steps = ceil(s_dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
                     double s_dist_per_step = s_dist_to_next_waypoint / s_num_steps;
 
-                    /* X-Y coordinates */
+                    /* X-Y coordinates
 
                     // Calculate direct distance to next waypoint
                     double dist_to_next_waypoint = sqrt(pow(next_waypoint_x - pos_x, 2) + pow(next_waypoint_y - pos_y, 2));
@@ -322,6 +326,7 @@ int main() {
                     int num_steps = ceil(dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
 
                     double dist_per_step = dist_to_next_waypoint / num_steps;
+                    */
 
 
                     /*
@@ -329,15 +334,14 @@ int main() {
                      */
 
                     // we'll use these in the for loop
-                    double delta_x;
-                    double delta_y;
                     double next_s;
                     double next_d;
                     vector<double> next_xy;
                     double delta_s = s_dist_per_step;
                     cout << "delta_s: " << delta_s << endl;
 
-                    for(int i = 0; i < num_steps; i++) {
+                    cout << "s_num_steps: " << s_num_steps << endl;
+                    for(int i = 0; i < s_num_steps; i++) {
 
                         next_s = pos_s + delta_s;
                         next_d = 6;
