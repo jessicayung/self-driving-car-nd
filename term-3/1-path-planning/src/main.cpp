@@ -348,8 +348,6 @@ int main() {
                         */
                         next_x_vals.push_back(next_xy[0]);
                         next_y_vals.push_back(next_xy[1]);
-                        pos_x += delta_x;
-                        pos_y += delta_y;
                         pos_s += delta_s;
                     };
 
