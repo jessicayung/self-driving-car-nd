@@ -326,15 +326,17 @@ int main() {
                     vector<double> delta_x_y;
                     double delta_s = s_dist_per_step;
 
-                    for(int i = 0; i < s_num_steps; i++) {
+                    for(int i = 0; i < num_steps; i++) {
 
                         delta_x_y = getXY(delta_s, 0, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+                        /* when using Frenet coords
                         delta_x = delta_x_y[0];
                         delta_y = delta_x_y[1];
-                        /* when using x-y coords
+                        */
+                        // when using x-y coords
                         delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
                         delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
-                        */
+
                         next_x_vals.push_back(pos_x + delta_x);
                         next_y_vals.push_back(pos_y + delta_y);
                         pos_x += delta_x;
