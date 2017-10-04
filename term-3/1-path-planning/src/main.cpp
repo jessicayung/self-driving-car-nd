@@ -34,6 +34,7 @@ string hasData(string s) {
     return "";
 }
 
+// Euclidean distance between two points
 double distance(double x1, double y1, double x2, double y2)
 {
     return sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
@@ -245,6 +246,8 @@ int main() {
                     // Move to the next closest waypoint s-value
                     // and try to orient car such that heading = d-vector at that point.
 
+
+                    // Get index of next waypoint
                     int closest_waypoint_index = NextWaypoint(car_x, car_y, car_yaw, map_waypoints_x, map_waypoints_y);
 
                     double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
@@ -267,7 +270,7 @@ int main() {
                     int max_points_from_prev_path = 10;
 
                     // Add unprocessed points from previous path to current path
-                    for(int i = 0; i < path_size; i++)
+                    for(int i = 0; i < min(path_size, max_points_from_prev_path); i++)
                     {
                         next_x_vals.push_back(previous_path_x[i]);
                         next_y_vals.push_back(previous_path_y[i]);
@@ -283,12 +286,12 @@ int main() {
                     }
                     else
                     {
-                        pos_x = previous_path_x[path_size-1];
-                        pos_y = previous_path_y[path_size-1];
+                        pos_x = previous_path_x[min(path_size, max_points_from_prev_path) - 1];
+                        pos_y = previous_path_y[min(path_size, max_points_from_prev_path) - 1];
 
-                        double pos_x2 = previous_path_x[path_size-2];
-                        double pos_y2 = previous_path_y[path_size-2];
-                        angle = atan2(pos_y-pos_y2,pos_x-pos_x2);
+                        double pos_x_prev = previous_path_x[path_size-2];
+                        double pos_y_prev = previous_path_y[path_size-2];
+                        angle = atan2(pos_y-pos_y_prev,pos_x-pos_x_prev);
                         // TODO: check if maps_x arg should be map_waypoints_x or something else. Same for maps_y arg.
                         // TODO: run fn only once
                         pos_s = getFrenet(pos_x, pos_y, angle, map_waypoints_x, map_waypoints_y)[0];
