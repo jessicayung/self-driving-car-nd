@@ -306,10 +306,13 @@ int main() {
                      */
 
 
+                    /* Frenet coordinates */
                     double s_dist_to_next_waypoint = next_waypoint_s - pos_s;
 
                     int s_num_steps = ceil(s_dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
                     double s_dist_per_step = s_dist_to_next_waypoint / s_num_steps;
+
+                    /* X-Y coordinates */
 
                     // Calculate direct distance to next waypoint
                     double dist_to_next_waypoint = sqrt(pow(next_waypoint_x - pos_x, 2) + pow(next_waypoint_y - pos_y, 2));
@@ -328,22 +331,23 @@ int main() {
                     // we'll use these in the for loop
                     double delta_x;
                     double delta_y;
-                    vector<double> delta_x_y;
+                    double next_s;
+                    double next_d;
+                    vector<double> next_xy;
                     double delta_s = s_dist_per_step;
+                    cout << "delta_s: " << delta_s << endl;
 
                     for(int i = 0; i < num_steps; i++) {
 
-                        delta_x_y = getXY(delta_s, 0, map_waypoints_s, map_waypoints_x, map_waypoints_y);
-                        /* when using Frenet coords
-                        delta_x = delta_x_y[0];
-                        delta_y = delta_x_y[1];
-                        */
-                        // when using x-y coords
+                        next_s = pos_s + delta_s;
+                        next_d = 6;
+                        next_xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+                        /* when using x-y coords
                         delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
                         delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
-
-                        next_x_vals.push_back(pos_x + delta_x);
-                        next_y_vals.push_back(pos_y + delta_y);
+                        */
+                        next_x_vals.push_back(next_xy[0]);
+                        next_y_vals.push_back(next_xy[1]);
                         pos_x += delta_x;
                         pos_y += delta_y;
                         pos_s += delta_s;
