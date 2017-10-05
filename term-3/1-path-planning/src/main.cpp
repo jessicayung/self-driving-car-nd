@@ -297,8 +297,8 @@ int main() {
                         pos_x = previous_path_x[min(path_size, max_points_from_prev_path) - 1];
                         pos_y = previous_path_y[min(path_size, max_points_from_prev_path) - 1];
 
-                        double pos_x_prev = previous_path_x[path_size-2];
-                        double pos_y_prev = previous_path_y[path_size-2];
+                        double pos_x_prev = previous_path_x[min(path_size, max_points_from_prev_path) - 2];
+                        double pos_y_prev = previous_path_y[min(path_size, max_points_from_prev_path) - 2];
                         angle = atan2(pos_y-pos_y_prev,pos_x-pos_x_prev);
                         // TODO: check if maps_x arg should be map_waypoints_x or something else. Same for maps_y arg.
                         // TODO: run fn only once
