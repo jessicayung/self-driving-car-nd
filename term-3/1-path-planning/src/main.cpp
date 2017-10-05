@@ -8,6 +8,7 @@
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
+#include "spline.h"
 
 using namespace std;
 
@@ -245,6 +246,11 @@ int main() {
 
                     // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
 
+
+                    // Define lane we're in (0 for far left, 1 for middle, 2 for far right)
+                    int lane = 1;
+                    double max_velocity = 45.;
+
                     // Move to the next closest waypoint s-value
                     // and try to orient car such that heading = d-vector at that point.
 
@@ -313,7 +319,7 @@ int main() {
                     // TODO: solve this instead of using a hack
                     s_dist_to_next_waypoint = abs(s_dist_to_next_waypoint);
 
-                    int s_num_steps = ceil(s_dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
+                    int s_num_steps = ceil(s_dist_to_next_waypoint / ((max_velocity * 1.61 / 3600 * 1000) * (0.02)));
                     double s_dist_per_step = s_dist_to_next_waypoint / s_num_steps;
 
                     /* X-Y coordinates
@@ -323,7 +329,7 @@ int main() {
                     double yaw_to_next_waypoint = atan((next_waypoint_y - pos_y)/(next_waypoint_x - pos_x));
 
                     // Calculate number of points needed to reach waypoint and stay within the speed limit
-                    int num_steps = ceil(dist_to_next_waypoint / ((50 *1.61 / 3600 * 1000) * (0.02)));
+                    int num_steps = ceil(dist_to_next_waypoint / ((max_velocity * 1.61 / 3600 * 1000) * (0.02)));
 
                     double dist_per_step = dist_to_next_waypoint / num_steps;
                     */
@@ -344,7 +350,7 @@ int main() {
                     for(int i = 0; i < s_num_steps; i++) {
 
                         next_s = pos_s + delta_s;
-                        next_d = 6;
+                        next_d = lane * 4 + 2;
                         next_xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
                         /* when using x-y coords
                         delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
