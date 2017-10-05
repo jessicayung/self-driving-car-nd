@@ -244,12 +244,14 @@ int main() {
                     vector<double> next_y_vals;
 
 
+                    // TODO: start
                     // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
 
 
                     // Define lane we're in (0 for far left, 1 for middle, 2 for far right)
                     int lane = 1;
                     double max_velocity = 45.;
+                    int path_size = 50;
 
                     // Move to the next closest waypoint s-value
                     // and try to orient car such that heading = d-vector at that point.
@@ -274,19 +276,19 @@ int main() {
                     double pos_s;
                     double pos_d;
                     double angle;
-                    int path_size = previous_path_x.size();
+                    int prev_path_size = previous_path_x.size();
 
-                    // TODO: change path_size in following for loop to max(max_points_from_prev_path, path_size)
+                    // TODO: change prev_path_size in following for loop to max(max_points_from_prev_path, prev_path_size)
                     int max_points_from_prev_path = 10;
 
                     // Add unprocessed points from previous path to current path
-                    for(int i = 0; i < min(path_size, max_points_from_prev_path); i++)
+                    for(int i = 0; i < min(prev_path_size, max_points_from_prev_path); i++)
                     {
                         next_x_vals.push_back(previous_path_x[i]);
                         next_y_vals.push_back(previous_path_y[i]);
                     }
 
-                    if(path_size == 0)
+                    if(prev_path_size == 0)
                     {
                         pos_x = car_x;
                         pos_y = car_y;
@@ -296,11 +298,11 @@ int main() {
                     }
                     else
                     {
-                        pos_x = previous_path_x[min(path_size, max_points_from_prev_path) - 1];
-                        pos_y = previous_path_y[min(path_size, max_points_from_prev_path) - 1];
+                        pos_x = previous_path_x[min(prev_path_size, max_points_from_prev_path) - 1];
+                        pos_y = previous_path_y[min(prev_path_size, max_points_from_prev_path) - 1];
 
-                        pos_x_prev = previous_path_x[min(path_size, max_points_from_prev_path) - 2];
-                        pos_y_prev = previous_path_y[min(path_size, max_points_from_prev_path) - 2];
+                        pos_x_prev = previous_path_x[min(prev_path_size, max_points_from_prev_path) - 2];
+                        pos_y_prev = previous_path_y[min(prev_path_size, max_points_from_prev_path) - 2];
                         angle = atan2(pos_y-pos_y_prev,pos_x-pos_x_prev);
                         // TODO: check if maps_x arg should be map_waypoints_x or something else. Same for maps_y arg.
                         // TODO: run fn only once
@@ -320,7 +322,7 @@ int main() {
                     vector<double> ptsx;
                     vector<double> ptsy;
 
-                    if (path_size != 0) {
+                    if (prev_path_size != 0) {
 
                         ptsx.push_back(pos_x_prev);
                         ptsx.push_back(pos_x);
@@ -405,7 +407,7 @@ int main() {
                     cout << "delta_s: " << delta_s << endl;
 
                     cout << "s_num_steps: " << s_num_steps << endl;
-                    for(int i = 0; i < s_num_steps; i++) {
+                    for(int i = 0; i < min(s_num_steps, path_size); i++) {
 
                         next_s = pos_s + delta_s;
                         next_d = lane * 4 + 2;
