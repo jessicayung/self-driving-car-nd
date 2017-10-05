@@ -269,6 +269,8 @@ int main() {
                     // form the path and add to path
                     double pos_x;
                     double pos_y;
+                    double pos_x_prev;
+                    double pos_y_prev;
                     double pos_s;
                     double pos_d;
                     double angle;
@@ -297,8 +299,8 @@ int main() {
                         pos_x = previous_path_x[min(path_size, max_points_from_prev_path) - 1];
                         pos_y = previous_path_y[min(path_size, max_points_from_prev_path) - 1];
 
-                        double pos_x_prev = previous_path_x[min(path_size, max_points_from_prev_path) - 2];
-                        double pos_y_prev = previous_path_y[min(path_size, max_points_from_prev_path) - 2];
+                        pos_x_prev = previous_path_x[min(path_size, max_points_from_prev_path) - 2];
+                        pos_y_prev = previous_path_y[min(path_size, max_points_from_prev_path) - 2];
                         angle = atan2(pos_y-pos_y_prev,pos_x-pos_x_prev);
                         // TODO: check if maps_x arg should be map_waypoints_x or something else. Same for maps_y arg.
                         // TODO: run fn only once
@@ -306,6 +308,62 @@ int main() {
                         pos_d = getFrenet(pos_x, pos_y, angle, map_waypoints_x, map_waypoints_y)[1];
                     }
 
+                    /*
+                     * Generate three spaced out points and draw a spline through them
+                     */
+
+                    double spacing = 30.;
+                    vector<double> next_wp0 = getXY(car_s+spacing, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
+                    vector<double> next_wp1 = getXY(car_s+spacing*2, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
+                    vector<double> next_wp2 = getXY(car_s+spacing*3, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
+
+                    vector<double> ptsx;
+                    vector<double> ptsy;
+
+                    if (path_size != 0) {
+
+                        ptsx.push_back(pos_x_prev);
+                        ptsx.push_back(pos_x);
+                        ptsy.push_back(pos_y_prev);
+                        ptsy.push_back(pos_y);
+
+                        }
+
+
+                    ptsx.push_back(next_wp0[0]);
+                    ptsx.push_back(next_wp1[0]);
+                    ptsx.push_back(next_wp2[0]);
+
+                    ptsy.push_back(next_wp0[1]);
+                    ptsy.push_back(next_wp1[1]);
+                    ptsy.push_back(next_wp2[1]);
+
+                    /*
+                     * Convert points to frame of ref relative to car
+                     */
+
+                    for (int i = 0; i < ptsx.size(); i++) {
+                    double shift_x = ptsx[i] - pos_x;
+                    double shift_y = ptsy[i] - pos_y;
+
+                    ptsx[i] = (shift_x*cos(0-angle)-shift_y*sin(0-angle));
+                    ptsy[i] = (shift_x*sin(0-angle)-shift_y*cos(0-angle));
+                    }
+
+                    tk::spline s;
+
+                    s.set_points(ptsx, ptsy);
+
+                    // Set horizon
+                    double target_x = 30.;
+                    double target_y = s(target_x);
+                    double target_dist = sqrt(pow(target_x, 2) + pow(target_y, 2));
+
+                    double x_add_on = 0;
+
+                    /*
+                     * TODO: Add each point we have on the spline to next_x_vals, next_y_vals
+                     */
 
                     /*
                      * Form path to next waypoint
