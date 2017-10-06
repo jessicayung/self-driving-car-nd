@@ -256,13 +256,14 @@ int main() {
                     // Move to the next closest waypoint s-value
                     // and try to orient car such that heading = d-vector at that point.
 
-
+                    /*
                     // Get index of next waypoint
                     int closest_waypoint_index = NextWaypoint(car_x, car_y, car_yaw, map_waypoints_x, map_waypoints_y);
 
                     double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
                     double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
                     double next_waypoint_s = map_waypoints_s[closest_waypoint_index];
+                    */
 
                     /*
                      * Add points from previous path
@@ -287,6 +288,9 @@ int main() {
                         next_x_vals.push_back(previous_path_x[i]);
                         next_y_vals.push_back(previous_path_y[i]);
                     }
+
+                    // Debugging print
+                    cout << "Next_x_vals.size(): " << next_x_vals.size() << endl;
 
                     if(prev_path_size == 0)
                     {
@@ -356,6 +360,10 @@ int main() {
 
                     s.set_points(ptsx, ptsy);
 
+                    /*
+                     * TODO: Add each point we have on the spline to next_x_vals, next_y_vals
+                     */
+
                     // Set horizon
                     double target_x = 30.;
                     double target_y = s(target_x);
@@ -363,16 +371,36 @@ int main() {
 
                     double x_add_on = 0;
 
-                    /*
-                     * TODO: Add each point we have on the spline to next_x_vals, next_y_vals
-                     */
+                    for (int i = 0; i < path_size - prev_path_size; i++) {
+
+                        double N = (target_dist/(.02*max_velocity/2.24)); // Dividing by 2.24 converts mph to mps
+                        double x_point = x_add_on + (target_x)/N;
+                        double y_point = s(x_point);
+
+                        x_add_on = x_point;
+
+                        // Convert coords from car's frame of ref
+
+                        double x_ref = x_point;
+                        double y_ref = y_point;
+
+                        x_point = (x_ref * cos(angle)-y_ref*sin(angle));
+                        y_point = (x_ref * sin(angle)+y_ref*cos(angle));
+
+                        x_point += pos_x;
+                        y_point += pos_y;
+
+                        next_x_vals.push_back(x_point);
+                        next_y_vals.push_back(y_point);
+
+                    }
 
                     /*
                      * Form path to next waypoint
                      */
 
-
-                    /* Frenet coordinates */
+                    /*
+                    // Frenet coordinates
                     double s_dist_to_next_waypoint = next_waypoint_s - pos_s;
                     cout << "s_dist_to_next_waypoint: " << s_dist_to_next_waypoint << endl;
 
@@ -382,7 +410,7 @@ int main() {
                     int s_num_steps = ceil(s_dist_to_next_waypoint / ((max_velocity * 1.61 / 3600 * 1000) * (0.02)));
                     double s_dist_per_step = s_dist_to_next_waypoint / s_num_steps;
 
-                    /* X-Y coordinates
+                     X-Y coordinates
 
                     // Calculate direct distance to next waypoint
                     double dist_to_next_waypoint = sqrt(pow(next_waypoint_x - pos_x, 2) + pow(next_waypoint_y - pos_y, 2));
@@ -392,12 +420,12 @@ int main() {
                     int num_steps = ceil(dist_to_next_waypoint / ((max_velocity * 1.61 / 3600 * 1000) * (0.02)));
 
                     double dist_per_step = dist_to_next_waypoint / num_steps;
-                    */
 
 
-                    /*
-                     * Add points to path
-                     */
+
+
+                    // Add points to path
+
 
                     // we'll use these in the for loop
                     double next_s;
@@ -412,14 +440,16 @@ int main() {
                         next_s = pos_s + delta_s;
                         next_d = lane * 4 + 2;
                         next_xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
-                        /* when using x-y coords
-                        delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
-                        delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
-                        */
-                        next_x_vals.push_back(next_xy[0]);
-                        next_y_vals.push_back(next_xy[1]);
+                        // when using x-y coords
+                        // delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
+                        // delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
+
+                        //next_x_vals.push_back(next_xy[0]);
+                        //next_y_vals.push_back(next_xy[1]);
                         pos_s += delta_s;
                     };
+
+                    */
 
                     msgJson["next_x"] = next_x_vals;
                     msgJson["next_y"] = next_y_vals;
