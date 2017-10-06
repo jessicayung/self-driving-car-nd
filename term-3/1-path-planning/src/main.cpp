@@ -252,13 +252,53 @@ int main() {
                     int lane = 1;
                     double max_velocity = 45.;
                     int path_size = 50;
+                    int prev_path_size = previous_path_x.size();
+                    bool try_to_change_lanes = false;
+
+                    /*
+                     * Avoid colliding with cars in our lane
+                     */
+
+                    if (prev_path_size > 0)
+                    {
+                        car_s = end_path_s;
+                    }
+
+                    bool too_close_to_car_in_front = false;
+                    for(int i = 0; i < sensor_fusion.size(); i++) {
+                    float d = sensor_fusion[i][6];
+
+                    int my_lane_center = 2+4*lane;
+                    // if car is in our lane (lane 4m wide)
+                    if (d < (my_lane_center+2) && d > (my_lane_center-2)) {
+                        double vx = sensor_fusion[i][3];
+                        double vy = sensor_fusion[i][4];
+                        double other_car_speed = sqrt(vx*vx*vy*vy);
+                        double other_car_s = sensor_fusion[i][5];
+
+                        // See where other cars will be once we've used all points from the prev path
+                        // TODO: use points_to_add instead?
+                        other_car_s += ((double)prev_path_size*.02*other_car_speed);
+
+                        bool car_ahead = other_car_s > car_s;
+                        double threshold = 30;
+                        bool gap_within_threshold = other_car_s - car_s < threshold;
+                        if(car_ahead && gap_within_threshold) {
+
+                        max_velocity = 30;
+
+                        }
+                    }
+
+                    }
+
 
                     /*
                      * Add points from previous path
                      */
 
                     // form the path and add to path
-                    int prev_path_size = previous_path_x.size();
+
                     // TODO: change points_to_add = min(prev_path_size, max_points_from_prev_path)
                     int points_to_add = prev_path_size;
 
