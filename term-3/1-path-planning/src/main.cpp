@@ -283,11 +283,15 @@ int main() {
                     int max_points_from_prev_path = 10;
 
                     // Add unprocessed points from previous path to current path
+
                     for(int i = 0; i < min(prev_path_size, max_points_from_prev_path); i++)
                     {
                         next_x_vals.push_back(previous_path_x[i]);
                         next_y_vals.push_back(previous_path_y[i]);
                     }
+
+                    vector<double> ptsx;
+                    vector<double> ptsy;
 
                     // Debugging print
                     cout << "Next_x_vals.size(): " << next_x_vals.size() << endl;
@@ -299,6 +303,11 @@ int main() {
                         pos_s = car_s;
                         pos_d = car_d;
                         angle = deg2rad(car_yaw);
+
+                        pos_x_prev = pos_x - cos(car_yaw);
+                        pos_y_prev = pos_y - sin(car_yaw);
+
+
                     }
                     else
                     {
@@ -323,17 +332,12 @@ int main() {
                     vector<double> next_wp1 = getXY(car_s+spacing*2, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
                     vector<double> next_wp2 = getXY(car_s+spacing*3, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
 
-                    vector<double> ptsx;
-                    vector<double> ptsy;
 
-                    if (prev_path_size != 0) {
+                    ptsx.push_back(pos_x_prev);
+                    ptsx.push_back(pos_x);
+                    ptsy.push_back(pos_y_prev);
+                    ptsy.push_back(pos_y);
 
-                        ptsx.push_back(pos_x_prev);
-                        ptsx.push_back(pos_x);
-                        ptsy.push_back(pos_y_prev);
-                        ptsy.push_back(pos_y);
-
-                        }
 
 
                     ptsx.push_back(next_wp0[0]);
