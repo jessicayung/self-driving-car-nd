@@ -253,75 +253,62 @@ int main() {
                     double max_velocity = 45.;
                     int path_size = 50;
 
-                    // Move to the next closest waypoint s-value
-                    // and try to orient car such that heading = d-vector at that point.
+                    // Debugging prints
+                    //cout << "car_x: " << car_x << endl;
+                    //cout << "car_y: " << car_y << endl;
 
-                    /*
-                    // Get index of next waypoint
-                    int closest_waypoint_index = NextWaypoint(car_x, car_y, car_yaw, map_waypoints_x, map_waypoints_y);
+                    //int closest_waypoint_index = NextWaypoint(car_x, car_y, car_yaw, map_waypoints_x, map_waypoints_y);
 
-                    double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
-                    double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
-                    double next_waypoint_s = map_waypoints_s[closest_waypoint_index];
-                    */
+                    //double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
+                    //double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
+                    //cout << "next_waypoint_x: " << next_waypoint_x << endl;
+                    //cout << "next_waypoint_y: " << next_waypoint_y << endl;
 
                     /*
                      * Add points from previous path
                      */
 
                     // form the path and add to path
-                    double pos_x;
-                    double pos_y;
-                    double pos_x_prev;
-                    double pos_y_prev;
-                    double pos_s;
-                    double pos_d;
-                    double angle;
                     int prev_path_size = previous_path_x.size();
-
-                    // TODO: change prev_path_size in following for loop to max(max_points_from_prev_path, prev_path_size)
-                    int max_points_from_prev_path = 10;
-
-                    // Add unprocessed points from previous path to current path
-
-                    for(int i = 0; i < min(prev_path_size, max_points_from_prev_path); i++)
-                    {
-                        next_x_vals.push_back(previous_path_x[i]);
-                        next_y_vals.push_back(previous_path_y[i]);
-                    }
+                    // TODO: change points_to_add = min(prev_path_size, max_points_from_prev_path)
+                    int points_to_add = prev_path_size;
 
                     vector<double> ptsx;
                     vector<double> ptsy;
 
+                    double ref_x = car_x;
+                    double ref_y = car_y;
+                    double ref_yaw = deg2rad(car_yaw);
                     // Debugging print
-                    cout << "Next_x_vals.size(): " << next_x_vals.size() << endl;
 
-                    if(prev_path_size == 0)
+                    if(prev_path_size < 2)
                     {
-                        pos_x = car_x;
-                        pos_y = car_y;
-                        pos_s = car_s;
-                        pos_d = car_d;
-                        angle = deg2rad(car_yaw);
 
-                        pos_x_prev = pos_x - cos(car_yaw);
-                        pos_y_prev = pos_y - sin(car_yaw);
+                        double prev_car_x = car_x - cos(car_yaw);
+                        double prev_car_y = car_y - sin(car_yaw);
 
+                        ptsx.push_back(prev_car_x);
+                        ptsx.push_back(car_x);
+
+                        ptsy.push_back(prev_car_y);
+                        ptsy.push_back(car_y);
 
                     }
                     else
                     {
-                        pos_x = previous_path_x[min(prev_path_size, max_points_from_prev_path) - 1];
-                        pos_y = previous_path_y[min(prev_path_size, max_points_from_prev_path) - 1];
+                        ref_x = previous_path_x[points_to_add - 1];
+                        ref_y = previous_path_y[points_to_add - 1];
 
-                        pos_x_prev = previous_path_x[min(prev_path_size, max_points_from_prev_path) - 2];
-                        pos_y_prev = previous_path_y[min(prev_path_size, max_points_from_prev_path) - 2];
-                        angle = atan2(pos_y-pos_y_prev,pos_x-pos_x_prev);
-                        // TODO: check if maps_x arg should be map_waypoints_x or something else. Same for maps_y arg.
-                        // TODO: run fn only once
-                        pos_s = getFrenet(pos_x, pos_y, angle, map_waypoints_x, map_waypoints_y)[0];
-                        pos_d = getFrenet(pos_x, pos_y, angle, map_waypoints_x, map_waypoints_y)[1];
-                    }
+                        double ref_x_prev = previous_path_x[points_to_add - 2];
+                        double ref_y_prev = previous_path_y[points_to_add - 2];
+                        ref_yaw = atan2(ref_y-ref_y_prev,ref_x-ref_x_prev);
+                        ptsx.push_back(ref_x_prev);
+                        ptsx.push_back(ref_x);
+
+                        ptsy.push_back(ref_y_prev);
+                        ptsy.push_back(ref_y);
+
+                    };
 
                     /*
                      * Generate three spaced out points and draw a spline through them
@@ -332,14 +319,6 @@ int main() {
                     vector<double> next_wp1 = getXY(car_s+spacing*2, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
                     vector<double> next_wp2 = getXY(car_s+spacing*3, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
 
-
-                    ptsx.push_back(pos_x_prev);
-                    ptsx.push_back(pos_x);
-                    ptsy.push_back(pos_y_prev);
-                    ptsy.push_back(pos_y);
-
-
-
                     ptsx.push_back(next_wp0[0]);
                     ptsx.push_back(next_wp1[0]);
                     ptsx.push_back(next_wp2[0]);
@@ -348,34 +327,48 @@ int main() {
                     ptsy.push_back(next_wp1[1]);
                     ptsy.push_back(next_wp2[1]);
 
+
+                    //cout << "ptsx: " << ptsx[0] << ", " << ptsx[1] << ", " << ptsx[2] << ", " << ptsx[3] << ", " << ptsx[4] << endl;
+                    //cout << "ptsy: " << ptsy[0] << ", " << ptsy[1] << ", " << ptsy[2] << ", " << ptsy[3] << ", " << ptsy[4] << endl;
+
                     /*
                      * Convert points to frame of ref relative to car
                      */
 
                     for (int i = 0; i < ptsx.size(); i++) {
-                    double shift_x = ptsx[i] - pos_x;
-                    double shift_y = ptsy[i] - pos_y;
+                        double shift_x = ptsx[i] - ref_x;
+                        double shift_y = ptsy[i] - ref_y;
 
-                    ptsx[i] = (shift_x*cos(0-angle)-shift_y*sin(0-angle));
-                    ptsy[i] = (shift_x*sin(0-angle)-shift_y*cos(0-angle));
+                        ptsx[i] = (shift_x*cos(0-ref_yaw)-shift_y*sin(0-ref_yaw));
+                        ptsy[i] = (shift_x*sin(0-ref_yaw)+shift_y*cos(0-ref_yaw));
                     }
 
                     tk::spline s;
 
                     s.set_points(ptsx, ptsy);
 
+                    // Add unprocessed points from previous path to current path
+
+                    for(int i = 0; i < points_to_add; i++)
+                    {
+                        next_x_vals.push_back(previous_path_x[i]);
+                        next_y_vals.push_back(previous_path_y[i]);
+                    }
+
                     /*
                      * TODO: Add each point we have on the spline to next_x_vals, next_y_vals
                      */
 
+
+
                     // Set horizon
                     double target_x = 30.;
                     double target_y = s(target_x);
-                    double target_dist = sqrt(pow(target_x, 2) + pow(target_y, 2));
+                    double target_dist = sqrt((target_x)*(target_x) + (target_y)*(target_y));
 
                     double x_add_on = 0;
 
-                    for (int i = 0; i < path_size - prev_path_size; i++) {
+                    for (int i = 0; i < path_size - points_to_add; i++) {
 
                         double N = (target_dist/(.02*max_velocity/2.24)); // Dividing by 2.24 converts mph to mps
                         double x_point = x_add_on + (target_x)/N;
@@ -388,72 +381,21 @@ int main() {
                         double x_ref = x_point;
                         double y_ref = y_point;
 
-                        x_point = (x_ref * cos(angle)-y_ref*sin(angle));
-                        y_point = (x_ref * sin(angle)+y_ref*cos(angle));
+                        x_point = (x_ref * cos(ref_yaw)-y_ref*sin(ref_yaw));
+                        y_point = (x_ref * sin(ref_yaw)+y_ref*cos(ref_yaw));
 
-                        x_point += pos_x;
-                        y_point += pos_y;
+                        x_point += ref_x;
+                        y_point += ref_y;
+
+                        // cout << "x_point: " << x_point << endl;
+                        // cout << "y_point: " << y_point << endl;
+
 
                         next_x_vals.push_back(x_point);
                         next_y_vals.push_back(y_point);
 
                     }
 
-                    /*
-                     * Form path to next waypoint
-                     */
-
-                    /*
-                    // Frenet coordinates
-                    double s_dist_to_next_waypoint = next_waypoint_s - pos_s;
-                    cout << "s_dist_to_next_waypoint: " << s_dist_to_next_waypoint << endl;
-
-                    // TODO: solve this instead of using a hack
-                    s_dist_to_next_waypoint = abs(s_dist_to_next_waypoint);
-
-                    int s_num_steps = ceil(s_dist_to_next_waypoint / ((max_velocity * 1.61 / 3600 * 1000) * (0.02)));
-                    double s_dist_per_step = s_dist_to_next_waypoint / s_num_steps;
-
-                     X-Y coordinates
-
-                    // Calculate direct distance to next waypoint
-                    double dist_to_next_waypoint = sqrt(pow(next_waypoint_x - pos_x, 2) + pow(next_waypoint_y - pos_y, 2));
-                    double yaw_to_next_waypoint = atan((next_waypoint_y - pos_y)/(next_waypoint_x - pos_x));
-
-                    // Calculate number of points needed to reach waypoint and stay within the speed limit
-                    int num_steps = ceil(dist_to_next_waypoint / ((max_velocity * 1.61 / 3600 * 1000) * (0.02)));
-
-                    double dist_per_step = dist_to_next_waypoint / num_steps;
-
-
-
-
-                    // Add points to path
-
-
-                    // we'll use these in the for loop
-                    double next_s;
-                    double next_d;
-                    vector<double> next_xy;
-                    double delta_s = s_dist_per_step;
-                    cout << "delta_s: " << delta_s << endl;
-
-                    cout << "s_num_steps: " << s_num_steps << endl;
-                    for(int i = 0; i < min(s_num_steps, path_size); i++) {
-
-                        next_s = pos_s + delta_s;
-                        next_d = lane * 4 + 2;
-                        next_xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
-                        // when using x-y coords
-                        // delta_x = cos(yaw_to_next_waypoint) * dist_per_step;
-                        // delta_y = sin(yaw_to_next_waypoint) * dist_per_step;
-
-                        //next_x_vals.push_back(next_xy[0]);
-                        //next_y_vals.push_back(next_xy[1]);
-                        pos_s += delta_s;
-                    };
-
-                    */
 
                     msgJson["next_x"] = next_x_vals;
                     msgJson["next_y"] = next_y_vals;
