@@ -253,17 +253,6 @@ int main() {
                     double max_velocity = 45.;
                     int path_size = 50;
 
-                    // Debugging prints
-                    //cout << "car_x: " << car_x << endl;
-                    //cout << "car_y: " << car_y << endl;
-
-                    //int closest_waypoint_index = NextWaypoint(car_x, car_y, car_yaw, map_waypoints_x, map_waypoints_y);
-
-                    //double next_waypoint_x = map_waypoints_x[closest_waypoint_index];
-                    //double next_waypoint_y = map_waypoints_y[closest_waypoint_index];
-                    //cout << "next_waypoint_x: " << next_waypoint_x << endl;
-                    //cout << "next_waypoint_y: " << next_waypoint_y << endl;
-
                     /*
                      * Add points from previous path
                      */
@@ -328,9 +317,6 @@ int main() {
                     ptsy.push_back(next_wp2[1]);
 
 
-                    //cout << "ptsx: " << ptsx[0] << ", " << ptsx[1] << ", " << ptsx[2] << ", " << ptsx[3] << ", " << ptsx[4] << endl;
-                    //cout << "ptsy: " << ptsy[0] << ", " << ptsy[1] << ", " << ptsy[2] << ", " << ptsy[3] << ", " << ptsy[4] << endl;
-
                     /*
                      * Convert points to frame of ref relative to car
                      */
@@ -386,10 +372,6 @@ int main() {
 
                         x_point += ref_x;
                         y_point += ref_y;
-
-                        // cout << "x_point: " << x_point << endl;
-                        // cout << "y_point: " << y_point << endl;
-
 
                         next_x_vals.push_back(x_point);
                         next_y_vals.push_back(y_point);
