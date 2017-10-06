@@ -200,7 +200,11 @@ int main() {
         map_waypoints_dy.push_back(d_y);
     }
 
-    h.onMessage([&map_waypoints_x, &map_waypoints_y, &map_waypoints_s, &map_waypoints_dx, &map_waypoints_dy](
+    // TODO: have some vars here
+    double ref_velocity = 0.;
+    int lane = 1;
+
+    h.onMessage([&ref_velocity, &lane, &map_waypoints_x, &map_waypoints_y, &map_waypoints_s, &map_waypoints_dx, &map_waypoints_dy](
             uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
             uWS::OpCode opCode) {
         // "42" at the start of the message means there's a websocket message event.
@@ -249,8 +253,6 @@ int main() {
 
 
                     // Define lane we're in (0 for far left, 1 for middle, 2 for far right)
-                    int lane = 1;
-                    double max_velocity = 45.;
                     int path_size = 50;
                     int prev_path_size = previous_path_x.size();
                     bool try_to_change_lanes = false;
@@ -285,10 +287,22 @@ int main() {
                         bool gap_within_threshold = other_car_s - car_s < threshold;
                         if(car_ahead && gap_within_threshold) {
 
-                        max_velocity = 30;
+                        // ref_velocity = 30;
+                        too_close_to_car_in_front = true;
 
                         }
                     }
+
+                    } // end of for loop wrt cars
+
+                    if (too_close_to_car_in_front) {
+
+                        ref_velocity -= 0.2;
+
+                    }
+                    else if (ref_velocity < 45) {
+
+                        ref_velocity += 0.2;
 
                     }
 
@@ -396,7 +410,7 @@ int main() {
 
                     for (int i = 0; i < path_size - points_to_add; i++) {
 
-                        double N = (target_dist/(.02*max_velocity/2.24)); // Dividing by 2.24 converts mph to mps
+                        double N = (target_dist/(.02*ref_velocity/2.24)); // Dividing by 2.24 converts mph to mps
                         double x_point = x_add_on + (target_x)/N;
                         double y_point = s(x_point);
 
