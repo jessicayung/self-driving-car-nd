@@ -251,11 +251,17 @@ int main() {
                     // TODO: start
                     // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
 
+                    // Debugging
+                    if (car_speed == 0) {
 
-                    // Define lane we're in (0 for far left, 1 for middle, 2 for far right)
+                        cout << "Vehicle stopped." << endl;
+                        cout << "car_s: " << car_s << endl;
+
+                    }
+
+
                     int path_size = 50;
                     int prev_path_size = previous_path_x.size();
-                    bool try_to_change_lanes = false;
 
                     /*
                      * Avoid colliding with cars in our lane
@@ -267,7 +273,6 @@ int main() {
                     }
 
                     bool too_close_to_car_in_front = false;
-                    // TODO: may move these outside
                     bool change_to_left_lane = (lane > 0);
                     bool change_to_right_lane = (lane < 2);
 
@@ -294,6 +299,7 @@ int main() {
                         bool gap_within_threshold = (other_car_s - car_s < threshold_front && car_ahead) or other_car_s - car_s < -threshold_back;
 
                         float d = sensor_fusion[i][6];
+                        // lane is 4m wide
                         int car_lane = floor(d/4.0);
 
                         // if other car is close to us
@@ -325,9 +331,6 @@ int main() {
                             }
 
                         }
-
-
-                        // if car is in our lane (lane 4m wide)
 
                     } // end of for loop wrt cars
 
@@ -372,7 +375,6 @@ int main() {
                     double ref_x = car_x;
                     double ref_y = car_y;
                     double ref_yaw = deg2rad(car_yaw);
-                    // Debugging print
 
                     if(prev_path_size < 2)
                     {
