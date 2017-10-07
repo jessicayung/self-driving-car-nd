@@ -1,5 +1,40 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
+
+## Code model for generating paths
+
+1. Going around the track
+    - Generate five points in Frenet coordinates we want the path to pass through.
+        - First two points: last two points in the previous path (which we'll include as the first section of the new path)
+        - Next three points: points in our target lane (constant d) spaced 30m apart
+    - Generate a spline through those points using the `spline.h` library.
+    - Construct points from the first 30m of the spline as our path.
+    - Add points on the spline (our path points) to `next_x_vals, next_y_vals`.
+2. Staying in a lane
+    - Implementation: We keep the `d` for our path constant. Specifically, we set `d = 2+4*lane`, since it is given that a lane is 4m wide and we'd like to stay in the center of the lane because that seems safest.
+3. Driving with velocity under (but close to) the speed limit
+    - Set a `ref_velocity` slightly lower than the speed limit. This is the speed we want our car to drive at.
+    - When adding points to our path, keep a distance of `.02 * ref_velocity / 2.24` between them.
+        - Division by 2.24 converts `ref_velocity` from miles per hour to metres per second.
+4. Not exceeding maximum acceleration or jerk
+    - Instead of setting a velocity to go straight to, we increase the velocity gradually until it reaches our target velocity.
+5. Avoiding colliding with cars in our lane
+    - Check if our car is close to the car in front of us in our lane.
+    - If it is, we may collide with the car in front of us if both cars continue at their current speed. So we slow down.
+    - To keep within maximum acceleration and jerk limits, we decrease the velocity by a small amount per iteration.
+    - Implementation: Use the data in the `sensor_fusion` vector to predict where each other car will be in the next timestep.
+        - Use Frenet coordinates:
+            - Use other car's `s` to determine whether it is close to our car.
+            - Use other car's `d` to determine which lane the other car is in.
+6. Changing lanes
+    - Determine whether we should change lanes.
+        - Check if the car is close to the car in front of us in our lane. (see point above)
+    - Determine whether it's safe to change lanes, and if so which lane we should switch to.
+        - If the car in a lane is close to us in the `s` direction, it is not safe to switch to that lane.
+        - We only switch between the three lanes given and only switch to adjacent lanes.
+    - Change lanes.
+        - Implementation: Change our car's `lane` variable from the current lane to the target lane (e.g. from 0 to 1).
+
    
 ### Simulator. You can download the Term3 Simulator BETA which contains the Path Planning Project from the [releases tab](https://github.com/udacity/self-driving-car-sim/releases).
 
