@@ -267,37 +267,79 @@ int main() {
                     }
 
                     bool too_close_to_car_in_front = false;
-                    for(int i = 0; i < sensor_fusion.size(); i++) {
-                    float d = sensor_fusion[i][6];
+                    // TODO: may move these outside
+                    bool change_to_left_lane = (lane > 0);
+                    bool change_to_right_lane = (lane < 2);
 
                     int my_lane_center = 2+4*lane;
-                    // if car is in our lane (lane 4m wide)
-                    if (d < (my_lane_center+2) && d > (my_lane_center-2)) {
+                    // threshold for s gap between us and other cars before classifying them as being too close
+                    double threshold = 30;
+
+                    // for each other car we can detect
+                    for(int i = 0; i < sensor_fusion.size(); i++) {
+
+                        // check if car is in range of our car
                         double vx = sensor_fusion[i][3];
                         double vy = sensor_fusion[i][4];
                         double other_car_speed = sqrt(vx*vx*vy*vy);
                         double other_car_s = sensor_fusion[i][5];
 
-                        // See where other cars will be once we've used all points from the prev path
+                        // See where other car will be once we've used all points from the prev path
                         // TODO: use points_to_add instead?
                         other_car_s += ((double)prev_path_size*.02*other_car_speed);
 
                         bool car_ahead = other_car_s > car_s;
-                        double threshold = 30;
-                        bool gap_within_threshold = other_car_s - car_s < threshold;
-                        if(car_ahead && gap_within_threshold) {
+                        bool gap_within_threshold = abs(other_car_s - car_s) < threshold;
 
-                        // ref_velocity = 30;
-                        too_close_to_car_in_front = true;
+                        float d = sensor_fusion[i][6];
+                        int car_lane = floor(d/4.0);
+
+                        // if other car is close to us
+                        if (gap_within_threshold) {
+
+                            // other car in our lane
+                            if (car_lane == lane && car_ahead) {
+
+                                too_close_to_car_in_front = true;
+
+                            }
+
+                            // other car in left lane
+                            else if (car_lane == lane - 1) {
+
+                                change_to_left_lane = false;
+
+                            }
+
+                            // other car in right lane
+                            else if (car_lane == lane + 1) {
+
+                                change_to_right_lane = false;
+
+                            }
 
                         }
-                    }
+
+
+                        // if car is in our lane (lane 4m wide)
 
                     } // end of for loop wrt cars
 
                     if (too_close_to_car_in_front) {
 
                         ref_velocity -= 0.2;
+
+                        if (change_to_left_lane == true) {
+
+                            lane -= 1;
+
+                        }
+
+                        else if (change_to_right_lane == true) {
+
+                            lane += 1;
+
+                        }
 
                     }
                     else if (ref_velocity < 45) {
