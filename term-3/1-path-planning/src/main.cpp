@@ -271,9 +271,11 @@ int main() {
                     bool change_to_left_lane = (lane > 0);
                     bool change_to_right_lane = (lane < 2);
 
-                    int my_lane_center = 2+4*lane;
                     // threshold for s gap between us and other cars before classifying them as being too close
-                    double threshold = 30;
+                    double threshold_front = 30;
+                    double threshold_back = 10;
+
+                    cout << "new iter. lane: " << lane << endl;
 
                     // for each other car we can detect
                     for(int i = 0; i < sensor_fusion.size(); i++) {
@@ -289,7 +291,7 @@ int main() {
                         other_car_s += ((double)prev_path_size*.02*other_car_speed);
 
                         bool car_ahead = other_car_s > car_s;
-                        bool gap_within_threshold = abs(other_car_s - car_s) < threshold;
+                        bool gap_within_threshold = (other_car_s - car_s < threshold_front && car_ahead) or other_car_s - car_s < -threshold_back;
 
                         float d = sensor_fusion[i][6];
                         int car_lane = floor(d/4.0);
@@ -301,6 +303,8 @@ int main() {
                             if (car_lane == lane && car_ahead) {
 
                                 too_close_to_car_in_front = true;
+                                cout << "too close to car in front. lane: " << lane << endl;
+                                cout << "car_lane: " << car_lane << endl;
 
                             }
 
@@ -308,6 +312,7 @@ int main() {
                             else if (car_lane == lane - 1) {
 
                                 change_to_left_lane = false;
+                                cout << "don't change to left. car_lane: " << car_lane << endl;
 
                             }
 
@@ -315,6 +320,7 @@ int main() {
                             else if (car_lane == lane + 1) {
 
                                 change_to_right_lane = false;
+                                cout << "don't change to right. car_lane: " << car_lane << endl;
 
                             }
 
@@ -332,12 +338,14 @@ int main() {
                         if (change_to_left_lane == true) {
 
                             lane -= 1;
+                            cout << "Changing to left lane" << endl;
 
                         }
 
                         else if (change_to_right_lane == true) {
 
                             lane += 1;
+                            cout << "Changing to right lane" << endl;
 
                         }
 
